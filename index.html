@@ -2402,5 +2402,212 @@ html, body {
   overflow: visible !important;
 }
   </style>
+  <style id="YK-FINAL-SCROLL-FIX">
+
+/* ================================
+   YAR KESHAVARZ - FINAL SCROLL FIX
+   ================================ */
+
+/* اسکرول عادی سایت */
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  min-height: 100% !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* اپ اصلی */
+#app {
+  width: 100% !important;
+  min-height: 100vh !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* صفحات معمولی */
+main,
+.page,
+.page-content,
+section {
+  overflow: visible !important;
+}
+
+/* ================================
+   کشاورزیار
+   ================================ */
+
+.yar-final {
+  position: fixed !important;
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100dvh !important;
+
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  overflow: hidden !important;
+
+  box-sizing: border-box !important;
+
+  background: #eef5f1 !important;
+}
+
+/* هدر */
+.yar-final .yarpro-head {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+
+  flex: 0 0 auto !important;
+
+  width: 100% !important;
+  height: 58px !important;
+  min-height: 58px !important;
+
+  box-sizing: border-box !important;
+
+  z-index: 100000 !important;
+}
+
+/* پنل انتخاب حالت */
+.yar-final .yar-mode-panel {
+  position: relative !important;
+
+  flex: 0 0 auto !important;
+
+  width: 100% !important;
+
+  box-sizing: border-box !important;
+
+  z-index: 99999 !important;
+}
+
+/* ================================
+   قسمت گفتگو
+   ================================ */
+
+.yar-final .yarpro-chat {
+
+  position: relative !important;
+
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+
+  flex: 1 1 auto !important;
+
+  width: 100% !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  box-sizing: border-box !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  -webkit-overflow-scrolling: touch !important;
+
+  overscroll-behavior: contain !important;
+
+  touch-action: pan-y !important;
+
+  padding-bottom: 160px !important;
+}
+
+/* ================================
+   کادر تایپ
+   ================================ */
+
+.yar-final .yarpro-form.yar-final-form {
+
+  position: fixed !important;
+
+  left: 6px !important;
+  right: 6px !important;
+
+  bottom: 76px !important;
+
+  top: auto !important;
+
+  width: auto !important;
+
+  height: 62px !important;
+  min-height: 62px !important;
+  max-height: 62px !important;
+
+  box-sizing: border-box !important;
+
+  z-index: 1000003 !important;
+}
+
+/* ================================
+   پنج ابزار پایین
+   ================================ */
+
+.yar-final .yar-final-tools {
+
+  position: fixed !important;
+
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+
+  width: 100% !important;
+
+  height: 76px !important;
+
+  box-sizing: border-box !important;
+
+  z-index: 1000004 !important;
+
+  overflow: hidden !important;
+}
+
+/* جلوگیری از اسکرول افقی */
+.yar-final,
+.yar-final * {
+  max-width: 100%;
+}
+
+/* نقشه همچنان قابلیت لمس و حرکت داشته باشد */
+.measure-wrap,
+.measure-map,
+#measureMap,
+.leaflet-container {
+  touch-action: none !important;
+}
+
+/* موبایل */
+@media (max-width: 620px) {
+
+  .yar-final {
+    height: 100dvh !important;
+  }
+
+  .yar-final .yarpro-chat {
+    padding-bottom: 155px !important;
+  }
+
+}
+
+/* ================================
+   پایان
+   ================================ */
+
+</style>
 </body>
 </html>
