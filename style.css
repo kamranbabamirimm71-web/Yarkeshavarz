@@ -1,0 +1,309 @@
+:root{--green:#0b3d2e;--green2:#17664b;--gold:#d8a84e;--bg:#f4f7f4;--card:#fff;--text:#17352b;--muted:#71817a;--line:#e4ebe6;--danger:#a33a3a;--shadow:0 10px 28px rgba(14,55,41,.08)}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif}.topbar{position:sticky;top:0;z-index:1000;height:68px;background:rgba(11,61,46,.97);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-shadow:0 5px 18px rgba(0,0,0,.12)}.brand{display:flex;align-items:center;gap:10px}.brand img{width:42px;height:42px;border-radius:12px;object-fit:cover;background:#fff}.brand b{display:block;font-size:16px}.brand span{display:block;font-size:11px;opacity:.72;margin-top:3px}.icon-btn{border:0;background:rgba(255,255,255,.1);color:#fff;border-radius:12px;width:40px;height:40px;font-size:20px}main{max-width:900px;margin:auto;padding:16px 14px 100px}.hero{min-height:220px;border-radius:24px;padding:24px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,rgba(7,43,31,.05),rgba(7,43,31,.8)),url('wheat-hero.jpg') center/cover;box-shadow:var(--shadow);margin-bottom:16px}.hero h1,.hero h2{margin:0 0 8px}.hero p{margin:0;opacity:.9}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 2px 10px}.section-head h2,.section-head h3{margin:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow)}.metric{font-size:23px;font-weight:800;margin-top:5px}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.primary,.secondary,.danger,.nav-action{border:0;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:var(--green);color:#fff}.secondary{background:#eaf2ee;color:var(--green)}.danger{background:#f8e8e8;color:var(--danger)}.badge{display:inline-block;background:#edf4ef;color:var(--green);padding:5px 8px;border-radius:999px;font-size:11px}.list{display:grid;gap:10px}.empty{text-align:center;color:var(--muted);padding:28px}.form{display:grid;gap:13px}.field{display:grid;gap:6px}.field label{font-size:13px;font-weight:700}.field input,.field textarea,.field select{width:100%;border:1px solid #d9e3dd;border-radius:12px;padding:12px;background:#fff;color:var(--text);font:inherit}.field textarea{min-height:90px;resize:vertical}.land-card{overflow:hidden}.land-photo{width:100%;height:150px;object-fit:cover;border-radius:13px;background:#edf2ee}.tabs{display:flex;gap:7px;overflow:auto;padding:4px 0 10px;margin:10px 0}.tabs button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 11px;color:var(--muted)}.tabs button.active{background:var(--green);color:#fff;border-color:var(--green)}.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(7,1fr);z-index:2000;padding-bottom:env(safe-area-inset-bottom)}.bottom-nav button{border:0;background:none;color:#78857f;font-size:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.bottom-nav button span{font-size:9px}.bottom-nav button.active{color:var(--green);font-weight:800}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.quick button{min-height:80px}.weather-now{background:linear-gradient(135deg,#0b3d2e,#1f7455);color:#fff}.weather-icon{font-size:42px}.weather-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.weather-day{padding:10px;border-radius:14px;background:#f1f6f3;text-align:center}.map-wrap{position:relative}.measure-page{position:fixed;inset:0;background:#fff;z-index:1500;padding:0}.measure-page .measure-map{position:absolute;inset:0}.measure-overlay{position:absolute;z-index:1600;top:12px;right:12px;left:12px;display:flex;gap:8px}.measure-overlay input{flex:1;border:0;border-radius:14px;padding:13px 14px;box-shadow:0 8px 22px rgba(0,0,0,.15);font:inherit}.floating{position:absolute;z-index:1600;top:64px;right:12px;display:flex;gap:7px}.floating button{width:42px;height:42px;border:0;border-radius:12px;background:#fff;box-shadow:0 8px 22px rgba(0,0,0,.15)}.measure-bottom{position:absolute;z-index:1600;left:10px;right:10px;bottom:10px;background:rgba(255,255,255,.96);border-radius:18px;padding:11px;box-shadow:0 8px 26px rgba(0,0,0,.18)}.measure-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;text-align:center}.measure-stats b{display:block;font-size:15px}.measure-stats span{font-size:10px;color:var(--muted)}.finish{width:100%;margin-top:9px;background:#9b2d2d;color:#fff;border:0;border-radius:13px;padding:13px;font-weight:800}.accuracy{font-size:10px;color:var(--muted);text-align:center;margin-top:5px}.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.photo-grid img{width:100%;aspect-ratio:1;border-radius:12px;object-fit:cover}.file-btn{display:inline-block;background:#edf4ef;color:var(--green);padding:10px 12px;border-radius:12px;font-weight:700;cursor:pointer}.ad{background:linear-gradient(135deg,#153d31,#285f4b);color:#fff;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}.news-img{width:100%;height:140px;object-fit:cover;border-radius:14px;margin-bottom:10px}@media(max-width:560px){.grid{grid-template-columns:1fr 1fr}.quick{grid-template-columns:repeat(2,1fr)}.weather-grid{grid-template-columns:repeat(2,1fr)}.bottom-nav{height:68px}.bottom-nav button{font-size:18px}.bottom-nav button span{font-size:8px}}
+
+/* Weather + navigation premium pass */
+.bottom-nav{height:82px;padding:4px 4px calc(4px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(14,55,41,.10)}
+.bottom-nav button{font-size:28px;gap:4px;line-height:1;min-width:0;transition:transform .18s ease,color .18s ease}
+.bottom-nav button span{font-size:11px;font-weight:700;white-space:nowrap}
+.bottom-nav button.active{transform:translateY(-2px)}
+.weather-shell{display:grid;gap:12px}
+.weather-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 2px}
+.weather-toolbar h2{margin:3px 0 0;font-size:21px}
+.eyebrow{font-size:11px;font-weight:800;color:var(--green2);letter-spacing:.2px}
+.refresh-weather{border:1px solid var(--line);background:#fff;color:var(--green);border-radius:13px;padding:10px 12px;font-weight:800}
+.weather-picker{display:flex;align-items:center;gap:10px;padding:11px 13px}
+.weather-picker label{font-size:12px;font-weight:800;white-space:nowrap}.weather-picker select{flex:1;border:0;background:#f3f7f4;border-radius:11px;padding:10px;font:inherit;color:var(--text);outline:none}
+.weather-page-head{position:relative;overflow:hidden;border-radius:24px;padding:22px;background:linear-gradient(135deg,#0a3c2d 0%,#17664b 58%,#2b8061 100%);color:#fff;min-height:205px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 16px 34px rgba(11,61,46,.18)}
+.weather-page-head:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.06);left:-70px;bottom:-100px}.weather-page-head h2{margin:6px 0 8px;font-size:20px}.weather-page-head .eyebrow{color:rgba(255,255,255,.68)}
+.weather-temp-row{display:flex;align-items:baseline;gap:10px}.weather-temp-row strong{font-size:56px;line-height:1;font-weight:900}.weather-temp-row span{font-size:13px;opacity:.78}.weather-location{font-size:11px;opacity:.72;margin:13px 0 0}.weather-big-icon{font-size:78px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.18));z-index:1}
+.weather-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.weather-stats>div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 7px;text-align:center;box-shadow:var(--shadow)}.weather-stats span{display:block;color:var(--muted);font-size:10px}.weather-stats b{display:block;font-size:15px;margin-top:5px}
+.farm-advice{display:flex;gap:11px;align-items:flex-start;border-radius:17px;padding:13px 14px;border:1px solid var(--line)}.farm-advice.good{background:#edf7f0}.farm-advice.warn{background:#fff5e8}.farm-advice.info{background:#eef5fa}.advice-icon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--green);color:#fff;flex:none}.farm-advice.warn .advice-icon{background:#b87316}.farm-advice.info .advice-icon{background:#397aa2}.farm-advice b{font-size:14px}.farm-advice p{margin:4px 0 0;font-size:11px;line-height:1.8;color:var(--muted)}
+.weather-section{background:#fff;border:1px solid var(--line);border-radius:19px;padding:13px;box-shadow:var(--shadow)}.weather-section .section-head{margin:0 0 10px}.hourly-row{display:flex;gap:8px;overflow:auto;padding-bottom:3px;scrollbar-width:none}.hourly-row::-webkit-scrollbar{display:none}.hour-card{min-width:76px;border:1px solid var(--line);border-radius:14px;padding:10px 7px;text-align:center;background:#f8faf9}.hour-card.now{background:#eaf4ee;border-color:#b9d8c7}.hour-card>b,.hour-card>small,.hour-card>strong{display:block}.hour-card>b{font-size:10px}.hour-icon{display:block;font-size:26px;margin:5px 0}.hour-card strong{font-size:17px}.hour-card small{font-size:9px;color:var(--muted);margin-top:4px}
+.forecast-list{display:grid;gap:7px}.forecast-card{display:grid;grid-template-columns:1.5fr .55fr .8fr .8fr;align-items:center;gap:7px;padding:10px;border-radius:14px;background:#f6f9f7}.forecast-day b{display:block;font-size:12px}.forecast-day small{display:block;color:var(--muted);font-size:9px;margin-top:3px}.forecast-icon{font-size:29px;text-align:center}.forecast-temp{text-align:center}.forecast-temp strong{font-size:17px}.forecast-temp span{font-size:12px;color:var(--muted);margin-right:4px}.forecast-rain{text-align:left;font-size:11px;color:var(--green)}.forecast-rain small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.sun-card{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sun-card>div{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px;text-align:center}.sun-card span{display:block;color:var(--muted);font-size:10px}.sun-card b{display:block;margin-top:5px;font-size:14px}.weather-note{font-size:10px;line-height:1.8;color:var(--muted);text-align:center;margin:2px 8px}.weather-loading,.weather-error,.weather-empty{display:grid;place-items:center;text-align:center;gap:8px;padding:30px 16px}.weather-loading span,.weather-error span{font-size:11px;color:var(--muted)}.spinner{width:28px;height:28px;border:3px solid #dce8e1;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}.empty-icon{font-size:52px}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:560px){.bottom-nav{height:82px}.bottom-nav button{font-size:27px}.bottom-nav button span{font-size:10px}.weather-stats{grid-template-columns:repeat(2,1fr)}.weather-page-head{min-height:195px;padding:19px}.weather-temp-row strong{font-size:50px}.weather-big-icon{font-size:64px}.forecast-card{grid-template-columns:1.4fr .5fr .8fr .8fr}}
+
+/* Final mobile fit + measurement registration */
+.measure-register:disabled{opacity:.48;cursor:not-allowed;filter:grayscale(.2)}
+@media(max-width:560px){
+  main{padding:12px 10px 100px;max-width:100%;overflow-x:hidden}
+  .weather-shell{gap:10px}
+  .weather-toolbar{align-items:flex-start}
+  .weather-toolbar h2{font-size:18px}
+  .refresh-weather{font-size:11px;padding:9px 10px}
+  .weather-picker{padding:9px 10px}
+  .weather-picker label{font-size:11px}
+  .weather-picker select{font-size:12px;min-width:0}
+  .weather-page-head{min-height:165px;padding:17px;border-radius:20px}
+  .weather-page-head h2{font-size:17px}
+  .weather-temp-row strong{font-size:44px}
+  .weather-temp-row span{font-size:11px}
+  .weather-location{font-size:9px;margin-top:9px}
+  .weather-big-icon{font-size:58px}
+  .weather-stats{grid-template-columns:repeat(2,1fr);gap:7px}
+  .weather-stats>div{padding:10px 6px;border-radius:14px}
+  .weather-stats span{font-size:10px}
+  .weather-stats b{font-size:14px}
+  .farm-advice{padding:11px 12px}
+  .farm-advice p{font-size:10px;line-height:1.7}
+  .weather-section{padding:11px;border-radius:17px}
+  .hour-card{min-width:72px;padding:9px 6px}
+  .forecast-list{display:grid;gap:7px}
+  .forecast-card{min-width:0!important;padding:10px!important;grid-template-columns:1.5fr .7fr .9fr .8fr!important}
+  .sun-card{gap:7px!important;padding:10px!important}
+  .weather-note{font-size:9px!important;line-height:1.8}
+  .measure-bottom{left:7px;right:7px;bottom:7px;padding:9px}
+  .measure-stats b{font-size:14px}
+  .measure-stats span{font-size:9px}
+  .finish,.measure-register{font-size:13px;padding:12px}
+}
+
+/* V3.1 final interaction fixes */
+body.measure-active .bottom-nav, body.measure-active .topbar{display:none!important}
+body.measure-active main{padding:0!important;max-width:none!important}
+body.measure-active .measure-page{z-index:5000!important}
+body.measure-active .measure-bottom{z-index:5200!important;bottom:12px!important}
+.measure-help{font-size:10px;color:var(--muted);text-align:center;padding:3px 4px 0;line-height:1.7}
+.measured-card{margin:12px 0}.measure-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.measure-detail-grid>div{background:#f4f8f5;border-radius:12px;padding:9px;text-align:center}.measure-detail-grid span{display:block;color:var(--muted);font-size:9px}.measure-detail-grid b{display:block;font-size:12px;margin-top:4px}.measure-badge{display:inline-block;margin-top:7px;background:#edf7f0;color:var(--green);border-radius:10px;padding:5px 8px;font-size:10px;font-weight:800}
+@media(max-width:560px){.measure-detail-grid{grid-template-columns:repeat(3,1fr)}.measure-bottom{bottom:12px!important}.measure-help{font-size:9px}.bottom-nav button{font-size:31px!important;width:100%;height:58px}.bottom-nav button span{font-size:10px!important}}
+
+/* V3.2 — unmistakable navigation, measurement save and weather usability */
+.bottom-nav button svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;display:block;flex:none}
+.bottom-nav button span{font-size:10px!important}
+.bottom-nav{height:86px!important;padding-top:5px!important}
+.measured-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#edf7f0;border-color:#cce2d4;margin-bottom:10px}
+.measured-banner b{display:block;font-size:13px}.measured-banner span{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.8}
+.measure-page{touch-action:manipulation}.measure-bottom{bottom:14px!important}
+.measure-register{min-height:46px;font-size:14px!important}
+.measure-register:disabled{background:#7e8d86!important;color:#fff!important;opacity:.65!important}
+.weather-shell{padding-bottom:10px}.weather-toolbar{position:relative}.weather-picker select{min-height:42px}
+.weather-empty.card{min-height:190px}.weather-error.card{min-height:160px}
+@media(max-width:560px){.bottom-nav{height:86px!important}.bottom-nav button svg{width:30px;height:30px}.bottom-nav button span{font-size:10px!important}.bottom-nav button{gap:3px!important}.measured-banner{align-items:flex-start}.measured-banner .secondary{white-space:nowrap;padding:8px}.measure-bottom{left:8px!important;right:8px!important;bottom:10px!important}}
+
+/* FINAL NAV v4 — Home / News / KeshavarYar / Ads / Account */
+.bottom-nav{
+  height:78px !important;
+  grid-template-columns:repeat(5,1fr) !important;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom)) !important;
+}
+.bottom-nav .nav-item{
+  min-width:0;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:3px !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+}
+.bottom-nav .nav-svg{
+  width:34px !important;
+  height:34px !important;
+  display:grid !important;
+  place-items:center !important;
+  font-size:29px !important;
+  line-height:1 !important;
+}
+main{padding-bottom:90px !important;overflow-x:hidden !important;}
+
+/* FINAL NAV ICONS — large consistent SVG */
+.bottom-nav{height:86px!important;grid-template-columns:repeat(5,1fr)!important;padding:7px 8px calc(7px + env(safe-area-inset-bottom))!important;}
+.bottom-nav .nav-item{gap:2px!important;font-size:11px!important;}
+.bottom-nav .nav-svg{width:42px!important;height:42px!important;display:grid!important;place-items:center!important;}
+.bottom-nav .nav-svg svg{width:34px!important;height:34px!important;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.bottom-nav .nav-item.active .nav-svg svg{stroke-width:2.35;}
+
+/* V6 distinct KeshavarYar page */
+.yar-hero{display:flex;align-items:center;gap:16px;padding:20px!important;}
+.yar-mark{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#183d2b,#2f7d4f);color:#fff;flex:0 0 58px;}
+.yar-suggestions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 16px;}
+.yar-chat{display:grid;gap:10px;}
+.yar-chat textarea{width:100%;box-sizing:border-box;resize:vertical;}
+.yar-bubble{padding:12px 14px;border-radius:16px;background:#f3f7f4;line-height:1.8;}
+.yar-bubble.answer{background:#eaf5ed;}
+@media(max-width:480px){.yar-suggestions{grid-template-columns:1fr;}.yar-hero{align-items:flex-start;}}
+
+/* V7 premium agricultural background */
+html, body {
+  min-height: 100%;
+}
+body {
+  background:
+    linear-gradient(rgba(248, 250, 246, .78), rgba(248, 250, 246, .88)),
+    url("wheat-hero.jpg") center center / cover fixed no-repeat !important;
+  background-color: #eef3ea !important;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(235,242,229,.30));
+}
+main, #app, .app, .page-container {
+  background: transparent !important;
+}
+.card, .panel, .section-card, .weather-card, .land-card, .hero-card,
+.modal, .sheet, .form-card {
+  background: rgba(255,255,255,.90) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.bottom-nav {
+  background: rgba(255,255,255,.94) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* V8 — modern SVG navigation */
+.modern-nav{
+  height:82px !important;
+  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom)) !important;
+  border-top:1px solid rgba(35,70,45,.10) !important;
+  box-shadow:0 -10px 28px rgba(20,50,30,.10) !important;
+}
+.modern-nav .nav-item{
+  border:0 !important;
+  background:transparent !important;
+  color:#6b756e !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  border-radius:16px !important;
+  transition:transform .18s ease, background .18s ease, color .18s ease !important;
+}
+.modern-nav .nav-item svg{
+  width:31px !important;
+  height:31px !important;
+  fill:none !important;
+  stroke:currentColor !important;
+  stroke-width:1.8 !important;
+  stroke-linecap:round !important;
+  stroke-linejoin:round !important;
+}
+.modern-nav .nav-item.active{
+  color:#237a45 !important;
+  background:rgba(35,122,69,.10) !important;
+  transform:translateY(-2px);
+}
+.modern-nav .nav-item:active{transform:scale(.94);}
+@media(max-width:380px){
+  .modern-nav .nav-item svg{width:28px !important;height:28px !important;}
+  .modern-nav .nav-item{font-size:10px !important;}
+}
+
+/* V9 — visible full-page wheat background */
+:root{
+  --yk-bg-image:url("wheat-hero.jpg");
+}
+html{
+  min-height:100%;
+  background:#dfe9d9 url("wheat-hero.jpg") center center / cover fixed no-repeat !important;
+}
+body{
+  min-height:100vh !important;
+  margin:0 !important;
+  background:
+    linear-gradient(rgba(245,248,242,.58),rgba(238,244,233,.68)),
+    url("wheat-hero.jpg") center center / cover fixed no-repeat !important;
+  background-attachment:fixed !important;
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-10;
+  pointer-events:none;
+  background:rgba(236,243,231,.20);
+}
+main,#app,.app,.page,.page-container,.screen,.content,.content-area,
+.view,.route,.route-page,.container{
+  background:transparent !important;
+}
+.card,.panel,.section-card,.land-card,.hero-card,.modal,.sheet,.form-card,
+.weather-card,.news-card,.ad-card,.account-card{
+  background:rgba(255,255,255,.88) !important;
+  box-shadow:0 10px 30px rgba(25,55,30,.12) !important;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+/* V10 — premium account */
+.yk-account-page{
+  max-width:720px;
+  margin:0 auto;
+  padding:18px 14px 100px;
+}
+.yk-account-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:18px;
+  border-radius:24px;
+  background:rgba(255,255,255,.90);
+  box-shadow:0 14px 35px rgba(25,55,30,.12);
+  backdrop-filter:blur(10px);
+}
+.yk-avatar{
+  width:64px;height:64px;border-radius:20px;
+  display:grid;place-items:center;font-size:34px;
+  background:rgba(35,122,69,.10);
+}
+.yk-account-head h2{margin:0;font-size:20px}
+.yk-account-head p{margin:4px 0 0;opacity:.65;font-size:12px}
+.yk-account-edit{
+  margin-inline-start:auto;border:0;border-radius:12px;
+  padding:9px 13px;font-weight:800;background:rgba(35,122,69,.10);color:#237a45;
+}
+.yk-account-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;
+}
+.yk-account-stats div,.yk-account-card,.yk-account-editor{
+  background:rgba(255,255,255,.90);
+  border-radius:20px;padding:16px;
+  box-shadow:0 10px 26px rgba(25,55,30,.09);
+  backdrop-filter:blur(9px);
+}
+.yk-account-stats div{text-align:center}
+.yk-account-stats strong{display:block;font-size:25px;color:#237a45}
+.yk-account-stats span{font-size:11px;opacity:.65}
+.yk-account-row{
+  display:flex;justify-content:space-between;gap:12px;
+  padding:13px 0;border-bottom:1px solid rgba(30,60,35,.08);
+  font-size:12px;
+}
+.yk-account-row:last-child{border-bottom:0}
+.yk-account-row strong{font-size:12px}
+.yk-account-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.yk-account-actions button,.yk-editor-buttons button{
+  border:0;border-radius:16px;padding:14px;font-weight:800;
+  background:rgba(255,255,255,.92);box-shadow:0 8px 22px rgba(25,55,30,.08);
+}
+.yk-account-editor{margin-top:12px}
+.yk-account-editor h3{margin-top:0}
+.yk-account-editor input{
+  width:100%;box-sizing:border-box;margin:6px 0;padding:13px;
+  border:1px solid rgba(30,70,40,.12);border-radius:14px;background:rgba(250,252,249,.9);
+  font:inherit;
+}
+.yk-editor-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.yk-editor-buttons button:first-child{background:#237a45;color:white}
+@media(max-width:420px){
+  .yk-account-page{padding-inline:10px}
+  .yk-account-actions{grid-template-columns:1fr}
+}
+
+
+/* V11 — clean premium account page */
+.account-hero{display:flex;align-items:center;gap:14px;padding:18px!important;margin-bottom:12px;}
+.account-avatar{width:74px;height:74px;border-radius:24px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(135deg,#1e5b3a,#6fae73);color:#fff;font-size:36px;flex:0 0 74px;box-shadow:0 8px 22px rgba(24,70,42,.16);}
+.account-avatar img{width:100%;height:100%;object-fit:cover;}
+.account-identity{min-width:0;flex:1;}.account-identity h1{font-size:20px;margin:0 0 5px}.account-identity p{margin:0;color:#68736c}.account-edit{white-space:nowrap!important;}
+.account-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}.account-stat{padding:15px 8px!important;text-align:center}.account-stat b{display:block;font-size:22px;margin-bottom:3px}.account-stat span{font-size:11px;color:#68736c;font-weight:700}
+.account-info,.account-tools,.account-help{padding:16px!important;margin-bottom:12px}.account-info .row{padding:11px 0;border-bottom:1px solid rgba(30,70,45,.08)}.account-info .row:last-child{border-bottom:0}.full-btn{width:100%;margin-top:8px}.account-editor{display:grid;gap:10px}.account-editor .field{margin:0}
+@media(max-width:420px){.account-hero{padding:14px!important}.account-avatar{width:62px;height:62px;flex-basis:62px;border-radius:20px;font-size:29px}.account-identity h1{font-size:17px}.account-stats{gap:7px}.account-stat{padding:12px 5px!important}.account-stat b{font-size:19px}}

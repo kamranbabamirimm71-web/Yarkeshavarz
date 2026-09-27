@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b3d2e">
 <meta name="description" content="یار کشاورز — مدیریت زمین، کشت، هزینه، انبار و آب‌وهوا">
-<!-- YarKeshavarz ONLINE V1 - Cloudflare Worker AI -->
-<title>یار کشاورز — نسخه آنلاین</title>
+<!-- YarKeshavarz OFFLINE V1 -->
+<title>یار کشاورز — نسخه آفلاین</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="https://unpkg.com/@tomickigrzegorz/leaflet-rotate@0.2.4/dist/leaflet-rotate.css">
 <style>
 :root{--g:#0b3d2e;--g2:#17664b;--bg:#f4f7f4;--card:#fff;--text:#17352b;--muted:#71817a;--line:#e1e9e4;--red:#a33a3a;--shadow:0 10px 28px rgba(14,55,41,.08)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
@@ -24,7 +22,7 @@ main{max-width:900px;margin:auto;padding:14px 12px 95px}.hero{min-height:210px;b
 .quick button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px}.quick button .qi{font-size:27px;line-height:1}.field-tools{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}.field-tool{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;text-align:right;display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;box-shadow:var(--shadow);color:var(--g)}.field-tool span{grid-row:1/3;font-size:31px}.field-tool b{font-size:14px}.field-tool small{font-size:9px;color:var(--muted);margin-top:2px}@media(max-width:420px){.field-tools{grid-template-columns:1fr}}.stock-actions{display:flex;gap:8px;margin-top:11px}.stock-actions button{flex:1;min-height:44px;border:0;border-radius:12px;font-weight:900}.stock-plus{background:#e7f3eb;color:var(--g)}.stock-minus{background:#fff0ed;color:#9a3730}.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.calc-grid button{min-height:52px;border:1px solid var(--line);background:#fff;border-radius:12px;font-weight:900}.calc-display{background:#123f31;color:#fff;border-radius:16px;padding:15px;text-align:left;font-size:26px;font-weight:900;direction:ltr;min-height:62px}.crop-card{border-right:4px solid var(--g2)}.crop-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.crop-actions button{flex:1;min-width:110px}.home-weather{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:13px;box-shadow:var(--shadow)}.home-weather-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.home-weather-main{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}.home-weather-temp{font-size:38px;font-weight:900}.home-weather-icon{font-size:46px}.home-hourly{display:flex;gap:7px;overflow-x:auto;padding:9px 1px 3px;scrollbar-width:none}.home-hour{min-width:72px;text-align:center;background:#f3f8f5;border-radius:13px;padding:8px 5px}.home-hour b{display:block;font-size:11px}.home-hour span{display:block;font-size:23px;margin:3px 0}.home-hour small{font-size:10px;color:var(--muted)}.hourly-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.hour-card{background:#f6f9f7;border-radius:14px;padding:9px;text-align:center}.hour-card b{font-size:11px}.hour-card .hi{font-size:23px;margin:4px 0}.hour-card small{display:block;color:var(--muted);font-size:9px;line-height:1.7}.weather-location-note{background:#edf5f0;border-radius:13px;padding:9px;font-size:11px;color:var(--g);margin-top:9px}.calc-land-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.calc-area{text-align:center;background:#edf5f0;border-radius:14px;padding:8px 13px;min-width:78px}.calc-area b{display:block;font-size:18px;color:var(--g)}.calc-area small{font-size:9px;color:var(--muted)}.calc-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.calc-form-grid.two{margin-top:8px}.calc-total{margin-top:10px;background:linear-gradient(135deg,#0b3d2e,#247557);color:#fff;text-align:center}.calc-total span,.calc-total strong,.calc-total small{display:block}.calc-total strong{font-size:26px;margin:5px 0}.calc-total small{opacity:.8}.calc-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.calc-result-grid div{background:#f3f8f5;border-radius:14px;padding:11px;text-align:center}.calc-result-grid span{display:block;font-size:10px;color:var(--muted)}.calc-result-grid b{display:block;font-size:16px;margin-top:5px}.crop-focus{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}@media(max-width:430px){.calc-form-grid{grid-template-columns:1fr}.measure-actions{grid-template-columns:1fr 1fr}} .hero{background-size:cover;background-position:center center;background-repeat:no-repeat} .hero:after{content:'';display:block;height:1px;width:100%}
 @media(max-width:560px){main{padding:11px 9px 92px}.quick{grid-template-columns:repeat(2,1fr)}.stat4,.measure-stats{grid-template-columns:repeat(2,1fr)}.day{grid-template-columns:1.3fr .5fr .7fr .7fr}.weather-temp{font-size:42px}}
 
-.hero{background-image:linear-gradient(180deg,#0000 20%,#082c22d9 100%),url("assets/wheat-hero.jpg");background-size:cover;background-position:center;min-height:245px}.hero p{font-weight:700;text-shadow:0 2px 8px #0008}.icon-card{display:flex;align-items:center;gap:10px}.icon-big{width:48px;height:48px;border-radius:15px;background:#edf4ef;display:grid;place-items:center;font-size:27px}.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.photo-grid img{width:100%;aspect-ratio:1;border-radius:13px;object-fit:cover;border:1px solid var(--line)}.profile-head{display:flex;align-items:center;gap:12px}.avatar{width:82px;height:82px;border-radius:50%;object-fit:cover;background:#eaf2ee;border:3px solid #fff;box-shadow:var(--shadow);display:grid;place-items:center;font-size:35px}.equip-grid{display:grid;gap:10px}.equip-item{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center}.equip-icon{width:54px;height:54px;border-radius:16px;background:#edf4ef;display:grid;place-items:center;font-size:29px}.equip-meta{font-size:11px;color:var(--muted);line-height:1.8}.weather-mini{margin-top:10px;border-radius:17px;padding:12px;background:#eef6f1}.weather-mini .temp{font-size:27px;font-weight:900}.weather-mini.loading{color:var(--muted)}.profile-menu{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.profile-menu button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px;font-weight:800;color:var(--g)}
+.hero{background-image:linear-gradient(180deg,#0000 20%,#082c22d9 100%),url("wheat-hero.jpg");background-size:cover;background-position:center;min-height:245px}.hero p{font-weight:700;text-shadow:0 2px 8px #0008}.icon-card{display:flex;align-items:center;gap:10px}.icon-big{width:48px;height:48px;border-radius:15px;background:#edf4ef;display:grid;place-items:center;font-size:27px}.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.photo-grid img{width:100%;aspect-ratio:1;border-radius:13px;object-fit:cover;border:1px solid var(--line)}.profile-head{display:flex;align-items:center;gap:12px}.avatar{width:82px;height:82px;border-radius:50%;object-fit:cover;background:#eaf2ee;border:3px solid #fff;box-shadow:var(--shadow);display:grid;place-items:center;font-size:35px}.equip-grid{display:grid;gap:10px}.equip-item{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center}.equip-icon{width:54px;height:54px;border-radius:16px;background:#edf4ef;display:grid;place-items:center;font-size:29px}.equip-meta{font-size:11px;color:var(--muted);line-height:1.8}.weather-mini{margin-top:10px;border-radius:17px;padding:12px;background:#eef6f1}.weather-mini .temp{font-size:27px;font-weight:900}.weather-mini.loading{color:var(--muted)}.profile-menu{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.profile-menu button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px;font-weight:800;color:var(--g)}
 @media(max-width:560px){.hero{min-height:225px}.photo-grid{grid-template-columns:repeat(3,1fr)}}
 
 .register-modal{position:fixed;inset:0;z-index:9999;background:#0008;display:flex;align-items:flex-end;justify-content:center;padding:12px}.register-card{width:min(560px,100%);background:#fff;border-radius:22px;padding:18px;box-shadow:0 20px 60px #0005}.register-card h3{margin:0 0 5px}.register-card label{display:block;margin-top:10px;font-weight:800;font-size:13px}.register-card input{width:100%;box-sizing:border-box;margin-top:5px;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit}.register-summary{margin:12px 0;padding:12px;border-radius:14px;background:#f2f8f5;display:flex;flex-direction:column;gap:4px}.register-summary b{font-size:20px}.register-card .actions{margin-top:14px;display:grid;grid-template-columns:1fr 1.4fr;gap:8px}.hero{background-size:cover!important;background-position:center!important;min-height:240px!important}
@@ -175,12 +173,12 @@ button.secondary,.secondary{
 body{
   background:
     linear-gradient(rgba(238,248,242,.76),rgba(238,248,242,.88)),
-    url("assets/wheat-hero.jpg") center top / cover fixed no-repeat !important;
+    url("wheat-hero.jpg") center top / cover fixed no-repeat !important;
 }
 .hero{
   background:
     linear-gradient(135deg,rgba(6,56,42,.42),rgba(27,103,72,.24)),
-    url("assets/wheat-hero.jpg") center / cover no-repeat !important;
+    url("wheat-hero.jpg") center / cover no-repeat !important;
   background-position:center !important;
 }
 
@@ -189,12 +187,12 @@ body{
 body{
   background:
     linear-gradient(rgba(238,248,242,.70),rgba(238,248,242,.84)),
-    url("assets/wheat-hero.jpg") center top / cover fixed no-repeat !important;
+    url("wheat-hero.jpg") center top / cover fixed no-repeat !important;
 }
 .hero{
   background:
     linear-gradient(135deg,rgba(6,52,39,.42),rgba(28,108,76,.20)),
-    url("assets/wheat-hero.jpg") center / cover no-repeat !important;
+    url("wheat-hero.jpg") center / cover no-repeat !important;
   min-height:245px !important;
 }
 
@@ -208,7 +206,7 @@ body::before{
   position:fixed;
   inset:0;
   z-index:-5;
-  background-image:url("assets/wheat-hero.jpg")!important;
+  background-image:url("wheat-hero.jpg")!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
   background-size:cover!important;
@@ -235,7 +233,7 @@ main,#app{background:transparent!important;}
 .hero{
   background:
     linear-gradient(180deg,rgba(4,65,48,.18),rgba(4,65,48,.64)),
-    url("assets/wheat-hero.jpg") center/cover no-repeat!important;
+    url("wheat-hero.jpg") center/cover no-repeat!important;
 }
 
 
@@ -243,7 +241,7 @@ main,#app{background:transparent!important;}
 .hero{
   background:
     linear-gradient(180deg,rgba(4,58,43,.10),rgba(4,58,43,.58)),
-    url("assets/wheat-hero.jpg") center center / cover no-repeat !important;
+    url("wheat-hero.jpg") center center / cover no-repeat !important;
   background-position:center center!important;
   min-height:245px!important;
   overflow:hidden!important;
@@ -281,7 +279,7 @@ main,#app{background:transparent!important;}
 body{
   background:
     linear-gradient(rgba(12,42,27,.30),rgba(12,42,27,.42)),
-    url("assets/wheat-hero.jpg") center center / cover fixed no-repeat !important;
+    url("wheat-hero.jpg") center center / cover fixed no-repeat !important;
 }
 body::before{
   content:"";position:fixed;inset:0;z-index:-1;
@@ -297,7 +295,7 @@ main{position:relative}
 .hero{
   background:
     linear-gradient(180deg,rgba(0,0,0,.05),rgba(5,42,26,.70)),
-    url("assets/wheat-hero.jpg") center 42% / cover no-repeat !important;
+    url("wheat-hero.jpg") center 42% / cover no-repeat !important;
   border:1px solid rgba(255,255,255,.30);
   box-shadow:0 18px 45px rgba(0,0,0,.20);
 }
@@ -772,136 +770,12 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 .manager-actions button{flex:1}
 @media(max-width:420px){.manager-wrap{padding-left:7px;padding-right:7px}.manager-chat{min-height:290px}.manager-bubble{max-width:88%}}
 </style>
-
-<style id="modular-v1-fix">
-html,body{min-height:100%;overscroll-behavior:none}
-.measure-wrap,.measure-map,#measureMap,.leaflet-container{touch-action:none!important;-webkit-user-select:none;user-select:none}
-.measure-map{overscroll-behavior:contain}
-</style>
-<style id="yk-global-scroll-fix">html,body{min-height:100%;height:auto!important;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch}#app{min-height:100vh;height:auto!important;overflow:visible!important}</style>
-<style id="yk-scroll-final-fix">
-html,body{
-  height:auto!important;
-  min-height:100%!important;
-  position:static!important;
-  margin:0!important;
-  overflow-x:hidden!important;
-  overflow-y:auto!important;
-  overscroll-behavior-y:auto!important;
-  -webkit-overflow-scrolling:touch!important;
-  background-attachment:scroll!important;
-}
-body::before{
-  background-attachment:scroll!important;
-  position:fixed!important;
-  inset:0!important;
-  pointer-events:none!important;
-}
-main,#app{
-  height:auto!important;
-  min-height:100vh!important;
-  max-height:none!important;
-  overflow:visible!important;
-}
-</style>
-
-<style id="yar-home-v1">
-.yar-home{direction:rtl;max-width:680px;margin:0 auto;padding:10px 0 22px;min-height:calc(100vh - 155px);display:flex;align-items:flex-start}
-.yar-home-card{position:relative;width:100%;background:rgba(255,255,255,.96);border-radius:34px 34px 0 0;padding:58px 24px 26px;box-shadow:0 14px 40px rgba(16,61,45,.13);border:1px solid rgba(21,75,53,.08);overflow:hidden}
-.yar-home-card:before{content:"";position:absolute;inset:0 0 auto;height:170px;background:radial-gradient(circle at 50% 18%,rgba(26,113,79,.035),transparent 60%);pointer-events:none}
-.yar-home-close{position:absolute;top:20px;right:20px;width:58px;height:58px;border:0;border-radius:17px;background:#176b4f;color:#fff;font-size:42px;font-weight:300;line-height:1;display:grid;place-items:center;box-shadow:0 8px 18px rgba(17,75,55,.13)}
-.yar-home-logo{width:112px;height:112px;border-radius:32px;margin:0 auto 20px;background:#176b4f;color:#fff;display:grid;place-items:center;font-size:62px;line-height:1;box-shadow:0 10px 22px rgba(16,87,61,.12)}
-.yar-home-card h1{text-align:center;margin:0;color:#17382c;font-size:31px;letter-spacing:-.5px}
-.yar-home-subtitle{text-align:center;color:#74837d;font-size:17px;margin:13px 0 32px}
-.yar-home-modes{display:grid;gap:18px}
-.yar-home-mode{width:100%;min-height:180px;background:#fff;border:1px solid #dbe7e1;border-radius:28px;box-shadow:0 8px 22px rgba(21,68,52,.07);display:grid;grid-template-columns:48px 82px 1fr;align-items:center;gap:12px;padding:18px 20px;text-align:right;color:#193d30}
-.yar-home-mode:active{transform:scale(.99)}
-.yar-home-arrow{font-size:48px;color:#7b9087;line-height:1;justify-self:start}
-.yar-home-mode-icon{width:74px;height:74px;border-radius:23px;display:grid;place-items:center;font-size:46px}
-.yar-home-cloud{background:#eaf1f3;color:#c7d1d5}
-.yar-home-off{background:#f2a014;color:#fff;font-size:21px;font-weight:900;letter-spacing:-1px}
-.yar-home-mode-text{display:grid;gap:9px}
-.yar-home-mode-text b{font-size:26px}
-.yar-home-mode-text small{font-size:15px;line-height:1.8;color:#7a8782}
-.yar-home-divider{height:1px;background:#e2e8e5;margin:30px 0 20px}
-.yar-home-land-title{font-size:23px;font-weight:900;color:#29483d;margin:0 0 12px}
-.yar-home-land-select{height:70px;border:1px solid #d8e4df;border-radius:20px;background:#fff;display:grid;grid-template-columns:36px 1fr 28px;align-items:center;padding:0 17px;box-shadow:0 5px 16px rgba(20,64,49,.04)}
-.yar-home-land-select span:first-child{font-size:27px}
-.yar-home-land-select select{width:100%;height:100%;border:0;outline:0;background:transparent;color:#29483d;font-size:18px;font-weight:700;font-family:inherit;appearance:none;text-align:right}
-.yar-home-chevron{font-size:25px;color:#62766d;pointer-events:none}
-.yar-home-note{color:#9aa49f;font-size:12px;margin:12px 4px 0;line-height:1.8}
-@media(max-width:480px){
-  .yar-home{padding:0;margin:0 -1px;min-height:calc(100vh - 140px)}
-  .yar-home-card{border-radius:34px 34px 0 0;padding:58px 20px 25px}
-  .yar-home-logo{width:104px;height:104px;font-size:58px}
-  .yar-home-card h1{font-size:29px}
-  .yar-home-subtitle{font-size:16px;margin-bottom:27px}
-  .yar-home-mode{min-height:156px;grid-template-columns:34px 72px 1fr;gap:8px;padding:16px 13px}
-  .yar-home-mode-icon{width:66px;height:66px;border-radius:20px;font-size:39px}
-  .yar-home-mode-text b{font-size:23px}
-  .yar-home-mode-text small{font-size:13px}
-  .yar-home-arrow{font-size:42px}
-}
-</style>
-
-
-<style id="yk-keshavar-yar-clean-v6">
-/* Keshavar-Yar final clean UI: one page at a time */
-.yar-home{max-width:620px!important;margin:0 auto!important;padding:8px 8px 105px!important}
-.yar-home-card{padding:24px 18px 18px!important;border-radius:28px!important}
-.yar-home-logo{width:70px!important;height:70px!important;border-radius:22px!important;font-size:34px!important;margin:4px auto 12px!important}
-.yar-home-card h1{font-size:28px!important;line-height:1.35!important;margin:0 0 7px!important}
-.yar-home-subtitle{font-size:14px!important;line-height:1.8!important;margin-bottom:20px!important}
-.yar-home-modes{gap:12px!important}
-.yar-home-mode{min-height:112px!important;padding:15px 14px!important;border-radius:22px!important}
-.yar-home-mode-icon{width:54px!important;height:54px!important;border-radius:17px!important;font-size:22px!important}
-.yar-home-mode-text b{font-size:17px!important}.yar-home-mode-text small{font-size:10px!important;line-height:1.8!important}
-.yar-home-arrow{font-size:22px!important}
-.yar-home-divider{margin:20px 0 15px!important}
-.yar-home-land-title{font-size:16px!important;margin-bottom:8px!important}
-.yar-home-land-select{min-height:54px!important;border-radius:17px!important;padding:7px 11px!important}
-.yar-home-land-select select{font-size:13px!important}
-.yar-home-note{font-size:9px!important;line-height:1.8!important}
-
-/* Chat/advisor pages: remove duplicated global controls */
-.yar-clean-page{max-width:760px;margin:0 auto;padding:10px 10px 104px}
-.yar-clean-head{display:flex;align-items:center;gap:10px;padding:11px 4px 14px}
-.yar-clean-head .yar-back{width:40px;height:40px;border:0;border-radius:14px;background:#e8f3ed;color:#17664b;font-size:20px}
-.yar-clean-head .yar-clean-brand{flex:1}.yar-clean-brand b{display:block;font-size:18px;color:#123b2b}.yar-clean-brand small{display:block;color:#708079;font-size:9px;margin-top:3px}
-.yar-status{padding:12px 14px;border:1px solid #dce9e2;border-radius:18px;background:#f8fbf9;color:#456056;margin-bottom:10px}
-.yar-status b{font-size:11px}.yar-status small{display:block;margin-top:4px;font-size:9px;color:#7a8882}
-.yar-clean-page .yarpro-chat{height:calc(100dvh - 330px)!important;min-height:260px!important;max-height:none!important;background:#f1f7f3!important;border:1px solid #dce9e2!important;border-radius:20px!important;padding:9px!important}
-.yar-clean-page .yarpro-form{position:sticky!important;bottom:68px!important;margin-top:8px!important;background:#fff!important;border:1px solid #dce8e1!important;border-radius:18px!important;padding:6px!important}
-.yar-clean-page .yarpro-form input{color:#173f32!important;background:transparent!important;font-size:11px!important}
-.yar-clean-page .yarpro-form input::placeholder{color:#87958f!important}
-.yar-clean-page .yarpro-send{background:#17664b!important}.yar-clean-page .yarpro-type,.yar-clean-page .yarpro-camera{background:#e8f3ed!important;color:#17664b!important}
-.yar-clean-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.yar-clean-tools button{border:1px solid #dce8e1;background:#fff;border-radius:16px;padding:10px 6px;color:#234d3e;font:800 10px inherit;box-shadow:0 6px 16px rgba(13,55,40,.05)}
-.yar-clean-tools span{display:block;font-size:18px;margin-bottom:4px}
-
-/* Crop advisor = real step-by-step pages */
-.crop-advisor-page{max-width:760px!important;margin:0 auto!important;padding:8px 8px 105px!important}
-.crop-clean-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}.crop-clean-head button{width:40px;height:40px;border:0;border-radius:14px;background:#e8f3ed;color:#17664b;font-size:20px}.crop-clean-head h2{margin:0;font-size:19px;color:#123b2b}.crop-clean-head p{margin:3px 0 0;font-size:9px;color:#788780}
-.crop-progress{display:flex;gap:6px;margin:0 0 12px}.crop-progress span{flex:1;height:5px;border-radius:99px;background:#dce8e1}.crop-progress span.on{background:#1b7655}
-.crop-single-step{background:#fff;border:1px solid #dce8e1;border-radius:22px;padding:17px;box-shadow:0 9px 24px rgba(13,55,40,.06)}
-.crop-single-step h3{margin:0 0 6px;font-size:16px;color:#173f32}.crop-single-step p{margin:0 0 14px;font-size:10px;color:#7a8882;line-height:1.8}
-.crop-big-select{width:100%;box-sizing:border-box;border:1px solid #d5e4dc;background:#f9fcfa;border-radius:16px;padding:13px;font:inherit;font-size:12px;color:#173f32}
-.crop-next{width:100%;margin-top:12px;padding:13px;border:0;border-radius:16px;background:linear-gradient(135deg,#0b6248,#16825a);color:#fff;font:800 12px inherit}
-.crop-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.crop-choice-grid button{min-height:78px;border:1px solid #dce8e1;background:#fff;border-radius:18px;text-align:right;padding:11px;color:#173f32}.crop-choice-grid span{font-size:21px;float:right;margin-left:8px}.crop-choice-grid b{font-size:11px}.crop-choice-grid small{display:block;color:#87958f;font-size:8px;margin-top:5px}
-.crop-detail-card{background:#fff;border:1px solid #dce8e1;border-radius:20px;padding:14px;margin-top:10px}.crop-detail-card h3{font-size:15px;margin:0 0 10px;color:#173f32}.crop-detail-card .field{margin-bottom:9px}.crop-detail-card .field label{font-size:10px}.crop-detail-card input{font-size:11px!important}
-.crop-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.crop-result-grid div{padding:11px;border-radius:15px;background:#f2f8f4;text-align:center}.crop-result-grid span{display:block;font-size:9px;color:#708079}.crop-result-grid b{display:block;font-size:11px;color:#173f32;margin-top:4px}
-@media(max-width:430px){.yar-home-card h1{font-size:25px!important}.yar-clean-tools{grid-template-columns:repeat(2,1fr)}.crop-choice-grid{grid-template-columns:1fr 1fr}.crop-advisor-page{padding-left:7px!important;padding-right:7px!important}}
-</style>
-
 </head>
 <body>
-
-<header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه</small></div></div><button id="backup">↥</button></header>
+<header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
 <main id="app"></main>
-<nav class="bottom"><button data-r="home">⌂<span>خانه</span></button><button data-r="news">▤<span>اخبار</span></button><button data-r="game">🎮<span>سرگرمی</span></button><button data-r="yar">✦<span>کشاورزیار</span></button><button data-r="ads">◈<span>تبلیغات</span></button><button data-r="account">●<span>اکانت</span></button></nav>
+<nav class="bottom"><button data-r="home">⌂<span>خانه</span></button><button data-r="news">▤<span>اخبار</span></button><button data-r="game">🎮<span>سرگرمی</span></button><button data-r="yar" onclick="yarLandMode=false;selected=null;go('yar')">✦<span>کشاورزیار</span></button><button data-r="ads">◈<span>تبلیغات</span></button><button data-r="account">●<span>اکانت</span></button></nav>
 <input id="restore" type="file" accept="application/json" hidden>
-<script src="./presence.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const FUN_KEY='yk-fun-v2';
 let funState=(()=>{try{return Object.assign({score:0,high:0,streak:0,played:0},JSON.parse(localStorage.getItem(FUN_KEY)||'{}'))}catch(e){return {score:0,high:0,streak:0,played:0}}})();
@@ -923,7 +797,6 @@ function funQuestion(){const q=FUN_DATA[funType][funIndex%FUN_DATA[funType].leng
 function funAnswer(i,a){if(funAnswered)return;funAnswered=true;document.querySelectorAll('#funPanel .fun-option').forEach((x,n)=>{if(n===a)x.classList.add('correct');if(n===i&&i!==a)x.classList.add('wrong')});if(i===a){funState.score+=10;funState.streak++;funState.high=Math.max(funState.high,funState.score)}else funState.streak=0;funState.played++;funSave();funRenderScore();const b=document.createElement('button');b.className='fun-btn';b.textContent='سؤال بعدی ➜';b.onclick=()=>{funIndex++;funQuestion()};funPanel.appendChild(b)}
 function funFact(){funHome.style.display='none';funPanel.style.display='block';funPanel.innerHTML='<div class="row"><b>😂 دانستنی جالب</b><button class="fun-back" onclick="funHome()">بازگشت</button></div><div class="fun-fact" style="margin-top:18px">'+FUN_FACTS[Math.floor(Math.random()*FUN_FACTS.length)]+'</div><button class="fun-btn" onclick="funFact()">یکی دیگر</button>'}
 </script>
-<script src="https://unpkg.com/@tomickigrzegorz/leaflet-rotate@0.2.4/dist/leaflet-rotate.umd.min.js"></script>
 <script>
 function divj(a,b){return Math.floor(a/b)}
 function toJalali(gy,gm,gd){
@@ -967,8 +840,9 @@ function jalaliDate(v){let d=v instanceof Date?v:new Date(v||Date.now());if(isNa
 'use strict';
 const KEY='yar-keshavarz-v4-single',app=document.getElementById('app'),title=document.getElementById('pageTitle');
 const base={lands:[],inventory:[],transactions:[],equipment:[],profile:{name:'',phone:'',email:'',photo:''}};
-  const HERO_IMG='assets/wheat-hero.jpg';
+  const HERO_IMG='wheat-hero.jpg';
 let state=load(),route='home',selected=null,map=null,points=[],markers=[],polygon=null,watch=null,satellite=false,measureReturn=null;
+window.__YK_APP_CONTEXT__=()=>({state,selected});
 function openSelectedTool(r){let id=selected||localStorage.getItem('yk-last-land');if(id&&state.lands.some(x=>x.id===id)){selected=id;go(r)}else{toast('برای استفاده از این بخش، ابتدا یک زمین را باز کن');go('lands')}}
 function load(){try{let x={...base,...JSON.parse(localStorage.getItem(KEY)||'{}')};x.lands=x.lands||[];x.inventory=x.inventory||[];x.transactions=x.transactions||[];x.equipment=x.equipment||[];x.profile={...base.profile,...(x.profile||{})};return x}catch{return JSON.parse(JSON.stringify(base))}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){console.error(e);toast('ذخیره‌سازی انجام نشد؛ حافظه مرورگر پر است.');return false}}
@@ -1004,7 +878,7 @@ function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt
 function toast(x){alert(x)}
 function head(x){title.textContent=x}
 function totals(id){let t=state.transactions.filter(x=>!id||x.landId===id),c=t.filter(x=>x.type==='expense').reduce((a,x)=>a+n(x.amount),0),i=t.filter(x=>x.type==='income').reduce((a,x)=>a+n(x.amount),0);return{cost:c,income:i,profit:i-c}}
-function go(r){if(r==='measure'&&!measureReturn){selected=null;measureReturn='add'}route=r;window.scrollTo({top:0,left:0,behavior:'instant'});if(r==='home')home();else if(r==='lands')lands();else if(r==='add')add();else if(r==='measure')measure();else if(r==='inventory')inventory();else if(r==='weather')weather();else if(r==='equipment')equipment();else if(r==='calculator'){toast('محاسبه‌گر برآورد از نسخه نهایی حذف شده است');go('home')}else if(r==='cultivation')cultivation();else if(r==='profile')profile();else if(r==='account')account();else if(r==='settings')settings();else if(r==='manager')managerChat();else if(r==='ads')ads();else if(r==='news')news();else if(r==='yar')yar();else if(r==='game')game();else home();document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.r===r))}
+function go(r){if(r==='measure'&&!measureReturn){selected=null;measureReturn='add'}route=r;window.scrollTo({top:0,left:0,behavior:'instant'});if(r==='home')home();else if(r==='lands')lands();else if(r==='add')add();else if(r==='measure')measure();else if(r==='inventory')inventory();else if(r==='weather')weather();else if(r==='equipment')equipment();else if(r==='calculator'){calculator()}else if(r==='cultivation')cultivation();else if(r==='profile')profile();else if(r==='account')account();else if(r==='settings')settings();else if(r==='manager')managerChat();else if(r==='ads')ads();else if(r==='news')news();else if(r==='yar')yar();else if(r==='game')game();else home();document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.r===r))}
 function landThumb(l){
   const ps=l&&l.measurement&&Array.isArray(l.measurement.points)?l.measurement.points:[];
   let poly='38,62 72,30 126,24 178,43 196,84 160,106 94,104 48,86';
@@ -1018,7 +892,7 @@ function landThumb(l){
 }
 
 function landCard(l){let t=totals(l.id);return `<article class="card"><div class="row land-title-row"><div class="land-title-wrap">${landThumb(l)}<div class="land-title-text"><h3>${esc(l.name)}</h3><span class="badge">${l.ownership==='rent'?'اجاره‌ای':'مالک'}</span></div></div><b>${n(l.area).toLocaleString('fa-IR')} هکتار</b></div><p class="muted small">${esc(l.region||'موقعیت ثبت نشده')} · ${esc(l.crop||'کشت ثبت نشده')}</p><div class="row small"><span>هزینه: ${money(t.cost)}</span><span>سود: ${money(t.profit)}</span></div><div class="actions"><button class="primary" onclick="openLand('${l.id}')">پرونده زمین</button><button class="secondary" onclick="weatherFor('${l.id}')">هوا</button></div></article>`}
-function home(){head('خانه');let t=totals(),area=state.lands.reduce((a,l)=>a+n(l.area),0);app.innerHTML=`<section class="hero" style="background-image:linear-gradient(180deg,rgba(0,45,32,.18),rgba(0,45,32,.72)),url('assets/wheat-hero.svg');background-size:cover;background-position:center;background-repeat:no-repeat;"><h1>یار کشاورز</h1><p>مدیریت حرفه‌ای زمین، کشت، هزینه، انبار و آب‌وهوا</p></section><div class="grid"><div class="card"><span class="muted">زمین‌ها</span><div class="metric">${state.lands.length.toLocaleString('fa-IR')}</div></div><div class="card"><span class="muted">مساحت</span><div class="metric">${area.toLocaleString('fa-IR')}</div><span class="small muted">هکتار</span></div><div class="card"><span class="muted">هزینه</span><div class="metric">${money(t.cost)}</div></div><div class="card"><span class="muted">درآمد</span><div class="metric">${money(t.income)}</div></div></div><div id="homeWeather" class="home-weather"><div class="home-weather-head"><b>🌤️ آب‌وهوای امروز</b><span class="small muted">در حال دریافت…</span></div></div><div class="section"><h3>دسترسی سریع</h3></div><div class="quick"><button onclick="go('add')"><span class="qi">🌾</span>ثبت زمین</button><button onclick="go('measure')"><span class="qi">📐</span>اندازه‌گیری</button><button onclick="go('inventory')"><span class="qi">📦</span>انبار</button><button onclick="go('equipment')"><span class="qi">🚜</span>ادوات</button></div><div class="section"><h3>زمین‌های اخیر</h3><button class="secondary" onclick="go('lands')">همه</button></div><div class="list">${state.lands.slice(0,3).map(landCard).join('')||'<div class="card empty">هنوز زمینی ثبت نشده است.</div>'}</div>`;loadHomeWeather()}
+function home(){head('خانه');let t=totals(),area=state.lands.reduce((a,l)=>a+n(l.area),0);app.innerHTML=`<section class="hero" style="background-image:linear-gradient(180deg,rgba(0,45,32,.18),rgba(0,45,32,.72)),url('wheat-hero.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;"><h1>یار کشاورز</h1><p>مدیریت حرفه‌ای زمین، کشت، هزینه، انبار و آب‌وهوا</p></section><div class="grid"><div class="card"><span class="muted">زمین‌ها</span><div class="metric">${state.lands.length.toLocaleString('fa-IR')}</div></div><div class="card"><span class="muted">مساحت</span><div class="metric">${area.toLocaleString('fa-IR')}</div><span class="small muted">هکتار</span></div><div class="card"><span class="muted">هزینه</span><div class="metric">${money(t.cost)}</div></div><div class="card"><span class="muted">درآمد</span><div class="metric">${money(t.income)}</div></div></div><div id="homeWeather" class="home-weather"><div class="home-weather-head"><b>🌤️ آب‌وهوای امروز</b><span class="small muted">در حال دریافت…</span></div></div><div class="section"><h3>دسترسی سریع</h3></div><div class="quick"><button onclick="go('add')"><span class="qi">🌾</span>ثبت زمین</button><button onclick="go('measure')"><span class="qi">📐</span>اندازه‌گیری</button><button onclick="go('inventory')"><span class="qi">📦</span>انبار</button><button onclick="go('equipment')"><span class="qi">🚜</span>ادوات</button><button onclick="go('calculator')"><span class="qi">🧮</span>محاسبه‌گر</button></div><div class="section"><h3>زمین‌های اخیر</h3><button class="secondary" onclick="go('lands')">همه</button></div><div class="list">${state.lands.slice(0,3).map(landCard).join('')||'<div class="card empty">هنوز زمینی ثبت نشده است.</div>'}</div>`;loadHomeWeather()}
 function lands(){head('زمین‌ها');app.innerHTML=`<div class="section"><h2>زمین‌های من</h2><button class="primary" onclick="go('add')">＋ زمین جدید</button></div><div class="list">${state.lands.map(landCard).join('')||'<div class="card empty">هنوز زمینی ثبت نشده است.</div>'}</div>`}
 function add(){
 head('ثبت زمین');
@@ -1157,7 +1031,6 @@ function cultivationTx(l){
 }
 function cultivation(){
  let l=state.lands.find(x=>x.id===selected);if(!l){toast('ابتدا یک زمین را انتخاب کن');return go('lands')}
-  
  head('کشت و اقتصاد — '+l.name);
  let archived=l.cultivationStatus==='archived', tx=cultivationTx(l), expenses=tx.filter(x=>x.type==='expense').reduce((a,x)=>a+n(x.amount),0), incomes=tx.filter(x=>x.type==='income').reduce((a,x)=>a+n(x.amount),0), profit=incomes-expenses;
  let archives=Array.isArray(l.cultivationArchive)?l.cultivationArchive:[];
@@ -1395,7 +1268,7 @@ function settingsClearManager(){
     toast('گفت‌وگوی مدیر پاک شد');settings();
   }
 }
-function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 حساب کاربری</h2><p class="small muted">اطلاعات برنامه روی همین دستگاه ذخیره می‌شود.</p><button class="primary" onclick="go('profile')">پروفایل کشاورز</button><button class="primary" style="margin-top:8px" onclick="go('manager')">👨‍💼 ارتباط با مدیر اپلیکیشن</button><button class="primary" style="margin-top:8px" onclick="location.href='./admin.html'">⚙️ مدیریت برنامه</button><button class="primary" style="margin-top:8px" onclick="go('settings')">⚙️ تنظیمات</button></div><div class="card" style="margin-top:10px"><b>💾 پشتیبان‌گیری</b><p class="small muted">اطلاعات زمین‌ها، انبار، ادوات و پروفایل را ذخیره یا بازیابی کن.</p><div class="actions"><button class="secondary" onclick="backup()">خروجی پشتیبان</button><button class="secondary" onclick="document.getElementById('restore').click()">بازیابی پشتیبان</button></div></div><div class="card" style="margin-top:10px"><b>نسخه آزمایشی</b><p class="small muted">V3 Trial — قبل از جایگزینی GitHub ابتدا روی گوشی تست شود.</p></div>`}function ads(){head('تبلیغات');let items=[{icon:'🌱',cat:'بذر',title:'بذرهای اصلاح‌شده و پربازده',text:'انواع بذر مناسب کشت‌های مختلف؛ قبل از خرید شرایط منطقه و رقم را بررسی کن.',price:'تماس برای قیمت'},{icon:'🧪',cat:'نهاده',title:'کود و نهاده کشاورزی',text:'معرفی محصولات و خدمات تأمین نهاده برای کشاورزان.',price:'استعلام قیمت'},{icon:'🚜',cat:'تجهیزات',title:'ماشین‌آلات و تجهیزات مزرعه',text:'آگهی‌های مرتبط با ادوات و تجهیزات کشاورزی در این بخش نمایش داده می‌شود.',price:'تماس با فروشنده'}];app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>محصولات، تجهیزات و خدماتی که برای کشاورز کاربردی هستند.</p></div><div class="filter-row"><button class="active">همه</button><button>🌱 بذر</button><button>🧪 نهاده</button><button>🚜 تجهیزات</button><button>🛠️ خدمات</button></div><div class="ads-grid">${items.map((x,i)=>`<article class="ad-item"><div class="ad-top"><span style="font-size:30px">${x.icon}</span><span class="badge-ad">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price)}</span></div><button class="primary ad-contact" onclick="toast('اطلاعات تماس این آگهی در نسخه آنلاین فعال می‌شود')">☎️ اطلاعات تماس</button></article>`).join('')}</div><div class="card" style="margin-top:12px"><b>📌 ثبت آگهی</b><p class="small muted">در مرحله اتصال آنلاین، کشاورزان و فروشندگان می‌توانند آگهی ثبت کنند.</p></div>`}
+function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 حساب کاربری</h2><p class="small muted">اطلاعات برنامه روی همین دستگاه ذخیره می‌شود.</p><button class="primary" onclick="go('profile')">پروفایل کشاورز</button><button class="primary" style="margin-top:8px" onclick="go('manager')">👨‍💼 ارتباط با مدیر اپلیکیشن</button><button class="primary" style="margin-top:8px" onclick="go('settings')">⚙️ تنظیمات</button></div><div class="card" style="margin-top:10px"><b>💾 پشتیبان‌گیری</b><p class="small muted">اطلاعات زمین‌ها، انبار، ادوات و پروفایل را ذخیره یا بازیابی کن.</p><div class="actions"><button class="secondary" onclick="backup()">خروجی پشتیبان</button><button class="secondary" onclick="document.getElementById('restore').click()">بازیابی پشتیبان</button></div></div><div class="card" style="margin-top:10px"><b>نسخه آزمایشی</b><p class="small muted">V3 Trial — قبل از جایگزینی GitHub ابتدا روی گوشی تست شود.</p></div>`}function ads(){head('تبلیغات');let items=[{icon:'🌱',cat:'بذر',title:'بذرهای اصلاح‌شده و پربازده',text:'انواع بذر مناسب کشت‌های مختلف؛ قبل از خرید شرایط منطقه و رقم را بررسی کن.',price:'تماس برای قیمت'},{icon:'🧪',cat:'نهاده',title:'کود و نهاده کشاورزی',text:'معرفی محصولات و خدمات تأمین نهاده برای کشاورزان.',price:'استعلام قیمت'},{icon:'🚜',cat:'تجهیزات',title:'ماشین‌آلات و تجهیزات مزرعه',text:'آگهی‌های مرتبط با ادوات و تجهیزات کشاورزی در این بخش نمایش داده می‌شود.',price:'تماس با فروشنده'}];app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>محصولات، تجهیزات و خدماتی که برای کشاورز کاربردی هستند.</p></div><div class="filter-row"><button class="active">همه</button><button>🌱 بذر</button><button>🧪 نهاده</button><button>🚜 تجهیزات</button><button>🛠️ خدمات</button></div><div class="ads-grid">${items.map((x,i)=>`<article class="ad-item"><div class="ad-top"><span style="font-size:30px">${x.icon}</span><span class="badge-ad">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price)}</span></div><button class="primary ad-contact" onclick="toast('اطلاعات تماس این آگهی در نسخه آنلاین فعال می‌شود')">☎️ اطلاعات تماس</button></article>`).join('')}</div><div class="card" style="margin-top:12px"><b>📌 ثبت آگهی</b><p class="small muted">در مرحله اتصال آنلاین، کشاورزان و فروشندگان می‌توانند آگهی ثبت کنند.</p></div>`}
 function news(){head('اخبار');let items=[{icon:'🌾',cat:'کشت',title:'مدیریت مرحله‌ای کشت؛ از آماده‌سازی تا برداشت',text:'ثبت عملیات و مشاهده وضعیت زمین کمک می‌کند تصمیم‌های مزرعه بر اساس سابقه واقعی گرفته شوند.',date:'امروز'},{icon:'🌦️',cat:'هوا',title:'هشدارهای آب‌وهوایی را جدی بگیرید',text:'پیش از آبیاری، سم‌پاشی یا عملیات حساس، شرایط جوی و پیش‌بینی روزهای آینده را بررسی کنید.',date:'امروز'},{icon:'💧',cat:'آبیاری',title:'آبیاری دقیق‌تر با ثبت مصرف آب',text:'ثبت زمان و مقدار آبیاری برای مقایسه عملکرد زمین و مدیریت بهتر منابع مفید است.',date:'این هفته'},{icon:'📦',cat:'بازار',title:'مدیریت موجودی انبار از هزینه‌های اضافی جلوگیری می‌کند',text:'ورودی و مصرف نهاده‌ها را جداگانه ثبت کن تا موجودی واقعی همیشه مشخص باشد.',date:'این هفته'}];app.innerHTML=`<div class="news-hero"><h2>📰 اخبار کشاورزی</h2><p>مطالب کاربردی برای تصمیم‌های بهتر در مزرعه.</p></div><div class="filter-row"><button class="active">همه</button><button>🌾 کشت</button><button>🌦️ هوا</button><button>💧 آبیاری</button><button>📈 بازار</button></div><div class="news-grid">${items.map((x,i)=>`<article class="news-item"><div class="news-top"><span style="font-size:29px">${x.icon}</span><span class="badge-news">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line">${esc(x.date)} · یار کشاورز</div><button class="secondary" style="width:100%;margin-top:11px" onclick="openNewsDetail(${i})">ادامه مطلب ←</button></article>`).join('')}</div>`;window.__ykNews=items}
 function openNewsDetail(i){let x=(window.__ykNews||[])[i];if(!x)return;head('خبر');app.innerHTML=`<article class="card news-detail"><div style="font-size:38px">${x.icon}</div><span class="badge-news">${esc(x.cat)}</span><h2>${esc(x.title)}</h2><div class="meta-line">${esc(x.date)} · یار کشاورز</div><p>${esc(x.text)}</p><p>این بخش در نسخه نهایی می‌تواند به سامانه اخبار آنلاین متصل شود تا اخبار معتبر، هشدارهای کشاورزی و اطلاعات بازار به‌صورت به‌روز در اختیار کشاورز قرار بگیرد.</p><button class="secondary" onclick="go('news')">← بازگشت به اخبار</button></article>`}
 function equipment(){head('ادوات');let list=state.equipment||[];app.innerHTML=`<div class="section"><h2>🚜 ادوات و ماشین‌آلات</h2><button class="primary" onclick="addEquipment()">＋ ثبت وسیله</button></div><div class="equip-grid">${list.map((x,i)=>`<article class="card equip-item"><div class="equip-icon">${esc(x.icon||'🚜')}</div><div><b>${esc(x.name)}</b><div class="equip-meta">نوع: ${esc(x.type||'-')}<br>مدل: ${esc(x.model||'-')} · وضعیت: ${esc(x.status||'فعال')}</div></div><div class="actions" style="margin:0"><button class="secondary" onclick="editEquipment(${i})">✏️</button><button class="danger" onclick="deleteEquipment(${i})">🗑️</button></div></article>`).join('')||'<div class="card empty">هنوز ادواتی ثبت نشده است.</div>'}</div>`}
@@ -1404,33 +1277,146 @@ function editEquipment(i){let x=state.equipment[i];if(!x)return;x.name=prompt('�
 function deleteEquipment(i){if(confirm('این وسیله حذف شود؟')){state.equipment.splice(i,1);save();equipment()}}
 const WX={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',56:'🌧️',57:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',66:'🌧️',67:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',77:'🌨️',80:'🌦️',81:'🌧️',82:'⛈️',85:'🌨️',86:'❄️',95:'⛈️',96:'⛈️',99:'⛈️'};
 function fmtHour(iso){try{return new Date(iso).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})}catch{return iso.slice(11,16)}}
-function weatherUrl(lat,lng){return `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=7`}
-async function getWeather(lat,lng){let r=await fetch(weatherUrl(lat,lng));if(!r.ok)throw new Error('weather');return r.json()}
-function nearestHourly(d,count=12){let now=Date.now(),out=[];for(let i=0;i<d.hourly.time.length&&out.length<count;i++){let ts=new Date(d.hourly.time[i]).getTime();if(ts>=now-30*60*1000)out.push(i)}return out}
-function hourlyHtml(d,count=12,compact=false){let idx=nearestHourly(d,count);return `<div class="${compact?'home-hourly':'hourly-grid'}">${idx.map(i=>`<div class="${compact?'home-hour':'hour-card'}"><b>${fmtHour(d.hourly.time[i])}</b><span class="${compact?'':'hi'}">${WX[d.hourly.weather_code[i]]||'🌤️'}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><small>💧 ${d.hourly.relative_humidity_2m[i]}%<br>🌧️ ${d.hourly.precipitation_probability[i]??0}%<br>💨 ${Math.round(d.hourly.wind_speed_10m[i])} km/h</small></div>`).join('')}</div>`}
-async function loadHomeWeather(){let box=document.getElementById('homeWeather');if(!box)return;let l=state.lands.find(x=>x.lat!=null&&x.lng!=null);try{let lat,lng,label='موقعیت فعلی';if(l){lat=l.lat;lng=l.lng;label=l.name}else{let ip=await fetch('https://ipapi.co/json/').then(r=>r.json());if(!ip.latitude||!ip.longitude)throw new Error('location');lat=ip.latitude;lng=ip.longitude;label=ip.city||'موقعیت تقریبی شما'}let d=await getWeather(lat,lng),c=d.current;box.innerHTML=`<div class="home-weather-head"><b>🌤️ آب‌وهوای امروز</b><button class="secondary" onclick="go('weather')">جزئیات</button></div><div class="home-weather-main"><div><div class="small muted">${esc(label)}</div><div class="home-weather-temp">${Math.round(c.temperature_2m)}°C</div><div class="small">احساس ${Math.round(c.apparent_temperature)}° · رطوبت ${c.relative_humidity_2m}% · باد ${Math.round(c.wind_speed_10m)} km/h</div></div><div class="home-weather-icon">${WX[c.weather_code]||'🌤️'}</div></div><div class="small muted" style="margin-top:10px">پیش‌بینی ساعتی</div>${hourlyHtml(d,8,true)}`;if(!l)box.insertAdjacentHTML('beforeend','<div class="weather-location-note">📍 برای آب‌وهوای دقیق هر زمین، موقعیت همان زمین را ثبت کن. آب‌وهوای صفحه اصلی بر اساس موقعیت تقریبی فعلی نمایش داده می‌شود.</div>')}catch(e){box.innerHTML=`<div class="home-weather-head"><b>🌤️ آب‌وهوای امروز</b><button class="secondary" onclick="go('weather')">باز کردن</button></div><p class="small muted">برای نمایش آب‌وهوا، اینترنت را روشن کن. موقعیت زمین لازم نیست؛ صفحه اصلی می‌تواند از موقعیت تقریبی استفاده کند.</p>`}}
-async function loadLandWeather(l){let box=document.getElementById('landWeather');if(!box)return;if(l.lat==null||l.lng==null){box.classList.remove('loading');box.innerHTML="📍 موقعیت این زمین ثبت نشده است.<br><button class='secondary' style='margin-top:7px' onclick=\"go('measure')\">ثبت موقعیت با نقشه و GPS</button>";return}try{let d=await getWeather(l.lat,l.lng),c=d.current;box.classList.remove('loading');box.innerHTML=`<div class="row"><div><div class="small muted">آب‌وهوای ${esc(l.name)}</div><div class="temp">${Math.round(c.temperature_2m)}°C</div></div><div style="font-size:45px">${WX[c.weather_code]||'🌤️'}</div></div><div class="small muted" style="margin-top:5px">رطوبت ${c.relative_humidity_2m}% · باد ${Math.round(c.wind_speed_10m)} km/h</div><button class="secondary" style="margin-top:8px" onclick="weatherFor('${l.id}')">پیش‌بینی کامل و ساعتی</button>`}catch{box.classList.remove('loading');box.innerHTML='⚠️ دریافت آب‌وهوا ممکن نشد. اینترنت را بررسی کن.'}}
+function offlineWeather(label){label=label||'حالت آفلاین';const seed=[...String(label)].reduce((a,c)=>a+c.charCodeAt(0),0),now=Date.now(),baseT=18+seed%14,codes=[0,1,2,3,61,2,1],hourly={time:[],weather_code:[],temperature_2m:[],relative_humidity_2m:[],precipitation_probability:[],wind_speed_10m:[]},daily={time:[],weather_code:[],temperature_2m_min:[],temperature_2m_max:[],precipitation_probability_max:[]};for(let i=0;i<24;i++){let d=new Date(now+i*3600000);hourly.time.push(d.toISOString());hourly.weather_code.push(codes[(seed+i)%codes.length]);hourly.temperature_2m.push(baseT+Math.round(Math.sin(i/3)*4));hourly.relative_humidity_2m.push(45+(seed+i*3)%35);hourly.precipitation_probability.push((seed+i*7)%45);hourly.wind_speed_10m.push(7+(seed+i)%13)}for(let i=0;i<7;i++){let d=new Date(now+i*86400000);daily.time.push(d.toISOString());daily.weather_code.push(codes[(seed+i+2)%codes.length]);daily.temperature_2m_min.push(baseT-5+i%3);daily.temperature_2m_max.push(baseT+5+i%4);daily.precipitation_probability_max.push((seed+i*9)%55)}return {current:{temperature_2m:baseT,apparent_temperature:baseT-1,relative_humidity_2m:hourly.relative_humidity_2m[0],wind_speed_10m:hourly.wind_speed_10m[0],precipitation:0,weather_code:hourly.weather_code[0]},hourly,daily}}
+function nearestHourly(d,count=12){return Array.from({length:Math.min(count,d.hourly.time.length)},(_,i)=>i)}
+function hourlyHtml(d,count=12,compact=false){let idx=nearestHourly(d,count);return `<div class="${compact?'home-hourly':'hourly-grid'}">${idx.map(i=>`<div class="${compact?'home-hour':'hour-card'}"><b>${fmtHour(d.hourly.time[i])}</b><span class="${compact?'':'hi'}">${WX[d.hourly.weather_code[i]]||'🌤️'}</span><strong>${Math.round(d.hourly.temperature_2m[i])}°</strong><small>💧 ${d.hourly.relative_humidity_2m[i]}%<br>🌧️ ${d.hourly.precipitation_probability[i]}%<br>💨 ${Math.round(d.hourly.wind_speed_10m[i])} km/h</small></div>`).join('')}</div>`}
+function loadHomeWeather(){let box=document.getElementById('homeWeather');if(!box)return;let l=state.lands.find(x=>x.lat!=null&&x.lng!=null),d=offlineWeather(l?l.name:'حالت آفلاین'),c=d.current;box.innerHTML=`<div class="home-weather-head"><b>🌤️ آب‌وهوای آفلاین</b><button class="secondary" onclick="go('weather')">جزئیات</button></div><div class="home-weather-main"><div><div class="small muted">${esc(l?l.name:'بدون داده زنده')}</div><div class="home-weather-temp">${Math.round(c.temperature_2m)}°C</div><div class="small">احساس ${Math.round(c.apparent_temperature)}° · رطوبت ${c.relative_humidity_2m}% · باد ${Math.round(c.wind_speed_10m)} km/h</div></div><div class="home-weather-icon">${WX[c.weather_code]||'🌤️'}</div></div><div class="small muted" style="margin-top:10px">پیش‌بینی نمونه محلی — بدون اینترنت</div>${hourlyHtml(d,8,true)}`}
+function loadLandWeather(l){let box=document.getElementById('landWeather');if(!box)return;if(l.lat==null||l.lng==null){box.classList.remove('loading');box.innerHTML="📍 موقعیت این زمین ثبت نشده است.<br><button class='secondary' style='margin-top:7px' onclick=\"go(\'measure\')\">ثبت موقعیت آفلاین</button>";return}let d=offlineWeather(l.name),c=d.current;box.classList.remove('loading');box.innerHTML=`<div class="row"><div><div class="small muted">آب‌وهوای آفلاین ${esc(l.name)}</div><div class="temp">${Math.round(c.temperature_2m)}°C</div></div><div style="font-size:45px">${WX[c.weather_code]||'🌤️'}</div></div><div class="small muted" style="margin-top:5px">رطوبت ${c.relative_humidity_2m}% · باد ${Math.round(c.wind_speed_10m)} km/h</div>`}
 function weather(){head('آب‌وهوا');let l=state.lands.find(x=>x.lat!=null&&x.lng!=null);if(l){weatherFor(l.id);return}loadGeneralWeather()}
-async function loadGeneralWeather(){head('آب‌وهوا');app.innerHTML='<div class="card weather-error">در حال دریافت آب‌وهوا و موقعیت تقریبی…</div>';try{let ip=await fetch('https://ipapi.co/json/').then(r=>r.json());if(!ip.latitude||!ip.longitude)throw new Error('location');let fake={id:'current',name:ip.city||'موقعیت فعلی',lat:ip.latitude,lng:ip.longitude};loadWeather(fake)}catch{app.innerHTML="<div class='card empty'>🌤️ آب‌وهوا در دسترس نیست.<p class='small muted'>این بخش برای کارکردن به اینترنت نیاز دارد. لازم نیست حتماً زمین ثبت شده باشد.</p><button class='primary' onclick=\"go('measure')\">ثبت موقعیت زمین</button></div>"}}
-function weatherFor(id){let l=state.lands.find(x=>x.id===id);if(!l)return;if(l.lat==null||l.lng==null){head('آب‌وهوای زمین');app.innerHTML=`<div class="card empty"><div style="font-size:45px">📍</div><b>موقعیت این زمین ثبت نشده است.</b><p class="small muted">برای آب‌وهوای دقیق این زمین، موقعیت آن را با نقشه ثبت کن.</p><button class="primary" onclick="go('measure')">رفتن به نقشه</button></div>`;return}loadWeather(l)}
-async function loadWeather(l){head('آب‌وهوای '+l.name);app.innerHTML='<div class="card weather-error">در حال دریافت آب‌وهوا…</div>';try{let d=await getWeather(l.lat,l.lng),c=d.current;app.innerHTML=`<div class="weather-now"><div class="row"><div><div class="small" style="opacity:.7">${esc(l.name)}</div><div class="weather-temp">${Math.round(c.temperature_2m)}°</div><div class="small">${WX[c.weather_code]||'🌤️'} · احساس ${Math.round(c.apparent_temperature)}° · رطوبت ${c.relative_humidity_2m}%</div></div><div class="weather-icon">${WX[c.weather_code]||'🌤️'}</div></div><div class="small" style="margin-top:8px">بارش ${c.precipitation} mm · باد ${Math.round(c.wind_speed_10m)} km/h</div></div><div class="section"><h3>⏱️ پیش‌بینی ساعتی — ۱۲ ساعت آینده</h3></div>${hourlyHtml(d,12,false)}<div class="section"><h3>📅 پیش‌بینی ۷ روزه</h3></div><div class="forecast">${d.daily.time.map((day,i)=>`<div class="day"><b>${new Date(day).toLocaleDateString('fa-IR',{weekday:'long',month:'numeric',day:'numeric'})}</b><span>${WX[d.daily.weather_code[i]]||'🌤️'}</span><span>${Math.round(d.daily.temperature_2m_min[i])}° / ${Math.round(d.daily.temperature_2m_max[i])}°</span><span>${d.daily.precipitation_probability_max[i]??0}%</span></div>`).join('')}</div><p class="small muted" style="text-align:center">داده هواشناسی از Open-Meteo دریافت می‌شود.</p>`}catch{app.innerHTML='<div class="card weather-error">دریافت آب‌وهوا انجام نشد. اینترنت را بررسی کن.</div>'}}
-function measure(landId){if(landId)selected=landId;if(!measureReturn)measureReturn=landId?'land':'add';head('متراژ');app.innerHTML=`<div class="measure-wrap"><div id="measureMap" class="measure-map"></div><div class="measure-head"><input id="search" placeholder="شهر، روستا یا مختصات"><button class="primary" onclick="searchPlace()">جستجو</button></div><div class="measure-tools"><button onclick="locate()">⌖</button><button onclick="toggleSat()">🛰️</button><button onclick="resetMapBearing()" title="بازگرداندن جهت نقشه">🧭</button><button onclick="undo()">↶</button><button onclick="clearMeasure()">↺</button><button onclick="closeMeasure()">×</button></div><div class="measure-bottom"><div class="measure-stats"><div><span>مساحت</span><b id="ma">۰</b></div><div><span>هکتار</span><b id="mh">۰</b></div><div><span>محیط</span><b id="mp">۰</b></div><div><span>نقاط</span><b id="mn">۰</b></div></div><div class="measure-actions"><button class="gps" id="gpsBtn" onclick="toggleGPS()">▶ شروع پیمایش GPS</button><button class="primary" id="register" disabled onclick="registerMeasured()">📐 ثبت زمین</button></div><div id="measureStatus" class="hint">حداقل ۳ نقطه روی نقشه مشخص کن.</div></div></div>`;setTimeout(initMap,50)}
-function initMap(){points=[];markers=[];if(selected&&measureReturn==='land'){let ll=state.lands.find(x=>x.id===selected);if(ll&&ll.measurement&&Array.isArray(ll.measurement.points))points=ll.measurement.points.map(x=>[+x[0],+x[1]]);}if(map){map.remove();map=null}map=L.map('measureMap',{zoomControl:false,touchZoom:true,dragging:true,rotate:true,touchRotate:true,dragRotate:true,shiftKeyRotate:true,rotateClockwise:true,preventPageGestures:true}).setView([35.7,51.4],12);window.__osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20,attribution:'© OpenStreetMap'}).addTo(map);map.on('click',e=>addPoint(e.latlng.lat,e.latlng.lng));if(points.length){points.forEach((p,i)=>{let m=L.marker(p,{draggable:true}).addTo(map);m.on('dragend',()=>{let q=m.getLatLng();points[i]=[q.lat,q.lng];redraw()});markers.push(m)});redraw();map.fitBounds(L.latLngBounds(points),{padding:[45,45]})}else updateMeasure()}
-function dist(a,b){let R=6371000,la1=a[0]*Math.PI/180,la2=b[0]*Math.PI/180,dla=(b[0]-a[0])*Math.PI/180,dlo=(b[1]-a[1])*Math.PI/180,q=Math.sin(dla/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dlo/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
-function areaM(ps){if(ps.length<3)return 0;let lat0=ps.reduce((a,p)=>a+p[0],0)/ps.length*Math.PI/180,R=6371000,a=0;for(let i=0;i<ps.length;i++){let p=ps[i],q=ps[(i+1)%ps.length],x1=R*p[1]*Math.PI/180*Math.cos(lat0),y1=R*p[0]*Math.PI/180,x2=R*q[1]*Math.PI/180*Math.cos(lat0),y2=R*q[0]*Math.PI/180;a+=x1*y2-x2*y1}return Math.abs(a)/2}
-function perimeter(ps){if(ps.length<2)return 0;let x=0;for(let i=0;i<ps.length;i++)x+=dist(ps[i],ps[(i+1)%ps.length]);return x}
-function addPoint(lat,lng){points.push([lat,lng]);let idx=points.length-1;let m=L.marker([lat,lng],{draggable:true}).addTo(map);m.on('dragend',()=>{let q=m.getLatLng();points[idx]=[q.lat,q.lng];redraw()});markers.push(m);redraw()}
-function redraw(){if(polygon)map.removeLayer(polygon);polygon=points.length>=3?L.polygon(points,{color:'#17664b',weight:3,fillOpacity:.18}).addTo(map):null;updateMeasure()}
-function updateMeasure(){let a=areaM(points),p=perimeter(points);if(document.getElementById('ma')){document.getElementById('ma').textContent=Math.round(a).toLocaleString('fa-IR')+' مترمربع';document.getElementById('mh').textContent=(a/10000).toLocaleString('fa-IR',{maximumFractionDigits:3});document.getElementById('mp').textContent=Math.round(p).toLocaleString('fa-IR')+' متر';document.getElementById('mn').textContent=points.length.toLocaleString('fa-IR');document.getElementById('register').disabled=points.length<3;let st=document.getElementById('measureStatus');if(st)st.textContent=points.length<3?'برای ثبت زمین، حداقل ۳ نقطه روی نقشه مشخص کن.':'✅ اندازه‌گیری آماده ثبت است؛ روی «ثبت این زمین» بزن.'}}
-function undo(){if(!points.length)return;points.pop();let m=markers.pop();if(m)map.removeLayer(m);redraw()}
-function clearMeasure(){stopGPS();points=[];markers.forEach(m=>map.removeLayer(m));markers=[];redraw()}
-function locate(){if(!navigator.geolocation)return toast('GPS در این مرورگر در دسترس نیست');if(location.protocol!=='https:'&&location.hostname!=='localhost'){toast('برای GPS باید برنامه روی آدرس HTTPS باز شود؛ فایل مستقیم گوشی اجازه GPS نمی‌دهد');return}navigator.geolocation.getCurrentPosition(p=>{map.setView([p.coords.latitude,p.coords.longitude],18);addPoint(p.coords.latitude,p.coords.longitude);toast('موقعیت شما روی نقشه ثبت شد')},err=>{let msg=err&&err.code===1?'اجازه موقعیت مکانی در مرورگر رد شده است؛ از تنظیمات Chrome اجازه Location را فعال کن.':err&&err.code===2?'موقعیت پیدا نشد؛ GPS گوشی را روشن کن.':'دریافت موقعیت زمان‌بر شد؛ GPS و اینترنت را بررسی کن.';toast(msg)}, {enableHighAccuracy:true,timeout:20000,maximumAge:0})}
-function toggleGPS(){if(watch!==null){stopGPS();return}if(!navigator.geolocation)return toast('GPS در این مرورگر در دسترس نیست');if(location.protocol!=='https:'&&location.hostname!=='localhost'){toast('پیمایش GPS فقط روی HTTPS یا localhost فعال می‌شود؛ بعد از قرار گرفتن روی GitHub Pages کار خواهد کرد');return}watch=navigator.geolocation.watchPosition(p=>{map.setView([p.coords.latitude,p.coords.longitude],18);addPoint(p.coords.latitude,p.coords.longitude)},err=>{stopGPS();toast(err&&err.code===1?'اجازه GPS داده نشد؛ Location را برای Chrome فعال کن.':'سیگنال GPS دریافت نشد')},{enableHighAccuracy:true,maximumAge:1000,timeout:15000});document.getElementById('gpsBtn').textContent='■ توقف پیمایش GPS'}
-function stopGPS(){if(watch!==null){navigator.geolocation.clearWatch(watch);watch=null}let b=document.getElementById('gpsBtn');if(b)b.textContent='▶ شروع پیمایش GPS'}
-function closeMeasure(){stopGPS();if(map){map.remove();map=null}let r=measureReturn||'home';measureReturn=null;go(r)}
-function resetMapBearing(){if(map&&typeof map.setBearing==='function')map.setBearing(0)}
-function toggleSat(){if(satellite){map.removeLayer(window.__sat);window.__osm.addTo(map);satellite=false}else{window.__osm.remove();window.__sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:20,attribution:'Tiles © Esri'}).addTo(map);satellite=true}}
-async function searchPlace(){let q=document.getElementById('search').value.trim();if(!q)return;try{let d=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=fa&q='+encodeURIComponent(q)).then(r=>r.json());if(!d.length)return toast('مکان پیدا نشد');map.setView([+d[0].lat,+d[0].lon],16)}catch{toast('جستجو انجام نشد')}}
+function loadGeneralWeather(){head('آب‌وهوا');let d=offlineWeather('حالت آفلاین'),c=d.current;app.innerHTML=`<div class="weather-now"><div class="row"><div><div class="small">حالت آفلاین</div><div class="weather-temp">${Math.round(c.temperature_2m)}°</div><div class="small">${WX[c.weather_code]||'🌤️'} · احساس ${Math.round(c.apparent_temperature)}° · رطوبت ${c.relative_humidity_2m}%</div></div><div class="weather-icon">${WX[c.weather_code]||'🌤️'}</div></div><div class="small" style="margin-top:8px">داده نمونه محلی؛ برای پیش‌بینی زنده از نسخه آنلاین استفاده کن.</div></div><div class="section"><h3>⏱️ پیش‌بینی ساعتی آفلاین</h3></div>${hourlyHtml(d,12,false)}<div class="section"><h3>📅 پیش‌بینی ۷ روزه آفلاین</h3></div><div class="forecast">${d.daily.time.map((day,i)=>`<div class="day"><b>${new Date(day).toLocaleDateString('fa-IR',{weekday:'long',month:'numeric',day:'numeric'})}</b><span>${WX[d.daily.weather_code[i]]||'🌤️'}</span><span>${Math.round(d.daily.temperature_2m_min[i])}° / ${Math.round(d.daily.temperature_2m_max[i])}°</span><span>${d.daily.precipitation_probability_max[i]}%</span></div>`).join('')}</div>`}
+function weatherFor(id){let l=state.lands.find(x=>x.id===id);if(!l)return;if(l.lat==null||l.lng==null){head('آب‌وهوای زمین');app.innerHTML=`<div class="card empty"><div style="font-size:45px">📍</div><b>موقعیت این زمین ثبت نشده است.</b><p class="small muted">در نسخه آفلاین می‌توانی اطلاعات زمین را محلی ثبت کنی.</p><button class="primary" onclick="go('measure')">اندازه‌گیری آفلاین</button></div>`;return}loadWeather(l)}
+function loadWeather(l){head('آب‌وهوای '+l.name);let d=offlineWeather(l.name),c=d.current;app.innerHTML=`<div class="weather-now"><div class="row"><div><div class="small">${esc(l.name)}</div><div class="weather-temp">${Math.round(c.temperature_2m)}°</div><div class="small">${WX[c.weather_code]||'🌤️'} · احساس ${Math.round(c.apparent_temperature)}° · رطوبت ${c.relative_humidity_2m}%</div></div><div class="weather-icon">${WX[c.weather_code]||'🌤️'}</div></div><div class="small" style="margin-top:8px">بارش ۰ mm · باد ${Math.round(c.wind_speed_10m)} km/h</div></div><div class="section"><h3>⏱️ پیش‌بینی ساعتی آفلاین</h3></div>${hourlyHtml(d,12,false)}<div class="section"><h3>📅 پیش‌بینی ۷ روزه آفلاین</h3></div><div class="forecast">${d.daily.time.map((day,i)=>`<div class="day"><b>${new Date(day).toLocaleDateString('fa-IR',{weekday:'long',month:'numeric',day:'numeric'})}</b><span>${WX[d.daily.weather_code[i]]||'🌤️'}</span><span>${Math.round(d.daily.temperature_2m_min[i])}° / ${Math.round(d.daily.temperature_2m_max[i])}°</span><span>${d.daily.precipitation_probability_max[i]}%</span></div>`).join('')}</div><p class="small muted" style="text-align:center">داده نمونه محلی — بدون اینترنت.</p>`}
+  function updateMeasure(){
+  const A=document.getElementById('ma');
+  const H=document.getElementById('mh');
+  const P=document.getElementById('mp');
+  const N=document.getElementById('mn');
+  const R=document.getElementById('register');
+  const S=document.getElementById('measureStatus');
+
+  const count=Array.isArray(points)?points.length:0;
+
+  if(N)N.textContent=String(count);
+  if(R)R.disabled=count<3;
+
+  if(S){
+    S.textContent=count<3
+      ?'حداقل ۳ نقطه لازم است.'
+      :'آماده ثبت — '+count+' نقطه';
+  }
+
+  if(!count){
+    if(A)A.textContent='۰';
+    if(H)H.textContent='۰.۰۰۰۰';
+    if(P)P.textContent='۰';
+    return;
+  }
+
+  let a=0;
+  let p=0;
+
+  try{
+    a=Number(areaM(points))||0;
+    p=Number(perimeter(points))||0;
+  }catch(e){
+    console.error('measurement error',e);
+  }
+
+  if(A)A.textContent=Math.round(a).toLocaleString('fa-IR');
+  if(H)H.textContent=(a/10000).toFixed(4);
+  if(P)P.textContent=Math.round(p).toLocaleString('fa-IR');
+  }
+  function geoDistance(a,b){
+  const R=6371008.8;
+  const toRad=v=>v*Math.PI/180;
+  const lat1=toRad(Number(a[0]));
+  const lat2=toRad(Number(b[0]));
+  const dLat=lat2-lat1;
+  const dLon=toRad(Number(b[1])-Number(a[1]));
+  const s1=Math.sin(dLat/2);
+  const s2=Math.sin(dLon/2);
+  const h=s1*s1+Math.cos(lat1)*Math.cos(lat2)*s2*s2;
+  return 2*R*Math.asin(Math.min(1,Math.sqrt(h)));
+}
+
+function perimeter(ps){
+  if(!Array.isArray(ps)||ps.length<2)return 0;
+  let total=0;
+  for(let i=0;i<ps.length;i++){
+    total+=geoDistance(ps[i],ps[(i+1)%ps.length]);
+  }
+  return total;
+}
+
+function areaM(ps){
+  if(!Array.isArray(ps)||ps.length<3)return 0;
+
+  const R=6371008.8;
+  const toRad=v=>v*Math.PI/180;
+  const lat0=ps.reduce((s,p)=>s+Number(p[0]),0)/ps.length;
+
+  const pts=ps.map(p=>[
+    R*toRad(Number(p[1]))*Math.cos(toRad(lat0)),
+    R*toRad(Number(p[0]))
+  ]);
+
+  let sum=0;
+
+  for(let i=0;i<pts.length;i++){
+    const a=pts[i];
+    const b=pts[(i+1)%pts.length];
+    sum+=a[0]*b[1]-b[0]*a[1];
+  }
+
+  return Math.abs(sum)/2;
+  }
+function measure(landId){if(landId)selected=landId;if(!measureReturn)measureReturn=landId?'land':'add';head('اندازه‌گیری آفلاین');app.innerHTML=`<div class="measure-wrap"><div id="measureMap" class="measure-map" style="background:linear-gradient(145deg,#edf7f0,#dcefe3);display:flex;align-items:center;justify-content:center;overflow:hidden"><svg id="offlineMeasureSvg" viewBox="0 0 360 520" width="100%" height="100%" style="touch-action:none"><defs><pattern id="offlineGrid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#cfe3d8" stroke-width="1"/></pattern></defs><rect width="360" height="520" fill="url(#offlineGrid)"/><text x="180" y="35" text-anchor="middle" fill="#17664b" font-size="15" font-weight="800">📐 اندازه‌گیری آفلاین</text><text x="180" y="57" text-anchor="middle" fill="#60756a" font-size="10">با لمس صفحه نقاط زمین را مشخص کن</text></svg></div><div class="measure-tools"><button onclick="locate()">⌖</button><button onclick="toggleSat()">🛰️</button><button onclick="undo()">↶</button><button onclick="clearMeasure()">↺</button><button onclick="closeMeasure()">×</button></div><div class="measure-bottom"><div class="measure-stats"><div><span>مساحت</span><b id="ma">۰</b></div><div><span>هکتار</span><b id="mh">۰</b></div><div><span>محیط</span><b id="mp">۰</b></div><div><span>نقاط</span><b id="mn">۰</b></div></div><div class="measure-actions"><button class="gps" id="gpsBtn" onclick="toggleGPS()">▶ ثبت با GPS</button><button class="primary" id="register" disabled onclick="registerMeasured()">📐 ثبت زمین</button></div><div id="measureStatus" class="hint">حداقل ۳ نقطه لازم است.</div></div></div>`;setTimeout(initMap,20)}
+function initMap(){points=[];if(selected&&measureReturn==='land'){let ll=state.lands.find(x=>x.id===selected);if(ll&&ll.measurement&&Array.isArray(ll.measurement.points))points=ll.measurement.points.map(x=>[+x[0],+x[1]])}const svg=document.getElementById('offlineMeasureSvg');if(!svg)return;svg.addEventListener('click',offlineMeasureClick);redraw()}
+function offlineMeasureClick(e){const svg=document.getElementById('offlineMeasureSvg'),r=svg.getBoundingClientRect(),x=Math.max(0,Math.min(360,(e.clientX-r.left)/r.width*360)),y=Math.max(0,Math.min(520,(e.clientY-r.top)/r.height*520));addPoint(35.7+(260-y)*.00001,51.4+(x-180)*.00001)}
+function coordToXY(p){if(!points.length)return[180,260];const xs=points.map(q=>q[1]),ys=points.map(q=>q[0]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),pad=55,w=Math.max(maxX-minX,1e-9),h=Math.max(maxY-minY,1e-9);return[pad+(p[1]-minX)/w*(360-pad*2),pad+(maxY-p[0])/h*(520-pad*2)]}
+function redraw(){const svg=document.getElementById('offlineMeasureSvg');if(!svg)return;svg.querySelectorAll('.dyn').forEach(x=>x.remove());if(points.length){const xy=points.map(coordToXY),poly=xy.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');svg.insertAdjacentHTML('beforeend',`<polygon class="dyn" points="${poly}" fill="#17664b" fill-opacity=".18" stroke="#17664b" stroke-width="3"/>`);xy.forEach((p,i)=>svg.insertAdjacentHTML('beforeend',`<circle class="dyn" cx="${p[0]}" cy="${p[1]}" r="7" fill="#fff" stroke="#17664b" stroke-width="3"/><text class="dyn" x="${p[0]+9}" y="${p[1]-9}" fill="#17664b" font-size="11" font-weight="800">${i+1}</text>`))}updateMeasure()}
+function updateMeasure(){
+  const A=document.getElementById('ma');
+  const H=document.getElementById('mh');
+  const P=document.getElementById('mp');
+  const N=document.getElementById('mn');
+  const R=document.getElementById('register');
+  const S=document.getElementById('measureStatus');
+
+  const count=Array.isArray(points)?points.length:0;
+
+  if(N)N.textContent=String(count);
+
+  if(R)R.disabled=count<3;
+
+  if(S){
+    S.textContent=count<3
+      ?'حداقل ۳ نقطه لازم است.'
+      :'آماده ثبت — '+count+' نقطه';
+  }
+
+  if(count===0){
+    if(A)A.textContent='۰';
+    if(H)H.textContent='۰.۰۰۰۰';
+    if(P)P.textContent='۰';
+    return;
+  }
+
+  let a=0;
+  let p=0;
+
+  try{
+    a=Number(areaM(points))||0;
+    p=Number(perimeter(points))||0;
+  }catch(e){
+    console.error('measurement error',e);
+  }
+
+  if(A)A.textContent=Math.round(a).toLocaleString('fa-IR');
+  if(H)H.textContent=(a/10000).toFixed(4);
+  if(P)P.textContent=Math.round(p).toLocaleString('fa-IR');
+                     }
+function addPoint(lat,lng){points.push([lat,lng]);redraw()}function undo(){points.pop();redraw()}function clearMeasure(){points=[];redraw()}function locate(){if(!navigator.geolocation)return toast('GPS در دسترس نیست');navigator.geolocation.getCurrentPosition(p=>{addPoint(p.coords.latitude,p.coords.longitude);toast('موقعیت GPS اضافه شد')},()=>toast('دریافت موقعیت GPS ناموفق بود'),{enableHighAccuracy:true,timeout:15000,maximumAge:1000})}function toggleGPS(){if(watch!==null){stopGPS();return}if(!navigator.geolocation)return toast('GPS در دسترس نیست');watch=navigator.geolocation.watchPosition(p=>addPoint(p.coords.latitude,p.coords.longitude),()=>{stopGPS();toast('سیگنال GPS دریافت نشد')},{enableHighAccuracy:true,maximumAge:1000,timeout:15000});let b=document.getElementById('gpsBtn');if(b)b.textContent='■ توقف GPS'}function stopGPS(){if(watch!==null){navigator.geolocation.clearWatch(watch);watch=null}let b=document.getElementById('gpsBtn');if(b)b.textContent='▶ ثبت با GPS'}function closeMeasure(){stopGPS();let r=measureReturn||'home';measureReturn=null;go(r)}function resetMapBearing(){toast('نسخه آفلاین قطب‌نما ندارد.')}function toggleSat(){toast('تصویر ماهواره‌ای آفلاین در دسترس نیست.')}function searchPlace(){toast('جستجوی مکان در نسخه آفلاین خاموش است.')}
 function registerMeasured(){
   if(points.length<3){toast('حداقل ۳ نقطه لازم است');return}
   let a=areaM(points), p=perimeter(points), lat=points.reduce((s,x)=>s+x[0],0)/points.length, lng=points.reduce((s,x)=>s+x[1],0)/points.length;
@@ -1469,7 +1455,7 @@ function registerMeasured(){
   document.getElementById('saveMeasuredLand').onclick=()=>{let nl=buildLand();if(!nl.name){toast('نام زمین را وارد کن');document.getElementById('newLandName').focus();return}state.lands.push(nl);save();selected=nl.id;closeReg();toast('زمین با همه مشخصات ذخیره شد');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(nl.id)},120)};
 }
 /* ===== PROFESSIONAL KESHAVAR-YAR V2 ===== */
-const YAR_CHAT_KEY='yk-yar-chat-v4';
+const YAR_CHAT_KEY='yk-yar-offline-chat-v1';
 let yarMessages=(()=>{try{const a=JSON.parse(localStorage.getItem(YAR_CHAT_KEY)||'[]');return Array.isArray(a)?a.filter(m=>!(m&&m.role==='bot'&&typeof m.text==='string'&&m.text.includes('سؤال را آزادانه بپرس'))):[]}catch(e){return[]}})();
 let yarPhotoData=null, yarPhotoName='';
 try{
@@ -1480,22 +1466,7 @@ try{
   yarMessages=_clean.slice(-60);
 }catch(e){}
 let yarLandMode=false;
-let yarMode=(()=>{try{return localStorage.getItem('yk-yar-mode')==='offline'?'offline':'online'}catch(e){return 'online'}})();
-function yarSetMode(mode){
-  yarMode=mode==='offline'?'offline':'online';
-  try{localStorage.setItem('yk-yar-mode',yarMode)}catch(e){}
-  yarChat();
-}
-function yarSelectLand(id){
-  if(!id){yarLandMode=false;selected=null}
-  else{
-    yarLandMode=true;selected=id;
-    try{localStorage.setItem('yk-last-land',id)}catch(e){}
-  }
-  if(document.getElementById('yarChat')) yarChat(); else yarLanding();
-}
-function yarLandOptions(){return (state.lands||[]).length?(state.lands||[]).map(x=>'<option value="'+esc(x.id)+'">'+esc(x.name||'زمین بدون نام')+'</option>').join(''):'<option value="">هنوز زمینی ثبت نشده</option>'}
-const YAR_AI_ENDPOINT='https://yarkeshavarz-ai-v4.z46689944.workers.dev';
+const YAR_AI_ENDPOINT='';
 function saveYarChat(){try{const clean=[];for(const m of yarMessages){const last=clean[clean.length-1];if(last&&last.role===m.role&&String(last.text||'')===String(m.text||'')&&!m.image&&!last.image)continue;clean.push(m)}yarMessages=clean.slice(-60);localStorage.setItem(YAR_CHAT_KEY,JSON.stringify(yarMessages))}catch(e){}}
 function yarNum(x){return Number(x||0).toLocaleString('fa-IR',{maximumFractionDigits:2})}
 function yarMoney(x){return Math.round(Number(x||0)).toLocaleString('fa-IR')+' تومان'}
@@ -1507,26 +1478,8 @@ function yarLandPhotos(id){
 function yarAiContext(id){
   const c=yarContext(id), l=c.l||null;
   const tx=l?(state.transactions||[]).filter(x=>x.landId===l.id).slice(-30):[];
-  const cultivation=l?{
-    status:l.cultivationStatus||'active',
-    cultivationId:l.activeCultivationId||'legacy',
-    crop:l.crop||'',
-    variety:l.cropVariety||'',
-    plantDate:l.plantDate||'',
-    notes:l.cropNotes||'',
-    lastHarvestDate:l.lastHarvestDate||''
-  }:null;
-  const cultivationHistory=l&&Array.isArray(l.cultivationArchive)
-    ?l.cultivationArchive.slice(-20).map(a=>({
-      year:a.year||'',crop:a.crop||'',variety:a.variety||'',area:a.area||0,
-      plantDate:a.plantDate||'',harvestDate:a.harvestDate||'',cost:a.cost||0,
-      income:a.income||0,profit:a.profit||0,notes:a.notes||''
-    }))
-    :[];
   return {
     land:l?{id:l.id,name:l.name,area:l.area,region:l.region,ownership:l.ownership,soil:l.soil,water:l.water,irrigation:l.irrigation,crop:l.crop,notes:l.notes,rentAmount:l.rentAmount}:null,
-    cultivation,
-    cultivationHistory,
     economics:l?{cost:c.t?.cost||0,income:c.t?.income||0,profit:c.t?.profit||0}:c?{cost:c.cost||0,income:c.income||0,profit:c.profit||0}:null,
     inventory:(state.inventory||[]).slice(0,80).map(x=>({name:x.name,qty:x.qty,unit:x.unit,category:x.category})),
     weather:l?.weather||null,
@@ -1633,181 +1586,16 @@ function yarRemovePhoto(){
 }
 function yarAddImageMessage(data,caption){yarMessages.push({role:'user',text:caption||'این عکس را تحلیل کن',image:data})}
 function yarImageIntent(q){const x=String(q||'').trim();return /^(?:یک|یه|یه دونه|یک دونه)?\s*(?:عکس|تصویر)(?:\s*(?:می.?خوام|می.?خواهم|لازم دارم))?[!؟?.،\s]*$/i.test(x)||/(?:عکس|تصویر|تصاویر|عکس‌ها)\s*(?:از|برای)?\s*\S+|(?:می.?خوام|می.?خواهم|نشون|نشان|بیار|بده|لازم دارم).*?(?:عکس|تصویر|تصاویر)/i.test(x)}
-async function yarSearchImages(q){
-  const raw=String(q||'').trim();
-  let term=raw
-    .replace(/^(?:لطفا\s*)?(?:یک|یه|یه دونه|یک دونه)?\s*(?:عکس|تصویر|تصاویر|عکس‌ها)\s*/i,'')
-    .replace(/^(?:از|برای)\s+/i,'')
-    .replace(/(?:می.?خوام|می.?خواهم|نشونم بده|نشانم بده|نشون بده|نشان بده|بیار|بده|لازم دارم|میخوام|می‌خوام|میخواهم|می‌خواهم)\s*$/i,'')
-    .replace(/\s+/g,' ')
-    .trim();
-
-  if(!term || /^(هرچی|هر چه|هرچی که|یه چیزی|یک چیزی|هر چیزی)$/i.test(term)){
-    return [];
-  }
-
-  // Try the user's exact subject first. Persian and English/Latin names both
-  // work with Commons; importantly, there is NO unrelated generic fallback.
-  const queries=[term];
-  const agriculturalWords=/(گندم|جو|برنج|ذرت|آفتابگردان|کلزا|پنبه|گوجه|خیار|سیب|انگور|پسته|زعفران|گیاه|درخت|بوته|برگ|گل|آفت|بیماری|تراکتور|کمباین|مزرعه|کشاورزی)/i;
-  if(agriculturalWords.test(term)) queries.push(term+' agriculture');
-
-  for(const searchTerm of queries){
-    const url='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(searchTerm)+'&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url|extmetadata&iilimit=1&iiurlwidth=700&format=json&origin=*';
-    const r=await fetch(url);
-    if(!r.ok) continue;
-    const d=await r.json();
-    const pages=Object.values(d.query?.pages||{});
-    const imgs=pages.map(x=>({
-      url:x.imageinfo?.[0]?.url||'',
-      thumb:x.imageinfo?.[0]?.thumburl||x.imageinfo?.[0]?.url||'',
-      title:String(x.title||'').replace(/^File:/,'')
-    })).filter(x=>x.url).slice(0,6);
-    if(imgs.length) return imgs;
-  }
-  return [];
-}
+async function yarSearchImages(){return []}
   async function yarOfflineAnswer(question, id=null){
   try{
-    const mod = await import('./offline/offline-ai.js');
+    const mod = await import('./offline/offline-ai.js?v=20260921-registry-v2');
     return mod.findOfflineAnswer(question, yarAiContext(id));
   }catch(e){
     return '🌱 پاسخ آفلاین در دسترس نیست. فایل‌های پوشه offline را بررسی کنید.';
   }
   }
-async function yarSend(){
-  const i=document.getElementById('yarInput'),q=(i?.value||'').trim(), id=selected||null;
-  if(!q&&!yarPhotoData)return;
-  const endpoint=String(YAR_AI_ENDPOINT||'').trim();
-  const image=yarPhotoData||null;
-  const question=q||'این عکس را در چارچوب کشاورزی تحلیل کن.';
-  const history=yarMessages.slice(-12).map(m=>({role:m.role,text:String(m.text||'').slice(0,4000)}));
-
-  const casual=/^(?:(?:سلام|درود)(?:\s+داداش)?(?:\s*(?:خوبی|چطوری))?|(?:خوبی|چطوری)(?:\s+داداش)?|خوبه\s+داداش\s+خوبی|(?:ممنون|مرسی|سپاس|متشکرم))(?:[!؟?.،\s]*)$/i.test(q);
-  if(casual){
-    yarMessages.push({role:'user',text:q});
-    yarMessages.push({role:'bot',text:yarReply(q,id)});
-    saveYarChat();yarRender();if(i){i.value='';i.focus()}return;
-  }
-
-  if(!image && yarImageIntent(q) && /(?:عکس|تصویر|تصاویر)/i.test(q) && /(?:هرچی|هر چه|هرچیزی|هر چیزی|یه چیزی|یک چیزی)/i.test(q)){
-    yarMessages.push({role:'user',text:q});
-    yarMessages.push({role:'bot',text:'حتماً داداش 🌱 فقط بگو عکسِ چه چیزی می‌خوای؛ مثلاً گندم، تراکتور، آفتابگردان یا هر موضوع دیگری.'});
-    if(i){i.value='';i.focus()};saveYarChat();yarRender();return;
-  }
-
-  if(!image && yarImageIntent(q) && /^(?:یک|یه|یه دونه|یک دونه)?\s*(?:عکس|تصویر)(?:\s*(?:می.?خوام|می.?خواهم|لازم دارم))?[!؟?.،\s]*$/i.test(q)){
-    yarMessages.push({role:'user',text:q});
-    yarMessages.push({role:'bot',text:'حتماً داداش 🌱 عکسِ چه محصول، گیاه، آفت یا موضوع کشاورزی‌ای می‌خوای؟ اسمش رو بگو تا برات جست‌وجو کنم.'});
-    if(i){i.value='';i.focus()};saveYarChat();yarRender();return;
-  }
-
-  if(!image && yarImageIntent(q)){
-    yarMessages.push({role:'user',text:q});
-    yarMessages.push({role:'bot',text:'در حال پیدا کردن تصاویر مرتبط…',pending:true});
-    yarRender();saveYarChat();
-    try{
-      const imgs=await yarSearchImages(q);
-      const k=yarMessages.findLastIndex(m=>m.pending);
-      if(k>=0)yarMessages[k]=imgs.length?{role:'bot',text:'🖼️ تصاویر مرتبط با درخواستت (برای مشاهده مستقیم):',images:imgs}:{role:'bot',text:'برای این موضوع تصویر مرتبطی پیدا نکردم 🌱 اسم دقیق محصول یا موضوع را بنویس تا فقط تصاویر مرتبط را جست‌وجو کنم.'};
-    }catch(e){
-      const k=yarMessages.findIndex(m=>m.pending);if(k>=0)yarMessages[k]={role:'bot',text:'جستجوی تصویر فعلاً در دسترس نیست. دوباره تلاش کن.'};
-    }
-    saveYarChat();yarRender();if(i){i.value='';i.focus()}return;
-  }
-
-  if(image && yarMode==='offline'){
-    yarAddImageMessage(image,question);
-    if(i)i.value='';
-    yarRemovePhoto();
-    yarMessages.push({role:'bot',text:'📴 حالت آفلاین فعاله. تحلیل تصویری به اتصال هوش مصنوعی آنلاین نیاز دارد؛ اما بر اساس اطلاعات همین زمین و سؤال متنی راهنمایی‌ات می‌کنم.'});
-    saveYarChat();yarRender();
-    return;
-  }
-
-  if(image){
-    const analysisId=yarRecordImageAnalysis(id,{image,question,status:'در انتظار تحلیل',result:'در انتظار تحلیل',action:'در انتظار پیشنهاد'});
-    yarAddImageMessage(image,question);if(i)i.value='';yarRemovePhoto();
-    yarMessages.push({role:'bot',text:'عکس دریافت شد؛ در حال تحلیل توسط کشاورزیار…',pending:true});yarRender();saveYarChat();
-    if(!endpoint || endpoint.includes('REPLACE-WITH-YOUR-WORKER')){
-      setTimeout(()=>{const k=yarMessages.findIndex(m=>m.pending);if(k>=0)yarMessages[k]={role:'bot',text:'رابط هوش مصنوعی هنوز فعال نشده است. آدرس Worker را در YAR_AI_ENDPOINT قرار بده.'};yarRender();saveYarChat()},450);
-      if(id)yarUpdateImageAnalysis(id,analysisId,{status:'در انتظار اتصال AI'});
-      return;
-    }
-    try{
-      const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:question,image,mode:id?'land':'general',context:yarAiContext(id),history})});
-      const d=await r.json().catch(()=>({}));
-      if(!r.ok)throw new Error(d.error||('HTTP '+r.status));
-      const k=yarMessages.findIndex(m=>m.pending);if(k>=0)yarMessages[k]={role:'bot',text:d.answer||d.reply||'تحلیل تصویر دریافت نشد.'};
-      if(id)yarUpdateImageAnalysis(id,analysisId,{status:'تحلیل شد',result:d.answer||d.reply||'تحلیل دریافت نشد.',action:'پیشنهادها در متن تحلیل ارائه شده‌اند.'});
-      yarRender();saveYarChat();
-    }catch(e){
-      const k=yarMessages.findIndex(m=>m.pending);if(k>=0)yarMessages[k]={role:'bot',text:'اتصال امن هوش مصنوعی برقرار نشد. تنظیمات Worker و API را بررسی کن.'};
-      if(id)yarUpdateImageAnalysis(id,analysisId,{status:'خطا',result:'تحلیل دریافت نشد.',action:'اتصال هوش مصنوعی بررسی شود.'});
-      yarRender();saveYarChat();
-    }
-    return;
-  }
-
-  yarMessages.push({role:'user',text:q});
-  yarMessages.push({role:'bot',text:'در حال بررسی سؤال توسط کشاورزیار…',pending:true});
-  if(i){i.value='';i.focus()}
-  yarRender();saveYarChat();
-  if(yarMode==='offline'){
-    const k=yarMessages.findIndex(m=>m.pending);
-    if(k>=0)yarMessages[k]={role:'bot',text:await yarOfflineAnswer(q,id)};
-    saveYarChat();yarRender();
-    return;
-  }
-  if(!navigator.onLine){
-  const k=yarMessages.findIndex(m=>m.pending);
-  if(k>=0){
-    yarMessages[k]={
-      role:'bot',
-      text:await yarOfflineAnswer(q,id)
-    };
-  }
-  saveYarChat();
-  yarRender();
-  return;
-  }
-
-  if(!endpoint || endpoint.includes('REPLACE-WITH-YOUR-WORKER')){
-    const k=yarMessages.findIndex(m=>m.pending);if(k>=0)yarMessages[k]={role:'bot',text:await yarOfflineAnswer(q,id)};
-    saveYarChat();yarRender();if(i){i.value='';i.focus()}return;
-  }
-
-  try{
-    const controller=new AbortController();
-const timer=setTimeout(()=>controller.abort(),8000);
-
-const r=await fetch(endpoint,{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  signal:controller.signal,
-  body:JSON.stringify({
-    message:q,
-    mode:id?'land':'general',
-    context:yarAiContext(id),
-    history
-  })
-});
-
-clearTimeout(timer);
-const d=await r.json().catch(()=>({}));
-    if(!r.ok)throw new Error(d.error||('HTTP '+r.status));
-    const k=yarMessages.findIndex(m=>m.pending);if(k>=0)yarMessages[k]={role:'bot',text:d.answer||d.reply||'پاسخی دریافت نشد.'};
-  }catch(e){
-    const k=yarMessages.findIndex(m=>m.pending);
-if(k>=0){
-  yarMessages[k]={
-    role:'bot',
-    text:await yarOfflineAnswer(q,id)
-  };
-}
-  }
-  saveYarChat();yarRender();if(i){i.value='';i.focus()}
-}
+async function yarSend(){const i=document.getElementById('yarInput'),q=(i?.value||'').trim(),id=selected||null;if(!q&&!yarPhotoData)return;const question=q||'این عکس را در چارچوب کشاورزی بررسی کن.';yarMessages.push({role:'user',text:q||'📷 عکس ارسال شد'});if(yarPhotoData){yarAddImageMessage(yarPhotoData,question);yarRemovePhoto();yarMessages.push({role:'bot',text:'📷 عکس ذخیره شد. تحلیل تصویری هوش مصنوعی در نسخه آفلاین انجام نمی‌شود؛ برای تحلیل تصویر از نسخه آنلاین استفاده کن.'})}else{yarMessages.push({role:'bot',text:await yarOfflineAnswer(question,id)})}saveYarChat();yarRender();if(i){i.value='';i.focus()}}
 
 function yarAnalyzeLand(id){
   const l=yarLand(id);if(!l)return;
@@ -1833,145 +1621,43 @@ function yarPriorityPlan(id){
   return out.slice(0,3);
 }
 
-
 function yar(){
-  yarLanding();
-}
-function yarLanding(){
-  head('کشاورزیار');
-  const current = yarLand();
-  const selectedId = current ? current.id : '';
-  app.innerHTML = `
-    <section class="yar-home" aria-label="صفحه اصلی کشاورزیار">
-      <div class="yar-home-card">
-        <button type="button" class="yar-home-close" onclick="go('home')" aria-label="بستن">×</button>
-
-        <div class="yar-home-logo" aria-hidden="true">✦</div>
-        <h1>کشاورزیار</h1>
-        <p class="yar-home-subtitle">حالت موردنظر خودت را انتخاب کن</p>
-
-        <div class="yar-home-modes">
-          <button type="button" class="yar-home-mode" onclick="yarSetMode('online')">
-            <span class="yar-home-arrow">‹</span>
-            <span class="yar-home-mode-icon yar-home-cloud">☁</span>
-            <span class="yar-home-mode-text">
-              <b>آنلاین</b>
-              <small>هوش مصنوعی آنلاین + اطلاعات پرونده زمین</small>
-            </span>
-          </button>
-
-          <button type="button" class="yar-home-mode" onclick="yarSetMode('offline')">
-            <span class="yar-home-arrow">‹</span>
-            <span class="yar-home-mode-icon yar-home-off">OFF</span>
-            <span class="yar-home-mode-text">
-              <b>آفلاین</b>
-              <small>دستیار کشاورزی بدون نیاز به اینترنت</small>
-            </span>
-          </button>
-        </div>
-
-        <div class="yar-home-divider"></div>
-
-        <div class="yar-home-land-title">پرونده زمین</div>
-        <div class="yar-home-land-select">
-          <span>🌾</span>
-          <select id="yarHomeLandSelect" onchange="yarHomeChooseLand(this.value)">
-            <option value="">همه زمین‌ها / حالت عمومی</option>
-            ${yarLandOptions()}
-          </select>
-          <span class="yar-home-chevron">⌄</span>
-        </div>
-        <p class="yar-home-note">اطلاعات این پرونده در گفت‌وگوی کشاورزیار در دسترس خواهد بود.</p>
-      </div>
-    </section>`;
-  const s=document.getElementById('yarHomeLandSelect');
-  if(s) s.value=selectedId;
-}
-function yarHomeChooseLand(id){
-  if(!id){yarLandMode=false;selected=null}
-  else{
-    yarLandMode=true;selected=id;
-    try{localStorage.setItem('yk-last-land',id)}catch(e){}
-  }
-}
-
-function yarChat(){
-  let l=yarLand();
-  const mode=(l&&yarLandMode)?'land':'general';
-  if(mode==='land') selected=l.id; else {l=null;selected=null;}
-  head(l?'کشاورزیار':'کشاورزیار');
-  if(!yarMessages.length)yarMessages=[{role:'bot',text:l?`سلام 🌱 من کشاورزیارِ «${l.name}» هستم. پرونده این زمین در دسترس من است.`:'سلام 🌱 من کشاورزیارم. سؤال کشاورزی، عکس یا درخواست تحلیل خودت را بفرست.'}];
-  const status=l?`پرونده «${esc(l.name)}» فعال است.`:(yarMode==='offline'?'دستیار آفلاین فعال است؛ اطلاعات روی همین دستگاه استفاده می‌شود.':'دستیار آنلاین فعال است؛ می‌توانی سؤال یا عکس بفرستی.');
-  app.innerHTML=`<section class="yar-clean-page">
-    <header class="yar-clean-head">
-      <button class="yar-back" type="button" onclick="yarLanding()">‹</button>
-      <div class="yar-clean-brand"><b>کشاورزیار</b><small>${yarMode==='online'?'آنلاین':'آفلاین'} · ${l?'مشاور همین زمین':'حالت عمومی'}</small></div>
+const l=selected?yarLand(selected):null;
+  
+  head(l?'کشاورزیار — '+l.name:'کشاورزیار');
+  if(!yarMessages.length)yarMessages=[{role:'bot',text:l?`سلام 🌱 من کشاورزیارِ «${l.name}» هستم. پرونده این قطعه را در اختیار دارم و می‌توانی هر سؤال، عکس یا درخواست تحلیل را مطرح کنی.`:'سلام 🌱 من کشاورزیارم. دستیار عمومی کشاورزی هستم؛ بدون انتخاب زمین، هر سؤال کشاورزی یا عکس را می‌توانی برای بررسی بفرستی.'}];
+  const c=yarContext();
+  const analysis=l?yarQuickAnalysis(l.id):yarQuickAnalysis(null);
+  const analysisClass=analysis.level==='نیازمند توجه'?'warn':'ok';
+  app.innerHTML=`<section class="yarpro yar-final">
+    <header class="yarpro-head">
+      <button type="button" class="yarpro-switch" onclick="go('home')">✕</button>
+      <div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>${l?'متخصص پرونده «'+esc(l.name)+'»':'دستیار هوشمند عمومی کشاورزی'}</span></div></div>
+      ${l?`<button class="yarpro-switch" onclick="yarLandMode=false;selected=null;go('yar')">عمومی</button>`:''}
     </header>
-    <div class="yar-status"><b>${yarMode==='online'?'☁️ آنلاین':'📴 آفلاین'}</b><small>${status}</small></div>
+
     <div id="yarChat" class="yarpro-chat"></div>
     <input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden>
     <input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden>
     <div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div>
-    <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="هر سؤال کشاورزی که داری…"><button type="submit" class="yarpro-send">➤</button></form>
-    <div class="yar-clean-tools">
-      <button type="button" onclick="${l?`yarAnalyzeLand('${l.id}')`:`yarAsk('اطلاعات و وضعیت مزرعه را بررسی کن')`}"><span>🌾</span>تحلیل مزرعه</button>
-      <button type="button" onclick="openCropAdvisor()"><span>🌱</span>مشاور کشت</button>
-      <button type="button" onclick="yarAsk('وضعیت انبار و نهاده را بررسی کن')"><span>📦</span>انبار و نهاده</button>
-      <button type="button" onclick="yarAsk('اقتصاد مزرعه و هزینه و درآمد را بررسی کن')"><span>💰</span>اقتصاد مزرعه</button>
-      <button type="button" onclick="yarPickPhoto()"><span>📷</span>تحلیل عکس</button>
+    <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()" aria-label="تایپ پیام" title="تایپ پیام">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()" aria-label="افزودن عکس">📷</button><input id="yarInput" autocomplete="off" placeholder="${l?'درباره همین زمین سؤال کن…':'هر سؤال کشاورزی که داری…'}"><button type="submit" class="yarpro-send" aria-label="ارسال پیام" title="ارسال پیام">➤</button></form>
+    <div class="yar-final-tools" aria-label="ابزارهای کشاورزیار">
+      <button type="button" onclick="${l?`yarAnalyzeLand('${l.id}')`:`yarAsk('اطلاعات و وضعیت مزرعه را بررسی کن')`}"><span>🌾</span><b>تحلیل مزرعه</b></button>
+      <button type="button" onclick="yarAsk('برای کشت چه پیشنهادی داری؟')"><span>🌱</span><b>مشاور کشت</b></button>
+      <button type="button" onclick="yarAsk('وضعیت انبار و نهاده را بررسی کن')"><span>📦</span><b>انبار و نهاده</b></button>
+      <button type="button" onclick="yarAsk('اقتصاد مزرعه و هزینه و درآمد را بررسی کن')"><span>💰</span><b>اقتصاد مزرعه</b></button>
+      <button type="button" onclick="yarPickPhoto()"><span>📷</span><b>تحلیل عکس</b></button>
     </div>
+    <div class="yarpro-hint">${l?'این گفت‌وگو به پرونده همین زمین متصل است.':'حالت عمومی فعال است؛ برای سؤال درباره یک قطعه، از داخل پرونده همان زمین وارد کشاورزیار شو.'}</div>
   </section>`;
   yarRender();
   yarBindInput();
 }
-
-function yarOfflineKnowledgeHtml(){
-  const l=yarLand();
-  const crop=(l?.crop||'').trim();
-  const subject=crop?` ${esc(crop)}`:'';
-  const items=[
-    ['📘','معرفی محصول',`معرفی کوتاه${subject||' محصول'}، نام علمی، کاربرد و نکات اصلی.`,`معرفی محصول${subject}`],
-    ['🌱','کاشت و تکثیر','روش کاشت، زمان مناسب، فاصله و روش‌های تکثیر.','کاشت و تکثیر'],
-    ['💧','آبیاری','نیاز آبی، زمان‌بندی و نکات مدیریت آب.','آبیاری'],
-    ['🧪','تغذیه و کود','اصول تغذیه، کوددهی و نکات مصرف.','تغذیه و کود'],
-    ['🌿','داشت و مراقبت','مراقبت‌های دوره رشد و عملیات مزرعه.','داشت و مراقبت'],
-    ['🐛','آفات','شناخت آفات و نشانه‌های رایج خسارت.','آفات'],
-    ['🦠','بیماری‌ها','نشانه‌ها، عوامل احتمالی و مدیریت کلی بیماری‌ها.','بیماری‌ها'],
-    ['🌾','برداشت','زمان برداشت و نکات مهم هنگام برداشت.','برداشت'],
-    ['📦','پس از برداشت و انبار','خشک‌کردن، نگهداری و مدیریت انبار.','پس از برداشت و انبار'],
-    ['🪨','خاک و شرایط زمین','خاک، زهکشی و شرایط مناسب رشد.','خاک و شرایط زمین'],
-    ['🌡️','اقلیم و دما','دما، اقلیم و شرایط محیطی موردنیاز.','اقلیم و دما'],
-    ['💰','اقتصاد و عملکرد','هزینه، عملکرد و نکات اقتصادی کشت.','اقتصاد و عملکرد'],
-    ['⚠️','ریسک‌ها','ریسک‌های مهم و نکات احتیاطی در کشت.','ریسک‌ها']
-  ];
-  return `<section class="yar-offline-guide" aria-label="راهنمای آفلاین کشاورزیار">
-    <div class="yar-offline-guide-head">
-      <div><b>📚 بانک دانش آفلاین</b><small>${crop?`برای محصول «${esc(crop)}» آماده است.`:'نام محصول را در سؤال بنویس تا پاسخ دقیق‌تر شود.'}</small></div>
-      <span>📴 آفلاین</span>
-    </div>
-    <div class="yar-offline-intro">
-      <button type="button" onclick="yarOfflineTopic('معرفی محصول')">
-        <span>📘</span><div><b>معرفی محصول</b><small>${crop?`معرفی ${esc(crop)}`:'نام محصول را بنویس'}</small></div><i>‹</i>
-      </button>
-    </div>
-    <div class="yar-offline-accordion">
-      ${items.slice(1).map(x=>`<details><summary><span class="yo-icon">${x[0]}</span><b>${x[1]}</b><em>⌄</em></summary><div class="yo-body"><span>${x[2]}</span><button type="button" onclick="yarOfflineTopic('${x[3]}')">پرسش درباره ${x[1]} ←</button></div></details>`).join('')}
-    </div>
-  </section>`;
-}
-function yarOfflineTopic(topic){
-  const l=yarLand();
-  let q=topic;
-  if(topic==='معرفی محصول' && l?.crop) q=`معرفی محصول ${l.crop}`;
-  else if(topic!=='معرفی محصول' && l?.crop) q=`${topic} ${l.crop}`;
-  yarAsk(q);
-}
-
-function yarRender(){const b=document.getElementById('yarChat');if(!b)return;const guide=yarMode==='offline'?yarOfflineKnowledgeHtml():'';b.innerHTML=guide+yarMessages.map(m=>{const imgs=Array.isArray(m.images)&&m.images.length?`<div class="yar-image-results">${m.images.slice(0,6).map(x=>`<figure class="yar-image-card"><img src="${esc(x.thumb||x.url||'')}" alt="${esc(x.title||'تصویر کشاورزی')}" loading="lazy" referrerpolicy="no-referrer"><figcaption>${esc(x.title||'تصویر کشاورزی')}</figcaption></figure>`).join('')}</div>`:'';return `<div class="yar-msg ${m.role==='user'?'user':'bot'}"><div>${m.image?`<img class="yar-msg-image" src="${esc(m.image)}" alt="عکس ارسالی">`:''}${m.text?`<span>${esc(m.text).replace(/\n/g,'<br>')}</span>`:''}${imgs}</div></div>`}).join('');b.scrollTop=b.scrollHeight}
-function yarAsk(q){if(String(q||'').includes('برای کشت')){if(typeof openCropAdvisor==='function'){openCropAdvisor();return}}const i=document.getElementById('yarInput');if(i){i.value=q;yarSend()}}
+function yarRender(){const b=document.getElementById('yarChat');if(!b)return;b.innerHTML=yarMessages.map(m=>{const imgs=Array.isArray(m.images)&&m.images.length?`<div class="yar-image-results">${m.images.slice(0,6).map(x=>`<figure class="yar-image-card"><img src="${esc(x.thumb||x.url||'')}" alt="${esc(x.title||'تصویر کشاورزی')}" loading="lazy" referrerpolicy="no-referrer"><figcaption>${esc(x.title||'تصویر کشاورزی')}</figcaption></figure>`).join('')}</div>`:'';return `<div class="yar-msg ${m.role==='user'?'user':'bot'}"><div>${m.image?`<img class="yar-msg-image" src="${esc(m.image)}" alt="عکس ارسالی">`:''}${m.text?`<span>${esc(m.text).replace(/\n/g,'<br>')}</span>`:''}${imgs}</div></div>`}).join('');b.scrollTop=b.scrollHeight}
+function yarAsk(q){const i=document.getElementById('yarInput');if(i){i.value=q;yarSend()}}
 function yarBindInput(){const i=document.getElementById('yarInput');if(!i||i.dataset.bound==='1')return;i.dataset.bound='1';i.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();const f=i.closest('form');if(f)f.requestSubmit();else yarSend();}})}
 function yarFocusInput(){const i=document.getElementById('yarInput');if(!i)return;i.focus();try{i.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}}
-function yarClear(){yarMessages=[];saveYarChat();yarChat()}
+function yarClear(){yarMessages=[];saveYarChat();yar()}
 
 function game(){
   head('سرگرمی');
@@ -2016,7 +1702,6 @@ if('serviceWorker' in navigator){
 .expense-list{margin-top:12px;display:grid;gap:8px}.expense-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid #e7ece9}.expense-row-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}.mini-btn{padding:6px 9px!important;font-size:12px!important}.expense-row-actions>b{white-space:nowrap}
   /* ===== KESHAVAR-YAR CLEAN FULLSCREEN ===== */
 
-.yar-mode-panel{margin:0;padding:10px 12px;background:#f7fbf8;border-bottom:1px solid #dfeae4;direction:rtl}.yar-mode-title{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#24463a;margin-bottom:7px}.yar-mode-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.yar-mode-buttons button{border:1px solid #d8e6df;background:#fff;color:#48665b;border-radius:12px;padding:9px;font:800 12px inherit}.yar-mode-buttons button.active{background:#e8f7ef;border-color:#2d9b68;color:#176b43;box-shadow:0 4px 12px rgba(23,107,67,.08)}.yar-land-picker{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;margin-top:8px}.yar-land-picker label{font-size:11px;color:#6a7e75}.yar-land-picker select{min-width:0;border:1px solid #d8e6df;border-radius:12px;background:#fff;padding:9px 10px;font:700 12px inherit;color:#24463a}.yar-mode-note{margin-top:7px;font-size:10px;color:#71837b;line-height:1.7}
 /* خود صفحه کشاورزیار */
 .yar-final.yarpro{
   margin:0!important;
@@ -2136,7 +1821,7 @@ body:has(.yar-final){
   }
 }
 </style><!-- V3 CHAT FIX: clean history, compact close button, silent local fallback. -->
-<!-- V3 FINAL CLEANUP: obsolete estimate calculator removed; route navigation resets scroll to top. -->
+<!-- Legacy agricultural calculator restored on top of the V3 data model. -->
 
 <style id="yar-fixed-input-final">
 /* V9: کادر تایپ همیشه ثابت و دقیقاً چسبیده به بالای پنج ابزار پایین */
@@ -2339,448 +2024,8 @@ html.yk-dark img,html.yk-dark video,html.yk-dark svg,html.yk-dark .logo{filter:i
 html.yk-font-small{font-size:92%}
 html.yk-font-large{font-size:108%}
 </style>
-
-
-<style id="yar-v2-layout-and-offline-fix">
-/* V2: کشاورزیار — هدر، اسکرول واقعی، حالت آفلاین آکاردئونی */
-.yar-final{
-  position:fixed!important;
-  inset:0!important;
-  width:100vw!important;
-  height:100dvh!important;
-  max-width:none!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:hidden!important;
-  box-sizing:border-box!important;
-  display:flex!important;
-  flex-direction:column!important;
-  background:#eef5f1!important;
-}
-.yar-final .yarpro-head{
-  position:relative!important;
-  inset:auto!important;
-  flex:0 0 auto!important;
-  z-index:10000010!important;
-  display:flex!important;
-  min-height:58px!important;
-  height:58px!important;
-  padding:9px 12px!important;
-  margin:0!important;
-  border:0!important;
-  border-radius:0!important;
-  background:#fff!important;
-  color:#17362a!important;
-  box-shadow:0 2px 12px rgba(13,55,40,.08)!important;
-  box-sizing:border-box!important;
-}
-.yar-final .yarpro-head > .yarpro-switch:first-child{
-  display:grid!important;
-  place-items:center!important;
-  visibility:visible!important;
-  opacity:1!important;
-  width:36px!important;
-  min-width:36px!important;
-  height:36px!important;
-  min-height:36px!important;
-  flex:0 0 36px!important;
-  padding:0!important;
-  margin:0!important;
-  background:#17664b!important;
-  color:#fff!important;
-  border:0!important;
-  border-radius:10px!important;
-  font-size:21px!important;
-  line-height:1!important;
-  z-index:10000011!important;
-}
-.yar-final .yarpro-brand{color:#17362a!important}
-.yar-final .yarpro-brand h2{color:#123b2b!important;font-size:18px!important}
-.yar-final .yarpro-brand span{color:#62736b!important}
-.yar-final .yarpro-head .yarpro-switch:not(:first-child){
-  background:#eef6f1!important;color:#17664b!important;border:1px solid #d8e7df!important;
-}
-
-/* پنل حالت همیشه زیر هدر و داخل جریان صفحه */
-.yar-final .yar-mode-panel{
-  position:relative!important;
-  z-index:10000009!important;
-  flex:0 0 auto!important;
-  display:block!important;
-  visibility:visible!important;
-  opacity:1!important;
-  width:100%!important;
-  box-sizing:border-box!important;
-  background:#f7fbf8!important;
-  border-bottom:1px solid #dfeae4!important;
-  padding:10px 12px!important;
-}
-
-/* فقط چت اسکرول شود؛ دیگر روی پنل یا فرم سوار نمی‌شود */
-.yar-final .yarpro-chat{
-  position:relative!important;
-  left:auto!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:auto!important;
-  flex:1 1 auto!important;
-  width:100%!important;
-  height:auto!important;
-  min-height:0!important;
-  max-height:none!important;
-  overflow-y:auto!important;
-  overflow-x:hidden!important;
-  margin:0!important;
-  padding:10px 8px 12px!important;
-  box-sizing:border-box!important;
-  border:0!important;
-  border-radius:0!important;
-  background:#eef5f1!important;
-  -webkit-overflow-scrolling:touch!important;
-  scroll-behavior:auto!important;
-}
-
-/* فرم ثابت بالای نوار ابزار */
-.yar-final .yarpro-form.yar-final-form{
-  position:fixed!important;
-  left:6px!important;
-  right:6px!important;
-  bottom:76px!important;
-  top:auto!important;
-  z-index:10000020!important;
-}
-
-/* نوار ابزار پنج‌تایی */
-.yar-final .yar-final-tools{
-  position:fixed!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  z-index:10000021!important;
-}
-
-/* راهنمای آفلاین */
-.yar-offline-guide{
-  direction:rtl;
-  color:#17362a;
-  padding:4px 2px 12px;
-}
-.yar-offline-guide-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:11px 12px;
-  margin-bottom:8px;
-  background:#fff;
-  border:1px solid #dce9e2;
-  border-radius:16px;
-  box-shadow:0 5px 16px rgba(20,70,50,.06);
-}
-.yar-offline-guide-head b{display:block;font-size:13px}
-.yar-offline-guide-head small{display:block;margin-top:3px;font-size:10px;color:#718079;line-height:1.6}
-.yar-offline-guide-head>span{
-  padding:5px 8px;border-radius:10px;background:#e8f5ed;color:#17664b;font-size:10px;font-weight:800;white-space:nowrap;
-}
-.yar-offline-intro button{
-  width:100%;display:flex;align-items:center;gap:9px;text-align:right;
-  border:1px solid #bfe0ce;background:#eaf7ef;color:#17362a;border-radius:16px;padding:12px;
-  box-shadow:0 6px 18px rgba(20,100,65,.08);
-}
-.yar-offline-intro button>span{font-size:24px}
-.yar-offline-intro button div{flex:1}
-.yar-offline-intro button b{display:block;font-size:13px}
-.yar-offline-intro button small{display:block;margin-top:3px;font-size:10px;color:#61746a}
-.yar-offline-intro button i{font-style:normal;font-size:22px;color:#17664b}
-.yar-offline-accordion{display:grid;gap:7px;margin-top:8px}
-.yar-offline-accordion details{
-  background:#fff;border:1px solid #dce8e1;border-radius:15px;overflow:hidden;
-  box-shadow:0 3px 12px rgba(20,70,50,.04);
-}
-.yar-offline-accordion summary{
-  list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:11px 12px;font-size:12px;color:#24463a;
-}
-.yar-offline-accordion summary::-webkit-details-marker{display:none}
-.yar-offline-accordion .yo-icon{font-size:19px;width:26px;text-align:center}
-.yar-offline-accordion summary b{flex:1}
-.yar-offline-accordion summary em{font-style:normal;color:#789087;font-size:15px;transition:transform .15s}
-.yar-offline-accordion details[open] summary em{transform:rotate(180deg)}
-.yo-body{
-  padding:0 12px 11px 47px;font-size:10px;color:#687a72;line-height:1.8;
-}
-.yo-body button{
-  margin-top:7px;border:1px solid #cfe3d8;background:#f2f8f4;color:#17664b;border-radius:10px;padding:7px 9px;font:800 10px inherit;
-}
-@media(max-width:420px){
-  .yar-final .yarpro-head{height:56px;min-height:56px;padding:8px 10px!important}
-  .yar-final .yarpro-head > .yarpro-switch:first-child{width:34px!important;min-width:34px!important;height:34px!important;min-height:34px!important;flex-basis:34px!important}
-  .yar-final .yarpro-brand h2{font-size:16px!important}
-  .yar-final .yarpro-brand span{font-size:10px!important}
-  .yar-final .yar-mode-panel{padding:9px 10px!important}
-  .yar-final .yarpro-chat{padding:8px 6px 12px!important}
-}
-
-/* ===== MOBILE SCROLL / TOUCH STABILITY FIX ===== */
-html,body{min-height:100%;height:auto;overflow-x:hidden;overflow-y:auto!important;-webkit-overflow-scrolling:touch}
-body{position:relative}
-#app{min-height:100vh;height:auto;overflow:visible!important}
-main,.page,.page-content,section{overflow:visible}
-.measure-wrap{touch-action:auto}
-#measureMap,.measure-map,.leaflet-container{touch-action:none!important;-webkit-user-select:none;user-select:none}
-</style>
-
-<script src="./data/crop-catalog.js"></script>
-<script src="./modules/crop-advisor.js"></script>
-(function () {
-  "use strict";
-
-  // Legacy restore disabled.
-  // نسخه فعلی یار کشاورز مستقل است و نباید فایل‌های قدیمی را بارگذاری کند.
-
-  console.log("Yar Keshavarz: legacy modules disabled");
-})();
-  <style id="yk-real-page-scroll-fix">
-html, body {
-  height: auto !important;
-  min-height: 100% !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-
-#app {
-  height: auto !important;
-  min-height: 100vh !important;
-  overflow: visible !important;
-}
-
-.yar-final {
-  position: relative !important;
-  inset: auto !important;
-  width: 100% !important;
-  height: auto !important;
-  min-height: 100vh !important;
-  max-height: none !important;
-  overflow: visible !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.yar-final .yarpro-chat {
-  flex: 0 0 auto !important;
-  height: auto !important;
-  max-height: none !important;
-  min-height: 300px !important;
-  overflow: visible !important;
-}
-  </style>
-  <style id="YK-FINAL-SCROLL-FIX">
-
-/* ================================
-   YAR KESHAVARZ - FINAL SCROLL FIX
-   ================================ */
-
-/* اسکرول عادی سایت */
-html,
-body {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  min-height: 100% !important;
-  height: auto !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-
-/* اپ اصلی */
-#app {
-  width: 100% !important;
-  min-height: 100vh !important;
-  height: auto !important;
-  overflow: visible !important;
-}
-
-/* صفحات معمولی */
-main,
-.page,
-.page-content,
-section {
-  overflow: visible !important;
-}
-
-/* ================================
-   کشاورزیار
-   ================================ */
-
-.yar-final {
-  position: fixed !important;
-  inset: 0 !important;
-
-  width: 100% !important;
-  height: 100dvh !important;
-
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-
-  overflow: hidden !important;
-
-  box-sizing: border-box !important;
-
-  background: #eef5f1 !important;
-}
-
-/* هدر */
-.yar-final .yarpro-head {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-
-  flex: 0 0 auto !important;
-
-  width: 100% !important;
-  height: 58px !important;
-  min-height: 58px !important;
-
-  box-sizing: border-box !important;
-
-  z-index: 100000 !important;
-}
-
-/* پنل انتخاب حالت */
-.yar-final .yar-mode-panel {
-  position: relative !important;
-
-  flex: 0 0 auto !important;
-
-  width: 100% !important;
-
-  box-sizing: border-box !important;
-
-  z-index: 99999 !important;
-}
-
-/* ================================
-   قسمت گفتگو
-   ================================ */
-
-.yar-final .yarpro-chat {
-
-  position: relative !important;
-
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-
-  flex: 1 1 auto !important;
-
-  width: 100% !important;
-
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-
-  box-sizing: border-box !important;
-
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-
-  -webkit-overflow-scrolling: touch !important;
-
-  overscroll-behavior: contain !important;
-
-  touch-action: pan-y !important;
-
-  padding-bottom: 160px !important;
-}
-
-/* ================================
-   کادر تایپ
-   ================================ */
-
-.yar-final .yarpro-form.yar-final-form {
-
-  position: fixed !important;
-
-  left: 6px !important;
-  right: 6px !important;
-
-  bottom: 76px !important;
-
-  top: auto !important;
-
-  width: auto !important;
-
-  height: 62px !important;
-  min-height: 62px !important;
-  max-height: 62px !important;
-
-  box-sizing: border-box !important;
-
-  z-index: 1000003 !important;
-}
-
-/* ================================
-   پنج ابزار پایین
-   ================================ */
-
-.yar-final .yar-final-tools {
-
-  position: fixed !important;
-
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-
-  width: 100% !important;
-
-  height: 76px !important;
-
-  box-sizing: border-box !important;
-
-  z-index: 1000004 !important;
-
-  overflow: hidden !important;
-}
-
-/* جلوگیری از اسکرول افقی */
-.yar-final,
-.yar-final * {
-  max-width: 100%;
-}
-
-/* نقشه همچنان قابلیت لمس و حرکت داشته باشد */
-.measure-wrap,
-.measure-map,
-#measureMap,
-.leaflet-container {
-  touch-action: none !important;
-}
-
-/* موبایل */
-@media (max-width: 620px) {
-
-  .yar-final {
-    height: 100dvh !important;
-  }
-
-  .yar-final .yarpro-chat {
-    padding-bottom: 155px !important;
-  }
-
-}
-
-/* ================================
-   پایان
-   ================================ */
-
-</style>
-  <style>html,body{background-attachment:scroll!important}</style>
+<script src="./offline/crop-catalog.js?v=20260928-calc1"></script>
+<script src="./offline/agri-calculators.js?v=20260928-calc1"></script>
+<script src="./offline/crop-ui.js?v=20260921-accordion-v1"></script>
 </body>
 </html>
