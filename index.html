@@ -2367,5 +2367,40 @@ main,.page,.page-content,section{overflow:visible}
 
   console.log("Yar Keshavarz: legacy modules disabled");
 })();
+  <style id="yk-real-page-scroll-fix">
+html, body {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+#app {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+.yar-final {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.yar-final .yarpro-chat {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 300px !important;
+  overflow: visible !important;
+}
+  </style>
 </body>
 </html>
