@@ -4,12 +4,15 @@
   function loadScript(url, done) {
     var s = document.createElement("script");
     s.src = url;
+
     s.onload = function () {
       if (done) done();
     };
+
     s.onerror = function () {
       console.error("YK Legacy load error:", url);
     };
+
     document.head.appendChild(s);
   }
 
@@ -23,7 +26,7 @@
         "https://z46689944-beep.github.io/YarKeshavarz/v14.4-modern-measure-fix.js",
         function () {
 
-          /* اصلاح اسکرول کل برنامه */
+          /* اصلاح اسکرول بدون قفل کردن صفحه */
           var style = document.createElement("style");
 
           style.id = "yk-final-scroll-fix";
@@ -45,7 +48,9 @@
             }
 
             .ky-screen {
-              overflow: hidden !important;
+              overflow: visible !important;
+              height: auto !important;
+              min-height: 100vh !important;
             }
 
             .ky-messages {
