@@ -13,37 +13,36 @@
   const currentLand=()=>landById(document.getElementById('cropLand')?.value)||landById(selected);
   const fmt=(x,max=2)=>Number(x||0).toLocaleString('fa-IR',{maximumFractionDigits:max});
 
-  function openCropAdvisor(){
-    activeCategory='';
-    activeCrop='';
-    head('مشاور کشت');
-    renderLandAndCategories();
+  function cropHeader(step,title,sub,back='go(\'yar\')'){
+    return `<div class="crop-clean-head"><button type="button" onclick="${back}">‹</button><div><h2>🌱 ${title}</h2><p>${sub}</p></div></div><div class="crop-progress">${[1,2,3,4].map(n=>`<span class="${n<=step?'on':''}"></span>`).join('')}</div>`;
   }
-
-  function renderLandAndCategories(){
+  function openCropAdvisor(){
+    activeCategory=''; activeCrop='';
+    head('مشاور کشت');
+    renderLandStep();
+  }
+  function renderLandStep(){
     const lands=Array.isArray(state.lands)?state.lands:[];
     const selectedLand=landById(selected);
-    app.innerHTML=`<div class="section crop-advisor-page">
-      <div class="page-header-row">
-        <div><h2>🌱 مشاور کشت</h2><p class="small muted">ابتدا زمین را انتخاب کن، بعد دسته و محصول را انتخاب کن.</p></div>
-        <button class="secondary" onclick="go('yar')">بازگشت</button>
-      </div>
-      <div class="card crop-step-card">
-        <div class="crop-step-title"><span>۱</span><div><b>انتخاب زمین</b><small>فقط نام زمین‌ها و مساحت آن‌ها نمایش داده می‌شود.</small></div></div>
-        <select id="cropLand" class="crop-land-select">
-          <option value="">انتخاب زمین</option>
-          ${lands.map(l=>`<option value="${esc(l.id)}" ${selectedLand&&String(l.id)===String(selectedLand.id)?'selected':''}>${esc(l.name||'زمین')} — ${fmt(l.area||0,3)} هکتار</option>`).join('')}
-        </select>
-        ${!lands.length?'<div class="small muted" style="margin-top:8px">هنوز زمینی ثبت نشده؛ اول یک زمین ثبت کن.</div>':''}
-      </div>
-      <div class="card crop-step-card">
-        <div class="crop-step-title"><span>۲</span><div><b>انتخاب محصول</b><small>اول دسته را انتخاب کن؛ بعد محصولات همان دسته نمایش داده می‌شوند.</small></div></div>
-        <div class="crop-category-grid" id="cropCategoryGrid">
-          ${catalog().categories.map(c=>`<button class="crop-category-card" onclick="cropChooseCategory('${esc(c.name)}')"><span>${c.icon}</span><b>${esc(c.name)}</b><small>${fmt(c.items.length,0)} محصول</small></button>`).join('')}
-        </div>
-      </div>
-    </div>`;
+    app.innerHTML=`<div class="crop-advisor-page">${cropHeader(1,'مشاور کشت','مرحله ۱ از ۴ · فقط یک زمین را انتخاب کن.')}
+      <div class="crop-single-step"><h3>انتخاب زمین</h3><p>زمین موردنظر را انتخاب کن تا ادامه برنامه کشت بر اساس مساحت همان زمین انجام شود.</p>
+        <select id="cropLand" class="crop-big-select"><option value="">انتخاب زمین</option>${lands.map(l=>`<option value="${esc(l.id)}" ${selectedLand&&String(l.id)===String(selectedLand.id)?'selected':''}>${esc(l.name||'زمین')} — ${fmt(l.area||0,3)} هکتار</option>`).join('')}</select>
+        ${!lands.length?'<div class="small muted" style="margin-top:10px">هنوز زمینی ثبت نشده؛ ابتدا یک زمین ثبت کن.</div>':''}
+        <button class="crop-next" type="button" onclick="cropProceedToCategories()">ادامه ← انتخاب محصول</button>
+      </div></div>`;
     document.getElementById('cropLand')?.addEventListener('change',()=>{selected=document.getElementById('cropLand').value||selected;});
+  }
+  function cropProceedToCategories(){
+    const land=currentLand();
+    if(!land){toast('ابتدا یک زمین انتخاب کن');return}
+    if(Number(land.area||0)<=0){toast('برای این زمین مساحت ثبت نشده است');return}
+    renderCategories();
+  }
+  function renderCategories(){
+    head('مشاور کشت');
+    app.innerHTML=`<div class="crop-advisor-page">${cropHeader(2,'انتخاب دسته محصول','مرحله ۲ از ۴ · فقط دسته موردنظر را انتخاب کن.','renderLandStep()')}
+      <div class="crop-single-step"><h3>زمین انتخاب‌شده</h3><p>🌾 ${esc(currentLand()?.name||'زمین')} · ${fmt(currentLand()?.area||0,3)} هکتار</p>
+      <div class="crop-choice-grid">${catalog().categories.map(c=>`<button type="button" onclick="cropChooseCategory('${esc(c.name)}')"><span>${c.icon}</span><b>${esc(c.name)}</b><small>${fmt(c.items.length,0)} محصول</small></button>`).join('')}</div></div></div>`;
   }
 
   function cropChooseCategory(name){
@@ -52,12 +51,9 @@
     const c=catByName();
     if(!c)return;
     const land=currentLand();
-    head('انتخاب محصول');
-    app.innerHTML=`<div class="section crop-advisor-page">
-      <div class="page-header-row"><div><h2>${c.icon} ${esc(c.name)}</h2><p class="small muted">${fmt(c.items.length,0)} محصول</p></div><button class="secondary" onclick="openCropAdvisor()">بازگشت</button></div>
-      <div class="card crop-selected-land"><b>🌾 زمین:</b> ${esc(land?.name||'انتخاب نشده')} ${land?`<span>· ${fmt(land.area||0,3)} هکتار</span>`:''}</div>
-      <div class="crop-product-grid">${c.items.map(x=>`<button class="crop-product-card" onclick="cropChooseProduct('${esc(x)}')"><span>${cropIcon(x,c.name)}</span><b>${esc(x)}</b><small>${esc(c.name)}</small></button>`).join('')}</div>
-    </div>`;
+    head('مشاور کشت');
+    app.innerHTML=`<div class="crop-advisor-page">${cropHeader(3,c.icon+' '+esc(c.name),'مرحله ۳ از ۴ · محصول را انتخاب کن.','renderCategories()')}
+      <div class="crop-single-step"><h3>🌾 زمین: ${esc(land?.name||'انتخاب نشده')}</h3><p>${land?fmt(land.area||0,3)+' هکتار':''}</p><div class="crop-choice-grid">${c.items.map(x=>`<button class="crop-product-card" onclick="cropChooseProduct('${esc(x)}')"><span>${cropIcon(x,c.name)}</span><b>${esc(x)}</b><small>${esc(c.name)}</small></button>`).join('')}</div></div></div>`;
   }
 
   function cropChooseProduct(name){
@@ -65,11 +61,11 @@
     const land=currentLand();
     const area=Number(land?.area||0);
     const seedRate=Number(catalog().seedRates?.[name]||0);
-    head('محاسبات کشت');
-    app.innerHTML=`<div class="section crop-advisor-page">
-      <div class="page-header-row"><div><h2>🌱 ${esc(name)}</h2><p class="small muted">محاسبه برای زمین انتخاب‌شده</p></div><button class="secondary" onclick="cropChooseCategory('${esc(activeCategory)}')">بازگشت</button></div>
-      <div class="card crop-focus-card"><div><b>🌾 زمین: ${esc(land?.name||'انتخاب نشده')}</b><div class="small muted">مساحت: <strong id="cropAreaText">${fmt(area,3)} هکتار</strong></div></div><span class="badge">${esc(activeCategory)}</span></div>
-      <div class="card">
+    head('مشاور کشت');
+    const backToCategory=`cropChooseCategory('${esc(activeCategory)}')`;
+    app.innerHTML=`<div class="crop-advisor-page">${cropHeader(4,'🌱 '+esc(name),'مرحله ۴ از ۴ · محاسبه و ثبت برنامه کشت.',backToCategory)}
+      <div class="crop-detail-card crop-focus-card"><div><b>🌾 زمین: ${esc(land?.name||'انتخاب نشده')}</b><div class="small muted">مساحت: <strong id="cropAreaText">${fmt(area,3)} هکتار</strong></div></div><span class="badge">${esc(activeCategory)}</span></div>
+      <div class="crop-detail-card">
         <div class="crop-rate-note">ℹ️ نرخ‌های بذرِ نمونه قابل ویرایش‌اند. برای کود و سم، مقدار را بر اساس آزمون، برچسب محصول مجاز و توصیه کارشناس منطقه وارد کن؛ برنامه دوز ثابت برای کود و سم تجویز نمی‌کند.</div>
         <div class="register-two">
           <div class="field"><label>🌾 بذر — کیلوگرم در هکتار</label><input id="seedRate" type="number" min="0" step="0.01" value="${seedRate||''}" placeholder="مثلاً ۱۸۰"></div>
@@ -77,7 +73,7 @@
           <div class="field"><label>🛡️ سم — لیتر در هکتار</label><input id="pestRate" type="number" min="0" step="0.01" placeholder="طبق برچسب همان محصول"></div>
           <div class="field"><label>💧 آب — میلی‌متر در هکتار</label><input id="waterRate" type="number" min="0" step="0.1" placeholder="عمق آبیاری هر نوبت"></div>
         </div>
-        <div class="crop-calc-grid">
+        <div class="crop-result-grid">
           <div class="crop-calc"><span>🌾 کل بذر</span><b id="calcSeed">۰ کیلوگرم</b></div>
           <div class="crop-calc"><span>🧪 کل کود</span><b id="calcFert">۰ کیلوگرم</b></div>
           <div class="crop-calc"><span>🛡️ کل سم</span><b id="calcPest">۰ لیتر</b></div>
@@ -86,7 +82,7 @@
         <div class="crop-advisor-actions"><button class="secondary" onclick="cropReReadArea()">📐 دریافت مساحت زمین</button><button class="primary" onclick="calculateCropPlan()">🧮 محاسبه</button></div>
         <div id="cropCalcStatus" class="measure-status">برای محاسبه، نرخ‌ها را وارد کن.</div>
       </div>
-      <div class="card"><div class="row"><div><b>🌱 ثبت محصول برای این زمین</b><div class="small muted">محصول انتخاب‌شده در پرونده زمین ذخیره می‌شود.</div></div><button class="primary" onclick="cropSaveToLand()">ذخیره محصول</button></div></div>
+      <div class="crop-detail-card"><div class="row"><div><b>🌱 ثبت محصول برای این زمین</b><div class="small muted">محصول انتخاب‌شده در پرونده زمین ذخیره می‌شود.</div></div><button class="primary" onclick="cropSaveToLand()">ذخیره محصول</button></div></div>
     </div>`;
     calculateCropPlan();
   }
