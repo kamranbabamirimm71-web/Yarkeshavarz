@@ -804,6 +804,46 @@ main,#app{
   overflow:visible!important;
 }
 </style>
+
+<style id="yar-home-v1">
+.yar-home{direction:rtl;max-width:680px;margin:0 auto;padding:10px 0 22px;min-height:calc(100vh - 155px);display:flex;align-items:flex-start}
+.yar-home-card{position:relative;width:100%;background:rgba(255,255,255,.96);border-radius:34px 34px 0 0;padding:58px 24px 26px;box-shadow:0 14px 40px rgba(16,61,45,.13);border:1px solid rgba(21,75,53,.08);overflow:hidden}
+.yar-home-card:before{content:"";position:absolute;inset:0 0 auto;height:170px;background:radial-gradient(circle at 50% 18%,rgba(26,113,79,.035),transparent 60%);pointer-events:none}
+.yar-home-close{position:absolute;top:20px;right:20px;width:58px;height:58px;border:0;border-radius:17px;background:#176b4f;color:#fff;font-size:42px;font-weight:300;line-height:1;display:grid;place-items:center;box-shadow:0 8px 18px rgba(17,75,55,.13)}
+.yar-home-logo{width:112px;height:112px;border-radius:32px;margin:0 auto 20px;background:#176b4f;color:#fff;display:grid;place-items:center;font-size:62px;line-height:1;box-shadow:0 10px 22px rgba(16,87,61,.12)}
+.yar-home-card h1{text-align:center;margin:0;color:#17382c;font-size:31px;letter-spacing:-.5px}
+.yar-home-subtitle{text-align:center;color:#74837d;font-size:17px;margin:13px 0 32px}
+.yar-home-modes{display:grid;gap:18px}
+.yar-home-mode{width:100%;min-height:180px;background:#fff;border:1px solid #dbe7e1;border-radius:28px;box-shadow:0 8px 22px rgba(21,68,52,.07);display:grid;grid-template-columns:48px 82px 1fr;align-items:center;gap:12px;padding:18px 20px;text-align:right;color:#193d30}
+.yar-home-mode:active{transform:scale(.99)}
+.yar-home-arrow{font-size:48px;color:#7b9087;line-height:1;justify-self:start}
+.yar-home-mode-icon{width:74px;height:74px;border-radius:23px;display:grid;place-items:center;font-size:46px}
+.yar-home-cloud{background:#eaf1f3;color:#c7d1d5}
+.yar-home-off{background:#f2a014;color:#fff;font-size:21px;font-weight:900;letter-spacing:-1px}
+.yar-home-mode-text{display:grid;gap:9px}
+.yar-home-mode-text b{font-size:26px}
+.yar-home-mode-text small{font-size:15px;line-height:1.8;color:#7a8782}
+.yar-home-divider{height:1px;background:#e2e8e5;margin:30px 0 20px}
+.yar-home-land-title{font-size:23px;font-weight:900;color:#29483d;margin:0 0 12px}
+.yar-home-land-select{height:70px;border:1px solid #d8e4df;border-radius:20px;background:#fff;display:grid;grid-template-columns:36px 1fr 28px;align-items:center;padding:0 17px;box-shadow:0 5px 16px rgba(20,64,49,.04)}
+.yar-home-land-select span:first-child{font-size:27px}
+.yar-home-land-select select{width:100%;height:100%;border:0;outline:0;background:transparent;color:#29483d;font-size:18px;font-weight:700;font-family:inherit;appearance:none;text-align:right}
+.yar-home-chevron{font-size:25px;color:#62766d;pointer-events:none}
+.yar-home-note{color:#9aa49f;font-size:12px;margin:12px 4px 0;line-height:1.8}
+@media(max-width:480px){
+  .yar-home{padding:0;margin:0 -1px;min-height:calc(100vh - 140px)}
+  .yar-home-card{border-radius:34px 34px 0 0;padding:58px 20px 25px}
+  .yar-home-logo{width:104px;height:104px;font-size:58px}
+  .yar-home-card h1{font-size:29px}
+  .yar-home-subtitle{font-size:16px;margin-bottom:27px}
+  .yar-home-mode{min-height:156px;grid-template-columns:34px 72px 1fr;gap:8px;padding:16px 13px}
+  .yar-home-mode-icon{width:66px;height:66px;border-radius:20px;font-size:39px}
+  .yar-home-mode-text b{font-size:23px}
+  .yar-home-mode-text small{font-size:13px}
+  .yar-home-arrow{font-size:42px}
+}
+</style>
+
 </head>
 <body>
 
@@ -1392,8 +1432,19 @@ try{
 }catch(e){}
 let yarLandMode=false;
 let yarMode=(()=>{try{return localStorage.getItem('yk-yar-mode')==='offline'?'offline':'online'}catch(e){return 'online'}})();
-function yarSetMode(mode){yarMode=mode==='offline'?'offline':'online';try{localStorage.setItem('yk-yar-mode',yarMode)}catch(e){};yar()}
-function yarSelectLand(id){if(!id){yarLandMode=false;selected=null}else{yarLandMode=true;selected=id;try{localStorage.setItem('yk-last-land',id)}catch(e){}}yar()}
+function yarSetMode(mode){
+  yarMode=mode==='offline'?'offline':'online';
+  try{localStorage.setItem('yk-yar-mode',yarMode)}catch(e){}
+  yarChat();
+}
+function yarSelectLand(id){
+  if(!id){yarLandMode=false;selected=null}
+  else{
+    yarLandMode=true;selected=id;
+    try{localStorage.setItem('yk-last-land',id)}catch(e){}
+  }
+  if(document.getElementById('yarChat')) yarChat(); else yarLanding();
+}
 function yarLandOptions(){return (state.lands||[]).length?(state.lands||[]).map(x=>'<option value="'+esc(x.id)+'">'+esc(x.name||'زمین بدون نام')+'</option>').join(''):'<option value="">هنوز زمینی ثبت نشده</option>'}
 const YAR_AI_ENDPOINT='https://yarkeshavarz-ai-v4.z46689944.workers.dev';
 function saveYarChat(){try{const clean=[];for(const m of yarMessages){const last=clean[clean.length-1];if(last&&last.role===m.role&&String(last.text||'')===String(m.text||'')&&!m.image&&!last.image)continue;clean.push(m)}yarMessages=clean.slice(-60);localStorage.setItem(YAR_CHAT_KEY,JSON.stringify(yarMessages))}catch(e){}}
@@ -1733,7 +1784,69 @@ function yarPriorityPlan(id){
   return out.slice(0,3);
 }
 
+
 function yar(){
+  yarLanding();
+}
+function yarLanding(){
+  head('کشاورزیار');
+  const current = yarLand();
+  const selectedId = current ? current.id : '';
+  app.innerHTML = `
+    <section class="yar-home" aria-label="صفحه اصلی کشاورزیار">
+      <div class="yar-home-card">
+        <button type="button" class="yar-home-close" onclick="go('home')" aria-label="بستن">×</button>
+
+        <div class="yar-home-logo" aria-hidden="true">✦</div>
+        <h1>کشاورزیار</h1>
+        <p class="yar-home-subtitle">حالت موردنظر خودت را انتخاب کن</p>
+
+        <div class="yar-home-modes">
+          <button type="button" class="yar-home-mode" onclick="yarSetMode('online')">
+            <span class="yar-home-arrow">‹</span>
+            <span class="yar-home-mode-icon yar-home-cloud">☁</span>
+            <span class="yar-home-mode-text">
+              <b>آنلاین</b>
+              <small>هوش مصنوعی آنلاین + اطلاعات پرونده زمین</small>
+            </span>
+          </button>
+
+          <button type="button" class="yar-home-mode" onclick="yarSetMode('offline')">
+            <span class="yar-home-arrow">‹</span>
+            <span class="yar-home-mode-icon yar-home-off">OFF</span>
+            <span class="yar-home-mode-text">
+              <b>آفلاین</b>
+              <small>دستیار کشاورزی بدون نیاز به اینترنت</small>
+            </span>
+          </button>
+        </div>
+
+        <div class="yar-home-divider"></div>
+
+        <div class="yar-home-land-title">پرونده زمین</div>
+        <div class="yar-home-land-select">
+          <span>🌾</span>
+          <select id="yarHomeLandSelect" onchange="yarHomeChooseLand(this.value)">
+            <option value="">همه زمین‌ها / حالت عمومی</option>
+            ${yarLandOptions()}
+          </select>
+          <span class="yar-home-chevron">⌄</span>
+        </div>
+        <p class="yar-home-note">اطلاعات این پرونده در گفت‌وگوی کشاورزیار در دسترس خواهد بود.</p>
+      </div>
+    </section>`;
+  const s=document.getElementById('yarHomeLandSelect');
+  if(s) s.value=selectedId;
+}
+function yarHomeChooseLand(id){
+  if(!id){yarLandMode=false;selected=null}
+  else{
+    yarLandMode=true;selected=id;
+    try{localStorage.setItem('yk-last-land',id)}catch(e){}
+  }
+}
+
+function yarChat(){
   let l=yarLand();
   const mode=(l && yarLandMode)?'land':'general';
   if(mode==='land') selected=l.id; else {l=null; selected=null;}
@@ -1825,7 +1938,7 @@ function yarRender(){const b=document.getElementById('yarChat');if(!b)return;con
 function yarAsk(q){if(String(q||'').includes('برای کشت')){if(typeof openCropAdvisor==='function'){openCropAdvisor();return}}const i=document.getElementById('yarInput');if(i){i.value=q;yarSend()}}
 function yarBindInput(){const i=document.getElementById('yarInput');if(!i||i.dataset.bound==='1')return;i.dataset.bound='1';i.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();const f=i.closest('form');if(f)f.requestSubmit();else yarSend();}})}
 function yarFocusInput(){const i=document.getElementById('yarInput');if(!i)return;i.focus();try{i.scrollIntoView({block:'center',behavior:'smooth'})}catch(e){}}
-function yarClear(){yarMessages=[];saveYarChat();yar()}
+function yarClear(){yarMessages=[];saveYarChat();yarChat()}
 
 function game(){
   head('سرگرمی');
