@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b3d2e">
+<title>بازیابی رمز مدیریت</title>
+<style>
+body{margin:0;background:#0b5b43;font-family:system-ui,sans-serif;color:#123;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{background:#fff;border-radius:28px;padding:28px;max-width:430px;width:calc(100% - 48px);box-sizing:border-box;text-align:center}
+h1{margin:10px 0 8px}.note{color:#667;line-height:1.8}
+input{width:100%;box-sizing:border-box;padding:16px;margin:7px 0;border:1px solid #ddd;border-radius:14px;font-size:16px}
+button{width:100%;padding:15px;border:0;border-radius:14px;background:#063f31;color:#fff;font-size:17px;margin-top:10px}
+.secondary{background:#e8f0ed;color:#174b3d}
+#msg{min-height:28px;color:#b33;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+<div style="font-size:52px">🌱</div>
+<h1>بازیابی رمز مدیریت</h1>
+<p class="note">رمز قبلی همین دستگاه پاک شده است. رمز جدید را دو بار وارد کنید.</p>
+<form id="f">
+<input id="p1" type="password" inputmode="numeric" minlength="4" maxlength="12" placeholder="رمز جدید" required>
+<input id="p2" type="password" inputmode="numeric" minlength="4" maxlength="12" placeholder="تکرار رمز جدید" required>
+<button type="submit">ذخیره رمز جدید</button>
+</form>
+<div id="msg"></div>
+<button class="secondary" type="button" onclick="location.href='./admin.html?v=15'">بازگشت به ورود مدیر</button>
+</div>
+<script>
+(function(){
+  var PIN='yk-admin-pin-v1';
+  localStorage.removeItem(PIN);
+  sessionStorage.removeItem('yk-admin-auth');
+  function hash(v){
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)).then(function(b){
+      return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('');
+    });
+  }
+  document.getElementById('f').addEventListener('submit',function(e){
+    e.preventDefault();
+    var a=document.getElementById('p1').value;
+    var b=document.getElementById('p2').value;
+    var msg=document.getElementById('msg');
+    if(a.length<4){msg.textContent='رمز باید حداقل ۴ کاراکتر باشد.';return;}
+    if(a!==b){msg.textContent='دو رمز یکسان نیستند.';return;}
+    hash(a).then(function(v){
+      localStorage.setItem(PIN,v);
+      sessionStorage.removeItem('yk-admin-auth');
+      msg.textContent='رمز جدید ذخیره شد. در حال بازگشت...';
+      setTimeout(function(){location.href='./admin.html?v=15';},500);
+    });
+  });
+})();
+</script>
+</body>
+</html>
