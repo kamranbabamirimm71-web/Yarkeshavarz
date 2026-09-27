@@ -1,4 +1,4 @@
-const CACHE='yar-keshavarz-v2-20260928-home';
+const CACHE='yar-keshavarz-v7-clean-20260928';
 const CORE=[
  './','./index.html','./manifest.webmanifest',
  './assets/wheat-hero.jpg','./assets/wheat-hero.svg','./assets/logo.png','./assets/icon-192.png','./assets/icon-512.png',
