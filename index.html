@@ -788,6 +788,76 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 .yar-profile-grid small{font-weight:900;color:#0b4f38}.yar-profile-grid p{font-size:9px;line-height:1.8;color:#687b72;margin:4px 0 0}
 @media(max-width:430px){.yar-profile-grid{grid-template-columns:1fr}}
 </style>
+<style id="yar-real-page-runtime-fix">
+/* The rich in-page Yar flow must scroll normally; older Yar CSS used a fixed chat shell. */
+.yar-real-page{
+  min-height:0!important;
+  color:#17362a!important;
+  overflow:visible!important;
+}
+.yar-real-page .yarpro-head{
+  position:relative!important;
+  color:#fff!important;
+}
+.yar-real-page .yar-flow-card{
+  position:relative!important;
+  color:#17362a!important;
+}
+.yar-real-page .yar-chat-section{
+  color:#17362a!important;
+}
+.yar-real-page .yar-chat-section .yarpro-chat{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:auto!important;
+  height:300px!important;
+  min-height:220px!important;
+  max-height:45vh!important;
+  overflow-y:auto!important;
+  background:#f7faf8!important;
+  border:1px solid #dce9e1!important;
+  color:#17362a!important;
+  box-sizing:border-box!important;
+}
+.yar-real-page .yar-final-form{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:58px!important;
+  max-height:none!important;
+  margin:9px 0 0!important;
+  background:#fff!important;
+  border:1px solid #d8e7df!important;
+  color:#17362a!important;
+  box-sizing:border-box!important;
+}
+.yar-real-page .yar-final-form input#yarInput{
+  background:#f4f8f6!important;
+  color:#17362a!important;
+}
+.yar-real-page .yar-final-tools{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  height:auto!important;
+  margin:8px 0 0!important;
+  padding:0!important;
+  overflow-x:auto!important;
+}
+.yar-real-page .yar-final-tools button{
+  color:#17362a!important;
+}
+.yar-real-page .yar-final-tools + .yarpro-hint{color:#65766f!important}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -1704,7 +1774,7 @@ function yar(){
   const cultivationDetail=l&&crop&&!cArchived?`<div class="yar-cultivation-form"><div><label>رقم / گونه</label><input id="yarVariety" value="${esc(l.cropVariety||'')}" placeholder="مثلاً رقم محلی"></div><div><label>تاریخ کاشت</label><input id="yarPlantDate" inputmode="numeric" value="${l.plantDate?jalaliDate(l.plantDate):''}" placeholder="۱۴۰۵/۰۷/۱۵"></div><div class="full"><label>یادداشت کشت</label><textarea id="yarCropNotes" placeholder="عملیات، شرایط و یادداشت‌های کشت">${esc(l.cropNotes||'')}</textarea></div><button type="button" class="primary full" onclick="yarSaveCultivation()">💾 ذخیره اطلاعات کشت</button></div><div class="yar-stage-actions"><button type="button" class="primary" onclick="addLandExpense('${l.id}')">＋ افزودن هزینه مرحله‌ای</button><button type="button" class="secondary" onclick="addLandIncome('${l.id}')">＋ ثبت درآمد برداشت</button></div><div class="yar-stage-title">هزینه‌های ثبت‌شده از کاشت تا برداشت</div><div class="yar-ledger">${cExpenseRows||'<div class="yar-empty small">هنوز هزینه‌ای ثبت نشده است.</div>'}</div><div class="yar-cost-breakdown">${cBreakdown}</div>${cIncome?'<div class="yar-stage-title">درآمد برداشت</div><div class="yar-ledger">'+cIncomeRows+'</div>':''}`:'';
   const cultivationSection=(l&&crop)?`<section class="yar-flow-card yar-cultivation-file"><div class="yar-section-head"><div><b>📋 پرونده کامل کشت</b><small>${esc(l.name)} · از کاشت تا برداشت و سود و زیان</small></div><span>${cArchived?'📁 بایگانی':'🌱 کشت جاری'}</span></div><div class="yar-economy-grid"><div><span>💵 درآمد</span><b>${money(cIncome)}</b></div><div><span>💸 هزینه</span><b>${money(cExpenses)}</b></div><div class="${cProfit>=0?'ok':'bad'}"><span>${cProfit>=0?'📈 سود':'📉 زیان'}</span><b>${money(Math.abs(cProfit))}</b></div></div>${cArchived?'<div class="yar-empty small">این کشت بایگانی شده است. برای ادامه، کشت جدید را از پرونده زمین شروع کن.</div>':cultivationDetail}</section>`:'';
   const calcSection=(l&&crop)?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>محاسبات همین زمین</b><small>مساحت ${areaHa.toLocaleString('fa-IR')} هکتار خودکار اعمال شده است.</small></div><span class="yar-area-badge">${areaHa.toLocaleString('fa-IR')} ha</span></div><div class="yar-calc-grid yar-calc-grid-real"><div class="yar-calc-card"><b>🌾 کل بذر</b><label>نرخ بذر، کیلو در هکتار</label><input id="yarSeedRate" inputmode="decimal" value="${yarCalc.seedRate??''}" placeholder="مثلاً ۱۸۰"><button type="button" onclick="yarCalcSeed()">محاسبه</button><strong>${yarCalc.seedResult||'—'}</strong></div><div class="yar-calc-card"><b>💧 حجم آب</b><label>عمق هر نوبت، میلی‌متر</label><input id="yarIrrDepth" inputmode="decimal" value="${yarCalc.irrDepth??''}" placeholder="مثلاً ۲۰"><button type="button" onclick="yarCalcIrr()">محاسبه</button><strong>${yarCalc.irrResult||'—'}</strong></div><div class="yar-calc-card"><b>🌿 تعداد بوته</b><label>فاصله ردیف و بوته، سانتی‌متر</label><div class="yar-two-input"><input id="yarRow" inputmode="decimal" value="${yarCalc.row??''}" placeholder="ردیف"><input id="yarPlant" inputmode="decimal" value="${yarCalc.plant??''}" placeholder="بوته"></div><button type="button" onclick="yarCalcPlants()">محاسبه</button><strong>${yarCalc.plantResult||'—'}</strong></div><div class="yar-calc-card"><b>🧪 مقدار محصول کودی</b><label>نیاز ماده غذایی / درصد ماده مؤثر</label><div class="yar-two-input"><input id="yarNutrient" inputmode="decimal" value="${yarCalc.nutrient??''}" placeholder="کیلو"><input id="yarAnalysis" inputmode="decimal" value="${yarCalc.analysis??''}" placeholder="درصد"></div><button type="button" onclick="yarCalcFertilizer()">محاسبه</button><strong>${yarCalc.fertResult||'—'}</strong></div></div><div class="yar-calc-note">فرمول‌ها روی مساحت ثبت‌شده همین زمین اجرا می‌شوند. دوز کود و سم نسخه ثابت نیست و باید با آزمون خاک/آب، رقم، شرایط منطقه و برچسب محصول تعیین شود.</div></section>`:'';
-  app.innerHTML=`<section class="yarpro yar-final yar-real-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" data-yar-route="home">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>${l?`زمین «${esc(l.name)}»`:'دستیار کشاورزی'}</span></div></div>${l?'<button class="yarpro-switch" data-yar-clear-land>تغییر</button>':''}</header>${modeCard}${landChooser}${landSelected}${productSection}${cultivationSection}${calcSection}<section class="yar-flow-card yar-chat-section"><div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>${l?`متصل به زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}`:'حالت عمومی'}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div><div id="yarChat" class="yarpro-chat"></div><input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden><input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden><div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div><form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="${l?'درباره همین زمین و محصول سؤال کن…':'هر سؤال کشاورزی که داری…'}"><button type="submit" class="yarpro-send">➤</button></form><div class="yar-final-tools"><button type="button" onclick="${l?`yarAnalyzeLand('${l.id}')`:`yarAsk('وضعیت زمین‌های ثبت‌شده را بررسی کن')`}"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div></section></section>`;
+  app.innerHTML=`<section class="yarpro yar-final yar-real-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" data-yar-route="home">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>${l?`زمین «${esc(l.name)}»`:'دستیار کشاورزی'} · نسخه مسیر واقعی کشاورزیار</span></div></div>${l?'<button class="yarpro-switch" data-yar-clear-land>تغییر</button>':''}</header>${modeCard}${landChooser}${landSelected}${productSection}${cultivationSection}${calcSection}<section class="yar-flow-card yar-chat-section"><div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>${l?`متصل به زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}`:'حالت عمومی'}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div><div id="yarChat" class="yarpro-chat"></div><input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden><input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden><div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div><form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="${l?'درباره همین زمین و محصول سؤال کن…':'هر سؤال کشاورزی که داری…'}"><button type="submit" class="yarpro-send">➤</button></form><div class="yar-final-tools"><button type="button" onclick="${l?`yarAnalyzeLand('${l.id}')`:`yarAsk('وضعیت زمین‌های ثبت‌شده را بررسی کن')`}"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div></section></section>`;
   document.getElementById('yarCropSelect')?.addEventListener('change',e=>yarSetCrop(e.target.value));
   document.querySelectorAll('[data-yar-crop]').forEach(b=>b.onclick=()=>yarSetCrop(b.dataset.yarCrop));
   document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=()=>yarSetMode(b.dataset.yarMode));
@@ -1757,7 +1827,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260928-v22').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260928-v23').catch(()=>{}));
 }
 </script>
 
