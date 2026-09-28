@@ -1625,65 +1625,70 @@ function yarPriorityPlan(id){
 }
 
 let yarCropRegistry=null, yarCropProfile=null, yarCalc={};
+const YAR_CROP_KEY='yk-yar-selected-crop-v2';
 async function yarLoadCropProfile(name){
   const crop=String(name||'').trim();
   if(!crop){yarCropProfile=null;return null;}
-  try{
-    const mod=await import('./offline/crop-profiles.js?v=20260928-yar-profile');
-    yarCropProfile=mod.findCropProfile(crop)||null;
-  }catch(e){yarCropProfile=null;}
+  try{const mod=await import('./offline/crop-profiles.js?v=20260928-yar-profile2');yarCropProfile=mod.findCropProfile(crop)||null}catch(e){yarCropProfile=null}
   return yarCropProfile;
 }
 async function yarLoadCropRegistry(){
   if(yarCropRegistry)return yarCropRegistry;
-  try{
-    const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops');
-    yarCropRegistry=mod.registry||{};
-  }catch(e){yarCropRegistry={};}
+  try{const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops2');yarCropRegistry=mod.registry||{}}catch(e){yarCropRegistry={}}
   return yarCropRegistry;
 }
-function yarCropNames(){
-  const l=selected?yarLand(selected):null, names=[];
-  if(l?.crop)names.push(String(l.crop));
-  for(const x of Object.keys(yarCropRegistry||{}))if(!names.some(n=>String(n).trim()===String(x).trim()))names.push(x);
-  return names;
+function yarSelectedCrop(id){
+  try{const x=JSON.parse(localStorage.getItem(YAR_CROP_KEY)||'{}');return String(x[id]||'')}catch(e){return ''}
 }
+function yarSaveSelectedCrop(id,crop){
+  try{const x=JSON.parse(localStorage.getItem(YAR_CROP_KEY)||'{}');if(crop)x[id]=crop;else delete x[id];localStorage.setItem(YAR_CROP_KEY,JSON.stringify(x))}catch(e){}
+}
+function yarLandProducts(l){
+  const out=[];
+  const add=v=>{const x=String(v||'').trim();if(x&&!out.some(y=>y===x))out.push(x)};
+  [l?.crop,l?.registeredProduct,l?.product].forEach(add);
+  for(const v of (Array.isArray(l?.products)?l.products:Array.isArray(l?.registeredProducts)?l.registeredProducts:[])) add(typeof v==='string'?v:(v?.name||v?.crop||v?.title));
+  return out;
+}
+function yarAllProducts(){return Object.keys(yarCropRegistry||{}).sort((a,b)=>a.localeCompare(b,'fa'))}
 function yarSetCrop(v){
-  const l=selected?yarLand(selected):null;
-  if(!l)return;
-  l.crop=String(v||'').trim();
-  yarCalc={};
-  yarCropProfile=null;
-  save();
-  if(l.crop) yarLoadCropProfile(l.crop).finally(()=>yar()); else yar();
+  const l=selected?yarLand(selected):null;if(!l)return;
+  const crop=String(v||'').trim();yarSaveSelectedCrop(l.id,crop);yarCalc={};yarCropProfile=null;
+  if(crop)yarLoadCropProfile(crop).finally(()=>yar());else yar();
 }
-function yarSetMode(mode){
-  yarMode=mode==='online'?'online':'offline';
-  localStorage.setItem('yk-yar-mode',yarMode);
-  yar();
-}
+function yarSetMode(mode){yarMode=mode==='online'?'online':'offline';localStorage.setItem('yk-yar-mode',yarMode);yar()}
 function yarSelectLand(id){
   const v=String(id||'');
-  if(!v){yarLandMode=false;selected=null;localStorage.removeItem('yk-last-land');yar();return;}
-  selected=v;yarLandMode=true;localStorage.setItem('yk-last-land',v);yar();
+  if(!v){yarLandMode=false;selected=null;localStorage.removeItem('yk-last-land');yarCropProfile=null;yar();return}
+  selected=v;yarLandMode=true;localStorage.setItem('yk-last-land',v);yarCalc={};const c=yarSelectedCrop(v)||yarLand(v)?.crop||'';yarCropProfile=null;if(c)yarLoadCropProfile(c).finally(()=>yar());else yar();
+}
+function yarRegisteredProducts(l){
+  const own=yarLandProducts(l);return own.length?own:yarAllProducts();
+}
+function yarLandEconomy(l){
+  const tx=(state.transactions||[]).filter(x=>x.landId===l.id&&(!x.cultivationId||x.cultivationId===activeCultivationId(l)));
+  const cost=tx.filter(x=>x.type==='expense').reduce((a,x)=>a+n(x.amount),0),income=tx.filter(x=>x.type==='income').reduce((a,x)=>a+n(x.amount),0);
+  return {cost,income,profit:income-cost};
 }
 function yar(){
   const l=selected?yarLand(selected):null;
-  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());}
-  if(l?.crop&&!yarCropProfile){yarLoadCropProfile(l.crop).then(()=>yar());}
+  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());return}
+  const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
+  if(crop&&!yarCropProfile){yarLoadCropProfile(crop).then(()=>yar());return}
   head(l?'کشاورزیار — '+l.name:'کشاورزیار');
-  if(!yarMessages.length)yarMessages=[{role:'bot',text:l?'سلام 🌱 کشاورزیارِ «'+l.name+'». از همین صفحه زمین، محصول و محاسبات را مدیریت کن.':'سلام 🌱 برای شروع، حالت کار را انتخاب کن و بعد زمین ثبت‌شده را انتخاب کن.'}];
-  const lands=Array.isArray(state.lands)?state.lands:[], crops=yarCropNames(), areaHa=l?Number(l.area||0):0, areaM2=l?Number(l.areaM2||areaHa*10000):0, profile=yarCropProfile;
-  const rows=profile?[['اقلیم',profile.climate],['خاک',profile.soil],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases]]:[];
-  const landButtons=lands.map(x=>'<button type="button" class="yar-land-option" data-yar-land="'+esc(x.id)+'"><span class="yar-land-icon">🌾</span><span><b>'+esc(x.name||'زمین بدون نام')+'</b><small>'+Number(x.area||0).toLocaleString('fa-IR')+' هکتار'+(x.region?' · '+esc(x.region):'')+(x.crop?' · محصول: '+esc(x.crop):'')+'</small></span><strong>›</strong></button>').join('');
-  const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>۲. انتخاب زمین ثبت‌شده</b><small>مساحت و اطلاعات زمین بعد از انتخاب خودکار استفاده می‌شود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landButtons}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
-  const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>۲. زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div></section>`:'';
-  const productOptions=crops.map(x=>`<option value="${esc(x)}" ${String(l?.crop||'')===String(x)?'selected':''}>${esc(x)}</option>`).join('');
-  const profileHtml=profile?`<div class="yar-profile-list">${rows.filter(x=>x[1]).map(x=>`<div><b>${esc(x[0])}</b><p>${esc(x[1])}</p></div>`).join('')}</div>`:`<div class="yar-empty small">برای این محصول شناسنامه کامل در بانک آفلاین پیدا نشد.</div>`;
-  const productSection=l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>۳. انتخاب محصول</b><small>محصول را برای همین زمین انتخاب کن.</small></div><span>${crops.length.toLocaleString('fa-IR')} محصول</span></div><select class="yar-main-select" id="yarCropSelect"><option value="">انتخاب محصول...</option>${productOptions}</select>${l.crop?`<div class="yar-product-box"><div class="yar-product-title"><b>🌱 ${esc(l.crop)}</b><small>${esc(yarCropRegistry?.[l.crop]?.label||profile?.category||'محصول کشاورزی')}</small></div>${profileHtml}</div>`:`<div class="yar-empty">ابتدا محصول این زمین را انتخاب کن تا بخش محاسبات فعال شود.</div>`}</section>`:'';
-  let calcSection='';
-  if(l&&l.crop){calcSection=`<section class="yar-flow-card"><div class="yar-section-head"><div><b>۴. محاسبات زمین</b><small>مساحت ${areaHa.toLocaleString('fa-IR')} هکتار به‌صورت خودکار مبناست.</small></div><span class="yar-area-badge">${areaHa.toLocaleString('fa-IR')} ha</span></div><div class="yar-calc-grid yar-calc-grid-real"><div class="yar-calc-card"><b>🌾 بذر</b><label>نرخ بذر (کیلو/هکتار)</label><input id="yarSeedRate" inputmode="decimal" placeholder="مثلاً ۱۸۰" value="${yarCalc.seedRate??''}"><button type="button" onclick="yarCalcSeed()">محاسبه کل زمین</button><strong>${yarCalc.seedResult||'—'}</strong></div><div class="yar-calc-card"><b>💧 آب</b><label>عمق آبیاری (میلی‌متر)</label><input id="yarIrrDepth" inputmode="decimal" placeholder="مثلاً ۲۰" value="${yarCalc.irrDepth??''}"><button type="button" onclick="yarCalcIrr()">محاسبه کل زمین</button><strong>${yarCalc.irrResult||'—'}</strong></div><div class="yar-calc-card"><b>🌿 تراکم</b><label>فاصله ردیف / بوته (سانتی‌متر)</label><div class="yar-two-input"><input id="yarRow" inputmode="decimal" placeholder="ردیف" value="${yarCalc.row??''}"><input id="yarPlant" inputmode="decimal" placeholder="بوته" value="${yarCalc.plant??''}"></div><button type="button" onclick="yarCalcPlants()">محاسبه کل زمین</button><strong>${yarCalc.plantResult||'—'}</strong></div><div class="yar-calc-card"><b>🧪 کود</b><label>نیاز ماده غذایی / درصد ماده مؤثر</label><div class="yar-two-input"><input id="yarNutrient" inputmode="decimal" placeholder="کیلو ماده غذایی" value="${yarCalc.nutrient??''}"><input id="yarAnalysis" inputmode="decimal" placeholder="درصد" value="${yarCalc.analysis??''}"></div><button type="button" onclick="yarCalcFertilizer()">محاسبه کل زمین</button><strong>${yarCalc.fertResult||'—'}</strong></div></div><div class="yar-calc-note">ℹ️ فرمول‌های این بخش از موتور محاسبات آفلاین برنامه استفاده می‌کنند؛ مقدارهای ورودی مثل نرخ بذر، عمق آب یا نیاز غذایی را بر اساس رقم، منطقه و آزمون خاک/آب وارد کن.</div></section>`;}
-  app.innerHTML=`<section class="yarpro yar-final yar-real-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" data-yar-route="home">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>${l?`پرونده «${esc(l.name)}»`:'دستیار کشاورزی'}</span></div></div>${l?'<button class="yarpro-switch" data-yar-clear-land>تغییر زمین</button>':''}</header><section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه انتخاب‌ها داخل همین صفحه انجام می‌شود</small></div><div class="yar-flow-steps"><span class="done">۱ حالت</span><span class="${l?'done':''}">۲ زمین</span><span class="${l&&l.crop?'done':''}">۳ محصول</span><span class="${l&&l.crop?'done':''}">۴ محاسبه</span></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online">🌐<b>آنلاین</b><small>${YAR_AI_ENDPOINT?'اتصال فعال':'اتصال آنلاین تنظیم نشده'}</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline">📴<b>آفلاین</b><small>اطلاعات داخل برنامه</small></button></div></section>${landChooser}${landSelected}${productSection}${calcSection}<section class="yar-flow-card yar-chat-section"><div class="yar-section-head"><div><b>💬 دستیار کشاورزیار</b><small>${l?`متصل به «${esc(l.name)}» و محصول «${esc(l.crop||'ثبت نشده')}»`:'حالت عمومی'}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div><div id="yarChat" class="yarpro-chat"></div><input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden><input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden><div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div><form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="${l?'درباره همین زمین و محصول سؤال کن…':'هر سؤال کشاورزی که داری…'}"><button type="submit" class="yarpro-send">➤</button></form><div class="yar-final-tools"><button type="button" onclick="${l?`yarAnalyzeLand('${l.id}')`:`yarAsk('اطلاعات و وضعیت مزرعه را بررسی کن')`}"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای کشت چه پیشنهادی داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div></section></section>`;
+  if(!yarMessages.length)yarMessages=[{role:'bot',text:l?`سلام 🌱 اینجا پرونده «${l.name}» باز است. حالت، محصول و محاسبات همین زمین را از همین صفحه مدیریت کن.`:'سلام 🌱 برای شروع، حالت آنلاین/آفلاین و سپس یکی از زمین‌های ثبت‌شده را انتخاب کن.'}];
+  const lands=Array.isArray(state.lands)?state.lands:[];
+  const areaHa=l?Number(l.area||0):0,areaM2=l?Number(l.areaM2||areaHa*10000):0,profile=yarCropProfile,eco=l?yarLandEconomy(l):null;
+  const products=l?yarRegisteredProducts(l):[];
+  const rows=profile?[['خلاصه',profile.summary],['اقلیم',profile.climate],['خاک',profile.soil],['pH',profile.ph],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases],['برداشت',profile.harvest]].filter(x=>x[1]):[];
+  const landCards=lands.map(x=>`<button type="button" class="yar-land-option" data-yar-land="${esc(x.id)}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${Number(x.area||0).toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}</small></span><strong>›</strong></button>`).join('');
+  const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online">🌐<b>آنلاین</b><small>${YAR_AI_ENDPOINT?'آماده اتصال':'اتصال آنلاین در پروژه تنظیم نشده'}</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline">📴<b>آفلاین</b><small>بانک و دستیار داخل برنامه</small></button></div></section>`;
+  const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
+  const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر زمین</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div>${eco?`<div class="yar-economy-strip"><span>💸 هزینه ${money(eco.cost)}</span><span>💵 درآمد ${money(eco.income)}</span><span>📈 ${eco.profit>=0?'سود':'زیان'} ${money(Math.abs(eco.profit))}</span></div>`:''}</section>`:'';
+  const options=products.map(x=>`<option value="${esc(x)}" ${crop===x?'selected':''}>${esc(x)}</option>`).join('');
+  const productSection=l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>محصول این زمین</b><small>${l.crop?'محصول ثبت‌شده زمین نمایش داده شده است.':'برای این زمین هنوز محصولی ثبت نشده است.'}</small></div><span>${products.length.toLocaleString('fa-IR')} گزینه</span></div><select class="yar-main-select" id="yarCropSelect"><option value="">انتخاب محصول</option>${options}</select>${!l.crop?`<div class="yar-empty small">اگر محصول زمین را ثبت نکرده‌ای، ابتدا از «کشت و اقتصاد» همان زمین ثبتش کن؛ انتخاب اینجا فقط برای کشاورزیار ذخیره می‌شود.</div>`:''}${crop?`<div class="yar-product-box"><div class="yar-product-title"><b>🌱 ${esc(crop)}</b><small>${esc(yarCropRegistry?.[crop]?.label||profile?.category||'محصول کشاورزی')}</small></div>${rows.length?`<div class="yar-profile-list">${rows.map(x=>`<div><b>${esc(x[0])}</b><p>${esc(x[1])}</p></div>`).join('')}</div>`:'<div class="yar-empty small">شناسنامه این محصول در بانک آفلاین کامل نیست.</div>'}</div>`:''}</section>`:'';
+  const calcSection=(l&&crop)?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>محاسبات همین زمین</b><small>مساحت ${areaHa.toLocaleString('fa-IR')} هکتار خودکار اعمال شده است.</small></div><span class="yar-area-badge">${areaHa.toLocaleString('fa-IR')} ha</span></div><div class="yar-calc-grid yar-calc-grid-real"><div class="yar-calc-card"><b>🌾 کل بذر</b><label>نرخ بذر، کیلو در هکتار</label><input id="yarSeedRate" inputmode="decimal" value="${yarCalc.seedRate??''}" placeholder="مثلاً ۱۸۰"><button type="button" onclick="yarCalcSeed()">محاسبه</button><strong>${yarCalc.seedResult||'—'}</strong></div><div class="yar-calc-card"><b>💧 حجم آب</b><label>عمق هر نوبت، میلی‌متر</label><input id="yarIrrDepth" inputmode="decimal" value="${yarCalc.irrDepth??''}" placeholder="مثلاً ۲۰"><button type="button" onclick="yarCalcIrr()">محاسبه</button><strong>${yarCalc.irrResult||'—'}</strong></div><div class="yar-calc-card"><b>🌿 تعداد بوته</b><label>فاصله ردیف و بوته، سانتی‌متر</label><div class="yar-two-input"><input id="yarRow" inputmode="decimal" value="${yarCalc.row??''}" placeholder="ردیف"><input id="yarPlant" inputmode="decimal" value="${yarCalc.plant??''}" placeholder="بوته"></div><button type="button" onclick="yarCalcPlants()">محاسبه</button><strong>${yarCalc.plantResult||'—'}</strong></div><div class="yar-calc-card"><b>🧪 مقدار محصول کودی</b><label>نیاز ماده غذایی / درصد ماده مؤثر</label><div class="yar-two-input"><input id="yarNutrient" inputmode="decimal" value="${yarCalc.nutrient??''}" placeholder="کیلو"><input id="yarAnalysis" inputmode="decimal" value="${yarCalc.analysis??''}" placeholder="درصد"></div><button type="button" onclick="yarCalcFertilizer()">محاسبه</button><strong>${yarCalc.fertResult||'—'}</strong></div></div><div class="yar-calc-note">فرمول‌ها روی مساحت ثبت‌شده همین زمین اجرا می‌شوند. دوز کود و سم نسخه ثابت نیست و باید با آزمون خاک/آب، رقم، شرایط منطقه و برچسب محصول تعیین شود.</div></section>`:'';
+  app.innerHTML=`<section class="yarpro yar-final yar-real-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" data-yar-route="home">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>${l?`زمین «${esc(l.name)}»`:'دستیار کشاورزی'}</span></div></div>${l?'<button class="yarpro-switch" data-yar-clear-land>تغییر</button>':''}</header>${modeCard}${landChooser}${landSelected}${productSection}${calcSection}<section class="yar-flow-card yar-chat-section"><div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>${l?`متصل به زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}`:'حالت عمومی'}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div><div id="yarChat" class="yarpro-chat"></div><input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden><input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden><div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div><form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="${l?'درباره همین زمین و محصول سؤال کن…':'هر سؤال کشاورزی که داری…'}"><button type="submit" class="yarpro-send">➤</button></form><div class="yar-final-tools"><button type="button" onclick="${l?`yarAnalyzeLand('${l.id}')`:`yarAsk('وضعیت زمین‌های ثبت‌شده را بررسی کن')`}"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div></section></section>`;
   document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=()=>yarSetMode(b.dataset.yarMode));
   document.querySelectorAll('[data-yar-land]').forEach(b=>b.onclick=()=>yarSelectLand(b.dataset.yarLand));
   document.querySelectorAll('[data-yar-clear-land]').forEach(b=>b.onclick=()=>yarSelectLand(''));
@@ -1692,10 +1697,10 @@ function yar(){
   yarRender();yarBindInput();
 }
 function yarAreaM2(){const l=selected?yarLand(selected):null;return l?Number(l.areaM2||Number(l.area||0)*10000):0;}
-function yarCalcSeed(){const area=yarAreaM2()/10000,r=Number(document.getElementById('yarSeedRate')?.value||0);yarCalc.seedRate=r;yarCalc.seedResult=area>0&&r>=0?(area*r).toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—';yar();}
-function yarCalcIrr(){const area=yarAreaM2(),d=Number(document.getElementById('yarIrrDepth')?.value||0);yarCalc.irrDepth=d;const liters=area*d;yarCalc.irrResult=area>0&&d>=0?(liters/1000).toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—';yar();}
+function yarCalcSeed(){const area=yarAreaM2()/10000,r=Number(document.getElementById('yarSeedRate')?.value||0);yarCalc.seedRate=r;yarCalc.seedResult=area>0&&r>0?(area*r).toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—';yar();}
+function yarCalcIrr(){const area=yarAreaM2(),d=Number(document.getElementById('yarIrrDepth')?.value||0);yarCalc.irrDepth=d;yarCalc.irrResult=area>0&&d>0?(area*d/1000).toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—';yar();}
 function yarCalcPlants(){const area=yarAreaM2(),row=Number(document.getElementById('yarRow')?.value||0),plant=Number(document.getElementById('yarPlant')?.value||0);yarCalc.row=row;yarCalc.plant=plant;yarCalc.plantResult=area>0&&row>0&&plant>0?Math.round(area/((row/100)*(plant/100))).toLocaleString('fa-IR')+' بوته':'—';yar();}
-function yarCalcFertilizer(){const nutrient=Number(document.getElementById('yarNutrient')?.value||0),analysis=Number(document.getElementById('yarAnalysis')?.value||0);yarCalc.nutrient=nutrient;yarCalc.analysis=analysis;yarCalc.fertResult=nutrient>=0&&analysis>0?(nutrient/(analysis/100)).toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم محصول':'—';yar();}
+function yarCalcFertilizer(){const nutrient=Number(document.getElementById('yarNutrient')?.value||0),analysis=Number(document.getElementById('yarAnalysis')?.value||0);yarCalc.nutrient=nutrient;yarCalc.analysis=analysis;yarCalc.fertResult=nutrient>0&&analysis>0?(nutrient/(analysis/100)).toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم محصول':'—';yar();}
 function yarRender(){const b=document.getElementById('yarChat');if(!b)return;b.innerHTML=yarMessages.map(m=>{const imgs=Array.isArray(m.images)&&m.images.length?`<div class="yar-image-results">${m.images.slice(0,6).map(x=>`<figure class="yar-image-card"><img src="${esc(x.thumb||x.url||'')}" alt="${esc(x.title||'تصویر کشاورزی')}" loading="lazy" referrerpolicy="no-referrer"><figcaption>${esc(x.title||'تصویر کشاورزی')}</figcaption></figure>`).join('')}</div>`:'';return `<div class="yar-msg ${m.role==='user'?'user':'bot'}"><div>${m.image?`<img class="yar-msg-image" src="${esc(m.image)}" alt="عکس ارسالی">`:''}${m.text?`<span>${esc(m.text).replace(/\n/g,'<br>')}</span>`:''}${imgs}</div></div>`}).join('');b.scrollTop=b.scrollHeight}
 function yarAsk(q){const i=document.getElementById('yarInput');if(i){i.value=q;yarSend()}}
 function yarBindInput(){const i=document.getElementById('yarInput');if(!i||i.dataset.bound==='1')return;i.dataset.bound='1';i.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();const f=i.closest('form');if(f)f.requestSubmit();else yarSend();}})}
