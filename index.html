@@ -1689,7 +1689,19 @@ function yarOpenLand(id){
   yar();
   return false;
 }
-function yarSelectLand(id){return yarOpenLand(id)}
+function yarSelectLand(id){
+  const v=String(id||'').trim();
+  const l=state.lands.find(x=>String(x.id)===v);
+  if(!l){toast('زمین انتخاب‌شده پیدا نشد؛ دوباره امتحان کن.');return false}
+  selected=l.id;
+  localStorage.setItem('yk-last-land',String(l.id));
+  yarCalc={};
+  yarCropProfile=null;
+  yarLandMode=false;
+  route='yar';
+  yar();
+  return false;
+}
 
 
 function yarRegisteredProducts(l){
@@ -1792,7 +1804,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260928-v29').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260928-v31').catch(()=>{}));
 }
 </script>
 
