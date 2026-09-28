@@ -411,17 +411,11 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 </style>
 
 
-<style id="yar-entry-click-fix-v26">
+<style id="yar-entry-click-fix-v27">
 .yar-entry-page{position:relative!important;inset:auto!important;z-index:10!important;width:100%!important;height:auto!important;min-height:100vh!important;max-width:none!important;overflow:visible!important;padding:10px 10px 110px!important}
 .yar-entry-page .yar-land-list,.yar-entry-page .yar-land-option{position:relative!important;z-index:100!important;pointer-events:auto!important}
 .yar-entry-page .yar-land-option{touch-action:manipulation!important;-webkit-tap-highlight-color:rgba(23,102,75,.12)!important}
 </style>
-// Fallback touch/click delegation for mobile browsers and cached DOMs.
-if(!window.__yarLandDelegation){
-  window.__yarLandDelegation=true;
-  document.addEventListener('click',function(e){const b=e.target.closest&&e.target.closest('[data-yar-land]');if(b){e.preventDefault();e.stopPropagation();yarOpenLand(b.dataset.yarLand)}},true);
-  document.addEventListener('pointerup',function(e){const b=e.target.closest&&e.target.closest('[data-yar-land]');if(b){e.preventDefault();e.stopPropagation();yarOpenLand(b.dataset.yarLand)}},true);
-}
 <style id="yar-real-flow-v1">
 .yar-real-page{direction:rtl!important;background:linear-gradient(180deg,#eef7f1,#f9fcfa)!important;color:#17362a!important}
 .yar-flow-card{background:#fff;border:1px solid #dce9e1;border-radius:22px;padding:14px;margin:10px 0;box-shadow:0 8px 24px rgba(18,70,48,.06)}
@@ -1680,6 +1674,14 @@ function yarOpenLand(id){
   return false;
 }
 function yarSelectLand(id){return yarOpenLand(id)}
+
+// Fallback touch/click delegation for mobile browsers and cached DOMs.
+if(!window.__yarLandDelegation){
+  window.__yarLandDelegation=true;
+  document.addEventListener('click',function(e){const b=e.target.closest&&e.target.closest('[data-yar-land]');if(b){e.preventDefault();e.stopPropagation();yarOpenLand(b.dataset.yarLand)}},true);
+  document.addEventListener('pointerup',function(e){const b=e.target.closest&&e.target.closest('[data-yar-land]');if(b){e.preventDefault();e.stopPropagation();yarOpenLand(b.dataset.yarLand)}},true);
+}
+
 function yarRegisteredProducts(l){
   const own=yarLandProducts(l);return own.length?own:yarAllProducts();
 }
