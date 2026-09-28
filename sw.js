@@ -1,4 +1,4 @@
-const CACHE='yar-keshavarz-shell-v18';
+const CACHE='yar-keshavarz-shell-v19';
 const CORE=[
   './','./index.html','./offline/offline-ai.js','./offline/agriculture-db.js',
   './offline/agriculture-db-extended.js','./offline/calculators.js',
@@ -10,7 +10,7 @@ const CORE=[
   './manifest.webmanifest','./icon-192.png','./icon-512.png','./logo.png',
   './wheat-hero.jpg','./admin.html','./admin.js','./admin.css',
   './knowledge/knowledge.json','./presence.js',
-  './offline/crop-ui.js?v=20260921-accordion-v1'
+  './offline/crop-ui.js?v=20260921-accordion-v1','./keshavar-yar.js?v=20260928-legacy-yar-v1'
 ];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE).catch(()=>{})).then(()=>self.skipWaiting()))
