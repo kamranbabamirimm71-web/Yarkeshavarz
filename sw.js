@@ -1,4 +1,4 @@
-const CACHE='yar-keshavarz-shell-v21';
+const CACHE='yar-keshavarz-shell-v25';
 const CORE=[
   './','./index.html','./offline/offline-ai.js','./offline/agriculture-db.js',
   './offline/agriculture-db-extended.js','./offline/calculators.js',
@@ -25,6 +25,14 @@ self.addEventListener('fetch',e=>{
   if(r.method!=='GET')return;
   const u=new URL(r.url);
   if(u.origin!==location.origin)return;
+  if(r.mode==='navigate' || u.pathname.endsWith('.html') || u.pathname==='/' ){
+    e.respondWith(fetch(r).then(res=>{
+      const copy=res.clone();
+      caches.open(CACHE).then(c=>c.put(r,copy));
+      return res;
+    }).catch(()=>caches.match(r).then(hit=>hit||caches.match('./index.html'))));
+    return;
+  }
   e.respondWith(
     caches.match(r).then(hit=>hit||fetch(r).then(res=>{
       const copy=res.clone();
