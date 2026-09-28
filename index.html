@@ -1620,6 +1620,26 @@ function yarPriorityPlan(id){
   return out.slice(0,3);
 }
 
+let yarCropRegistry=null, yarCalc={};
+async function yarLoadCropRegistry(){
+  if(yarCropRegistry)return yarCropRegistry;
+  try{
+    const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops');
+    yarCropRegistry=mod.registry||{};
+  }catch(e){yarCropRegistry={};}
+  return yarCropRegistry;
+}
+function yarCropNames(){
+  const l=selected?yarLand(selected):null, names=[];
+  if(l?.crop)names.push(String(l.crop));
+  for(const x of Object.keys(yarCropRegistry||{}))if(!names.some(n=>String(n).trim()===String(x).trim()))names.push(x);
+  return names;
+}
+function yarSetCrop(v){
+  const l=selected?yarLand(selected):null;
+  if(!l)return;
+  l.crop=String(v||'').trim();save();yar();
+}
 function yarSetMode(mode){
   yarMode=mode==='online'?'online':'offline';
   localStorage.setItem('yk-yar-mode',yarMode);
@@ -1632,6 +1652,7 @@ function yarSelectLand(id){
 }
 function yar(){
 const l=selected?yarLand(selected):null;
+  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());}
   
   head(l?'کشاورزیار — '+l.name:'کشاورزیار');
   if(!yarMessages.length)yarMessages=[{role:'bot',text:l?`سلام 🌱 من کشاورزیارِ «${l.name}» هستم. پرونده این قطعه را در اختیار دارم و می‌توانی هر سؤال، عکس یا درخواست تحلیل را مطرح کنی.`:'سلام 🌱 من کشاورزیارم. دستیار عمومی کشاورزی هستم؛ بدون انتخاب زمین، هر سؤال کشاورزی یا عکس را می‌توانی برای بررسی بفرستی.'}];
@@ -1659,7 +1680,18 @@ const l=selected?yarLand(selected):null;
         </select>
       </div>
     </div>
-    ${l?`<div class="yar-selected-land"><div><b>🌾 ${esc(l.name)}</b><span>${n(l.area).toLocaleString('fa-IR')} هکتار · ${esc(l.crop||'محصول ثبت نشده')}</span></div><button type="button" class="secondary" onclick="go('land')">پرونده زمین</button></div>`:''}
+    ${l?`<div class="yar-selected-land"><div><b>🌾 ${esc(l.name)}</b><span>${n(l.area).toLocaleString('fa-IR')} هکتار · ${esc(l.crop||'محصول ثبت نشده')}</span></div><button type="button" class="secondary" onclick="go('land')">پرونده زمین</button></div>
+    <section class="yar-farm-panel">
+      <div class="yar-panel-title"><div><b>🌱 محصول و محاسبات این زمین</b><small>همه اعداد خودکار با مساحت همین زمین محاسبه می‌شوند.</small></div><span>${n(l.areaM2||Number(l.area||0)*10000).toLocaleString('fa-IR')} m²</span></div>
+      <div class="yar-crop-row"><label>محصول ثبت‌شده</label><select id="yarCropSelect" onchange="yarSetCrop(this.value)"><option value="">محصول را انتخاب کن</option>${yarCropNames().map(x=>`<option value="${esc(x)}" ${String(l.crop||'')===String(x)?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+      <div class="yar-calc-grid">
+        <div class="yar-calc-card"><b>🌾 بذر</b><label>کیلو در هکتار</label><input id="yarSeedRate" inputmode="decimal" placeholder="مثلاً 180" value="${yarCalc.seedRate??''}"><button type="button" onclick="yarCalcSeed()">محاسبه</button><strong id="yarSeedResult">${yarCalc.seedResult||'—'}</strong></div>
+        <div class="yar-calc-card"><b>💧 آبیاری</b><label>عمق آبیاری (میلی‌متر)</label><input id="yarIrrDepth" inputmode="decimal" placeholder="مثلاً 20" value="${yarCalc.irrDepth??''}"><button type="button" onclick="yarCalcIrr()">محاسبه</button><strong id="yarIrrResult">${yarCalc.irrResult||'—'}</strong></div>
+        <div class="yar-calc-card"><b>🌿 تعداد بوته</b><label>فاصله ردیف / بوته (cm)</label><div class="yar-two-input"><input id="yarRow" inputmode="decimal" placeholder="ردیف" value="${yarCalc.row??''}"><input id="yarPlant" inputmode="decimal" placeholder="بوته" value="${yarCalc.plant??''}"></div><button type="button" onclick="yarCalcPlants()">محاسبه</button><strong id="yarPlantResult">${yarCalc.plantResult||'—'}</strong></div>
+        <div class="yar-calc-card"><b>🧪 کود</b><label>نیاز ماده غذایی / درصد ماده مؤثر</label><div class="yar-two-input"><input id="yarNutrient" inputmode="decimal" placeholder="kg" value="${yarCalc.nutrient??''}"><input id="yarAnalysis" inputmode="decimal" placeholder="%" value="${yarCalc.analysis??''}"></div><button type="button" onclick="yarCalcFertilizer()">محاسبه</button><strong id="yarFertResult">${yarCalc.fertResult||'—'}</strong></div>
+      </div>
+      <div class="yar-calc-note">ℹ️ این محاسبات فقط تبدیل عددی بر اساس مساحت زمین هستند؛ مقدار مصرف واقعی کود و سم باید با محصول، رقم، آزمون خاک/آب و برچسب نهاده تعیین شود.</div>
+    </section>`:''}
 
     <div id="yarChat" class="yarpro-chat"></div>
     <input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden>
@@ -1678,6 +1710,11 @@ const l=selected?yarLand(selected):null;
   yarRender();
   yarBindInput();
 }
+function yarAreaM2(){const l=selected?yarLand(selected):null;return l?Number(l.areaM2||Number(l.area||0)*10000):0;}
+function yarCalcSeed(){const area=yarAreaM2()/10000,r=Number(document.getElementById('yarSeedRate')?.value||0);yarCalc.seedRate=r;yarCalc.seedResult=area>0&&r>=0?(area*r).toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—';yar();}
+function yarCalcIrr(){const area=yarAreaM2(),d=Number(document.getElementById('yarIrrDepth')?.value||0);yarCalc.irrDepth=d;const liters=area*d;yarCalc.irrResult=area>0&&d>=0?(liters/1000).toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—';yar();}
+function yarCalcPlants(){const area=yarAreaM2(),row=Number(document.getElementById('yarRow')?.value||0),plant=Number(document.getElementById('yarPlant')?.value||0);yarCalc.row=row;yarCalc.plant=plant;yarCalc.plantResult=area>0&&row>0&&plant>0?Math.round(area/((row/100)*(plant/100))).toLocaleString('fa-IR')+' بوته':'—';yar();}
+function yarCalcFertilizer(){const nutrient=Number(document.getElementById('yarNutrient')?.value||0),analysis=Number(document.getElementById('yarAnalysis')?.value||0);yarCalc.nutrient=nutrient;yarCalc.analysis=analysis;yarCalc.fertResult=nutrient>=0&&analysis>0?(nutrient/(analysis/100)).toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم محصول':'—';yar();}
 function yarRender(){const b=document.getElementById('yarChat');if(!b)return;b.innerHTML=yarMessages.map(m=>{const imgs=Array.isArray(m.images)&&m.images.length?`<div class="yar-image-results">${m.images.slice(0,6).map(x=>`<figure class="yar-image-card"><img src="${esc(x.thumb||x.url||'')}" alt="${esc(x.title||'تصویر کشاورزی')}" loading="lazy" referrerpolicy="no-referrer"><figcaption>${esc(x.title||'تصویر کشاورزی')}</figcaption></figure>`).join('')}</div>`:'';return `<div class="yar-msg ${m.role==='user'?'user':'bot'}"><div>${m.image?`<img class="yar-msg-image" src="${esc(m.image)}" alt="عکس ارسالی">`:''}${m.text?`<span>${esc(m.text).replace(/\n/g,'<br>')}</span>`:''}${imgs}</div></div>`}).join('');b.scrollTop=b.scrollHeight}
 function yarAsk(q){const i=document.getElementById('yarInput');if(i){i.value=q;yarSend()}}
 function yarBindInput(){const i=document.getElementById('yarInput');if(!i||i.dataset.bound==='1')return;i.dataset.bound='1';i.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();const f=i.closest('form');if(f)f.requestSubmit();else yarSend();}})}
@@ -1856,6 +1893,9 @@ body:has(.yar-final){
   }
 }
 </style><!-- V3 CHAT FIX: clean history, compact close button, silent local fallback. -->
+
+<style id="yar-farm-calcs">.yar-farm-panel{margin:10px 0;padding:12px;border:1px solid #d8e8df;border-radius:18px;background:#fff;box-shadow:0 8px 25px rgba(13,55,40,.06)}.yar-panel-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.yar-panel-title b{display:block;color:#0b4f38}.yar-panel-title small{display:block;color:#71847b;font-size:9px;margin-top:3px}.yar-panel-title>span{background:#edf5f0;color:#0b4f38;border-radius:10px;padding:7px 9px;font-size:10px;font-weight:900;white-space:nowrap}.yar-crop-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;margin-bottom:10px}.yar-crop-row label,.yar-calc-card label{font-size:10px;color:#657970}.yar-crop-row select,.yar-calc-card input{width:100%;box-sizing:border-box;border:1px solid #d7e6de;border-radius:11px;background:#fbfdfc;padding:9px;font-family:inherit}.yar-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.yar-calc-card{border:1px solid #e0ebe5;border-radius:14px;padding:9px;background:#f8fbf9}.yar-calc-card>b{display:block;font-size:12px;margin-bottom:5px}.yar-calc-card label{display:block;margin-bottom:4px}.yar-calc-card button{width:100%;margin-top:6px;border:0;border-radius:10px;padding:8px;background:#e5f2eb;color:#0b4f38;font-weight:900}.yar-calc-card strong{display:block;text-align:center;margin-top:7px;font-size:12px;color:#0b4f38}.yar-two-input{display:grid;grid-template-columns:1fr 1fr;gap:5px}.yar-calc-note{margin-top:9px;font-size:9px;line-height:1.8;color:#71847b;background:#f1f7f3;padding:8px;border-radius:10px}@media(max-width:430px){.yar-calc-grid{grid-template-columns:1fr}.yar-crop-row{grid-template-columns:1fr}.yar-panel-title{align-items:flex-start}}</style>
+
 <!-- V3 FINAL CLEANUP: obsolete estimate calculator removed; route navigation resets scroll to top. -->
 
 <style id="yar-fixed-input-final">
