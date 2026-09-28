@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  const KEY = "yar-keshavarz-v4-single";
+  const KEY = "yk-v3-clean";
 
   function faDigits(v) {
     return String(v ?? "")
@@ -47,11 +47,6 @@
   function lands() {
     const s = getState();
     return Array.isArray(s.lands) ? s.lands : [];
-  }
-
-  function selectedLand() {
-    const id = localStorage.getItem("yk-last-land");
-    return lands().find(x => String(x.id) === String(id)) || null;
   }
 
   function inventory() {
@@ -493,13 +488,6 @@
         font-size:11px;
       }
 
-      .ky-controls{padding:10px 12px;background:#fff;border-bottom:1px solid #e2e9e3;}
-      .ky-mode-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px}
-      .ky-mode{border:1px solid #cfe0d4;background:#fff;color:#166534;border-radius:13px;padding:10px;font:800 12px inherit}
-      .ky-mode.active{background:#e7f4eb;border-color:#7fbc91}
-      .ky-land-select{width:100%;border:1px solid #d2ddd5;border-radius:13px;padding:11px;background:#fff;font:700 12px inherit}
-      .ky-land-info{margin-top:7px;background:#edf7f0;border-radius:11px;padding:8px;font-size:10px;color:#166534}
-
       .ky-messages{
         flex:1;
         overflow:auto;
@@ -680,18 +668,6 @@
 
       </div>
 
-      <div class="ky-controls">
-        <div class="ky-mode-row">
-          <button type="button" class="ky-mode ky-offline active">📴 آفلاین</button>
-          <button type="button" class="ky-mode ky-online">🌐 آنلاین</button>
-        </div>
-        <select class="ky-land-select" id="kyLandSelect">
-          <option value="">دستیار عمومی</option>
-          ${lands().map(l => `<option value="${esc(l.id)}" ${selectedLand()&&String(selectedLand().id)===String(l.id)?"selected":""}>${esc(l.name||"زمین بدون نام")} — ${num(l.area).toLocaleString("fa-IR")} هکتار</option>`).join("")}
-        </select>
-        ${selectedLand()?`<div class="ky-land-info">🌾 ${esc(selectedLand().name||"زمین")} · ${num(selectedLand().area).toLocaleString("fa-IR")} هکتار · ${esc(selectedLand().crop||"محصول ثبت نشده")}</div>`:""}
-      </div>
-
       <div
         class="ky-messages"
         id="kyMessages"
@@ -840,17 +816,6 @@
         }
       );
 
-    const landSelect = screen.querySelector("#kyLandSelect");
-    if (landSelect) landSelect.addEventListener("change", function(){
-      if (this.value) localStorage.setItem("yk-last-land", this.value);
-      else localStorage.removeItem("yk-last-land");
-      screen.remove();
-      openAssistant();
-    });
-    screen.querySelector(".ky-online")?.addEventListener("click",()=>{
-      alert("اتصال آنلاین در این نسخه هنوز سرویس API ندارد؛ حالت آفلاین فعال است.");
-    });
-
     setTimeout(
       function(){
         input.focus();
@@ -863,8 +828,6 @@
   /* =====================================================
      CONNECT TO BOTTOM NAV
      ===================================================== */
-
-  window.openKeshavarYar = openAssistant;
 
   function boot() {
 
