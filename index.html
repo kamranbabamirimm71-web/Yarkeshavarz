@@ -793,6 +793,11 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 .yar-profile-grid small{font-weight:900;color:#0b4f38}.yar-profile-grid p{font-size:9px;line-height:1.8;color:#687b72;margin:4px 0 0}
 @media(max-width:430px){.yar-profile-grid{grid-template-columns:1fr}}
 </style>
+<style id="yar-v29-land-touch">
+/* v29: land cards must remain directly touchable; no document-level capture handler. */
+.yar-land-option{pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important;position:relative;z-index:2}
+.yar-land-option *{pointer-events:none}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -1675,6 +1680,7 @@ function yarOpenLand(id){
 }
 function yarSelectLand(id){return yarOpenLand(id)}
 
+
 function yarRegisteredProducts(l){
   const own=yarLandProducts(l);return own.length?own:yarAllProducts();
 }
@@ -1694,7 +1700,7 @@ function yar(){
   const areaHa=l?Number(l.area||0):0,areaM2=l?Number(l.areaM2||areaHa*10000):0,profile=yarCropProfile,eco=l?yarLandEconomy(l):null;
   const products=l?yarRegisteredProducts(l):[];
   const rows=profile?[['خلاصه',profile.summary],['اقلیم',profile.climate],['خاک',profile.soil],['pH',profile.ph],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases],['برداشت',profile.harvest]].filter(x=>x[1]):[];
-  const landCards=lands.map(x=>`<a class="yar-land-option" data-yar-land="${esc(x.id)}" href="./?v=28&yarland=${esc(encodeURIComponent(String(x.id)))}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${Number(x.area||0).toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}</small></span><strong>›</strong></a>`).join('');
+  const landCards=lands.map(x=>`<button type="button" class="yar-land-option" data-yar-land="${esc(x.id)}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${Number(x.area||0).toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}</small></span><strong>›</strong></button>`).join('');
   const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" onclick="yarSetMode('online')">🌐<b>آنلاین</b><small>${YAR_AI_ENDPOINT?'آماده اتصال':'اتصال آنلاین در پروژه تنظیم نشده'}</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" onclick="yarSetMode('offline')">📴<b>آفلاین</b><small>بانک و دستیار داخل برنامه</small></button></div></section>`;
   const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
   const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر زمین</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div>${eco?`<div class="yar-economy-strip"><span>💸 هزینه ${money(eco.cost)}</span><span>💵 درآمد ${money(eco.income)}</span><span>📈 ${eco.profit>=0?'سود':'زیان'} ${money(Math.abs(eco.profit))}</span></div>`:''}</section>`:'';
@@ -1771,13 +1777,11 @@ function backup(){let a=document.createElement('a');a.href=URL.createObjectURL(n
 document.getElementById('backup').onclick=backup;document.getElementById('restore').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...base,...JSON.parse(r.result)};save();go('home')}catch{toast('فایل پشتیبان نامعتبر است')}};r.readAsText(f)}
 document.addEventListener('click',e=>{let b=e.target.closest('[data-r]');if(b)go(b.dataset.r)});
 document.getElementById('restore').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...base,...JSON.parse(r.result)};save();toast('پشتیبان بازیابی شد');go('home')}catch{toast('فایل پشتیبان معتبر نیست')}};r.readAsText(f)};
-window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLand=editLand;window.yarOpenLand=yarOpenLand;
-const __yarLandFromUrl=new URLSearchParams(location.search).get('yarland');
-if(__yarLandFromUrl && state.lands.some(x=>String(x.id)===String(__yarLandFromUrl))){selected=__yarLandFromUrl;yarLandMode=true;localStorage.setItem('yk-last-land',String(selected));go('yar')}else{go('home')}
+window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLand=editLand;go('home');
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260928-v22').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260928-v29').catch(()=>{}));
 }
 </script>
 
