@@ -1679,24 +1679,12 @@ function yarLandProducts(l){
 }
 function yarAllProducts(){return Object.keys(yarCropRegistry||{}).sort((a,b)=>a.localeCompare(b,'fa'))}
 function yarSetCrop(v){
-  const l=(yarLandMode&&selected)?yarLand(selected):null;if(!l)return;
+  const l=selected?yarLand(selected):null;if(!l)return;
   const crop=String(v||'').trim();
   yarSaveSelectedCrop(l.id,crop);
   if(crop){l.crop=crop;if(!l.activeCultivationId)l.activeCultivationId=uid();if(l.cultivationStatus!=='archived')l.cultivationStatus='active';save();}
   yarCalc={};yarCropProfile=null;
   if(crop)yarLoadCropProfile(crop).finally(()=>yar());else yar();
-}
-function yarSetMode(mode){
-  if(!selected){
-    toast('اول زمین موردنظر را انتخاب کن، بعد آنلاین یا آفلاین را بزن.');
-    return;
-  }
-  yarMode=mode==='online'?'online':'offline';
-  localStorage.setItem('yk-yar-mode',yarMode);
-  yarLandMode=true;
-  localStorage.setItem('yk-last-land',String(selected));
-  route='yar';
-  yar();
 }
 function yarOpenLand(id){
   const v=String(id||'').trim();
@@ -1705,7 +1693,7 @@ function yarOpenLand(id){
   selected=l.id;
   localStorage.setItem('yk-last-land',String(l.id));
   yarCalc={};yarCropProfile=null;
-  yarLandMode=true;
+  yarLandMode=false;
   route='yar';
   yar();
   return false;
@@ -1765,12 +1753,12 @@ function yar(){
   head(l?'کشاورزیار — '+l.name:'کشاورزیار');
   if(!yarMessages.length)yarMessages=[{role:'bot',text:l?`سلام 🌱 اینجا پرونده «${l.name}» باز است. حالت، محصول و محاسبات همین زمین را از همین صفحه مدیریت کن.`:'سلام 🌱 برای شروع، حالت آنلاین/آفلاین و سپس یکی از زمین‌های ثبت‌شده را انتخاب کن.'}];
   const lands=Array.isArray(state.lands)?state.lands:[];
-  const areaHa=l?Number(l.area||((Number(l.areaM2||l.measurement?.areaM2||0))/10000)||0):0,areaM2=l?Number(l.areaM2||l.measurement?.areaM2||(areaHa*10000)||0):0,profile=yarCropProfile,eco=l?yarLandEconomy(l):null;
+  const areaM2=l?Number(l.areaM2||l.measurement?.areaM2||(Number(l.area||0)*10000)||0):0,areaHa=l?(Number(l.area||0)||areaM2/10000):0,profile=yarCropProfile,eco=l?yarLandEconomy(l):null;
   const products=l?yarRegisteredProducts(l):[];
   const rows=profile?[['خلاصه',profile.summary],['اقلیم',profile.climate],['خاک',profile.soil],['pH',profile.ph],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases],['برداشت',profile.harvest]].filter(x=>x[1]):[];
-  const landCards=lands.map(x=>`<button type="button" class="yar-land-option ${String(selected)===String(x.id)?'active':''}" data-yar-land="${esc(x.id)}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${(Number(x.area||((Number(x.areaM2||x.measurement?.areaM2||0))/10000))||0).toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}${String(selected)===String(x.id)?' · ✓ انتخاب شد':''}</small></span><strong>${String(selected)===String(x.id)?'✓':'›'}</strong></button>`).join('');
+  const landCards=lands.map(x=>`<button type="button" class="yar-land-option ${String(selected)===String(x.id)?'active':''}" data-yar-land="${esc(x.id)}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${Number(x.area||((Number(x.areaM2||x.measurement?.areaM2||0))/10000)||0).toLocaleString('fa-IR',{maximumFractionDigits:3})} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}${String(selected)===String(x.id)?' · ✓ انتخاب شد':''}</small></span><strong>${String(selected)===String(x.id)?'✓':'›'}</strong></button>`).join('');
   const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" onclick="yarSetMode('online')">🌐<b>آنلاین</b><small>ورود به صفحه کشاورزیار</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" onclick="yarSetMode('offline')">📴<b>آفلاین</b><small>ورود به صفحه کشاورزیار</small></button></div></section>`;
-  const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
+  const landChooser=!yarLandMode?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
   const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر زمین</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div>${eco?`<div class="yar-economy-strip"><span>💸 هزینه ${money(eco.cost)}</span><span>💵 درآمد ${money(eco.income)}</span><span>📈 ${eco.profit>=0?'سود':'زیان'} ${money(Math.abs(eco.profit))}</span></div>`:''}</section>`:'';
   const options=products.map(x=>`<option value="${esc(x)}" ${crop===x?'selected':''}>${esc(x)}</option>`).join('');
   const groups=Object.entries((yarCropRegistry&&window.__yarGroups)||{});
@@ -1804,7 +1792,7 @@ function yar(){
   const areaSummary=l?`<div class="yar-legacy-area-strip"><span>📐 متراژ زمین</span><b>${areaM2.toLocaleString('fa-IR')} مترمربع</b><span>🌾 ${areaHa.toLocaleString('fa-IR')} هکتار</span><span>📶 حالت: ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div>`:'';
 
   // صفحه اول کشاورزیار فقط برای انتخاب حالت و زمین است؛ چت بعد از انتخاب زمین باز می‌شود.
-  if(!l){
+  if(!l || !yarLandMode){
     app.innerHTML=`<section class="yarpro yar-final yar-real-page yar-entry-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" data-yar-route="home">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>دستیار کشاورزی · شروع کار</span></div></div></header><div class="yar-entry-hero"><b>🌱 شروع کشاورزیار</b><span>ابتدا زمین را انتخاب کن؛ سپس با زدن آنلاین یا آفلاین وارد صفحه کشاورزیار شو.</span></div>${modeCard}${landChooser}</section>`;
     document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=()=>yarSetMode(b.dataset.yarMode));
     document.querySelectorAll('[data-yar-land]').forEach(b=>b.onclick=()=>yarSelectLand(b.dataset.yarLand));
@@ -1837,7 +1825,7 @@ function yar(){
   const cs=document.getElementById('yarCropSelect');if(cs)cs.onchange=()=>yarSetCrop(cs.value);
   yarRender();yarBindInput();
 }
-function yarAreaM2(){const l=selected?yarLand(selected):null;return l?Number(l.areaM2||l.measurement?.areaM2||Number(l.area||0)*10000):0;}
+function yarAreaM2(){const l=selected?yarLand(selected):null;if(!l)return 0;const m2=Number(l.areaM2||l.measurement?.areaM2||0);return m2>0?m2:Number(l.area||0)*10000;}
 function yarSaveCultivation(){
   const l=selected?yarLand(selected):null;if(!l)return;
   if(l.cultivationStatus==='archived'){toast('این کشت بایگانی شده است');return}
