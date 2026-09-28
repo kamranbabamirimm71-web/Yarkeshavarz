@@ -1,7 +1,7 @@
-const CACHE='yar-keshavarz-shell-v16-legacy-home';
+const CACHE='yar-keshavarz-shell-v15';
 const CORE=[
   './','./index.html','./offline/offline-ai.js','./offline/agriculture-db.js',
-  './offline/agriculture-db-extended.js','./offline/calculators.js','./offline/legacy-crop-catalog.js',
+  './offline/agriculture-db-extended.js','./offline/calculators.js',
   './offline/context-engine.js','./offline/crop-profiles-universal.js',
   './offline/crop-profiles.js','./offline/crop-ui.js',
   './offline/global-agriculture-brain.js',

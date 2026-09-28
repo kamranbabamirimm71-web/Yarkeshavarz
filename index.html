@@ -770,11 +770,6 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 .manager-actions button{flex:1}
 @media(max-width:420px){.manager-wrap{padding-left:7px;padding-right:7px}.manager-chat{min-height:290px}.manager-bubble{max-width:88%}}
 </style>
-
-<style id="legacy-home-v2">
-.home-control{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.mode-card,.active-land-card,.registered-crops-card,.home-calc-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:13px;box-shadow:var(--shadow)}
-.mode-title{display:flex;justify-content:space-between;align-items:center;gap:8px}.mode-buttons{display:flex;gap:7px;margin-top:9px}.mode-buttons button{flex:1;min-height:42px;border:1px solid #d6e5dd;border-radius:12px;background:#f6faf8;color:#315b49;font-family:inherit;font-weight:800}.mode-buttons button.active{background:#17664b;color:#fff;border-color:#17664b}.active-land-card{margin-top:9px;background:linear-gradient(135deg,#edf7f1,#fff)}.active-land-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.active-land-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.active-land-meta div{background:#fff;border-radius:12px;padding:8px;text-align:center}.active-land-meta small{display:block;color:var(--muted);font-size:9px}.active-land-meta b{display:block;margin-top:3px}.home-section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:18px 2px 9px}.registered-crops{display:grid;gap:8px}.registered-crop{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #e1ebe5;background:#fbfdfc;border-radius:15px;padding:10px}.registered-crop-main{min-width:0}.registered-crop-main b{display:block}.registered-crop-main small{color:var(--muted)}.registered-crop-stats{text-align:left;white-space:nowrap}.registered-crop-stats b{display:block;color:var(--g)}.registered-crop-stats small{font-size:9px;color:var(--muted)}.home-calc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:9px}.home-calc-grid button{min-height:58px;border:1px solid #dce8e1;background:#f8fbf9;border-radius:14px;font-family:inherit;font-weight:800;color:#24523e}.legacy-badge{display:inline-flex;align-items:center;gap:4px;background:#e8f4ee;color:#17664b;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:800}.calculator-wrap{padding-bottom:30px}.calculator-hero{background:linear-gradient(135deg,#0b4f38,#25825e);color:#fff;border-radius:22px;padding:16px;margin-bottom:10px}.calculator-hero h2{margin:0 0 5px}.calc-tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 10px}.calc-tabs button{white-space:nowrap;border:1px solid #d8e6de;background:#fff;border-radius:12px;padding:9px 12px;font-family:inherit;font-weight:800;color:#24523e}.calc-tabs button.active{background:#17664b;color:#fff}.calc-box{background:#fff;border:1px solid var(--line);border-radius:20px;padding:13px;margin-bottom:10px}.calc-box h3{margin:0 0 10px}.calc-fields{display:grid;grid-template-columns:1fr 1fr;gap:9px}.calc-fields label{font-size:11px;color:#52675d}.calc-fields input,.calc-fields select{width:100%;box-sizing:border-box;margin-top:5px;border:1px solid #d6e4dc;border-radius:12px;padding:11px;font-family:inherit;background:#fbfdfc}.calc-output{margin-top:10px;background:#edf6f1;border-radius:15px;padding:12px;text-align:center;color:#174c38}.calc-output b{display:block;font-size:24px;margin:4px 0}.calc-output small{color:#60756a}.calc-note{font-size:10px;color:#718078;line-height:1.7;margin-top:8px}@media(max-width:520px){.home-control{grid-template-columns:1fr}.calc-fields{grid-template-columns:1fr}}
-</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -882,7 +877,7 @@ function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt
 function toast(x){alert(x)}
 function head(x){title.textContent=x}
 function totals(id){let t=state.transactions.filter(x=>!id||x.landId===id),c=t.filter(x=>x.type==='expense').reduce((a,x)=>a+n(x.amount),0),i=t.filter(x=>x.type==='income').reduce((a,x)=>a+n(x.amount),0);return{cost:c,income:i,profit:i-c}}
-function go(r){if(r==='measure'&&!measureReturn){selected=null;measureReturn='add'}route=r;window.scrollTo({top:0,left:0,behavior:'instant'});if(r==='home')home();else if(r==='lands')lands();else if(r==='add')add();else if(r==='measure')measure();else if(r==='inventory')inventory();else if(r==='weather')weather();else if(r==='equipment')equipment();else if(r==='calculator'){calculator()}else if(r==='cultivation')cultivation();else if(r==='profile')profile();else if(r==='account')account();else if(r==='settings')settings();else if(r==='manager')managerChat();else if(r==='ads')ads();else if(r==='news')news();else if(r==='yar')yar();else if(r==='game')game();else home();document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.r===r))}
+function go(r){if(r==='measure'&&!measureReturn){selected=null;measureReturn='add'}route=r;window.scrollTo({top:0,left:0,behavior:'instant'});if(r==='home')home();else if(r==='lands')lands();else if(r==='add')add();else if(r==='measure')measure();else if(r==='inventory')inventory();else if(r==='weather')weather();else if(r==='equipment')equipment();else if(r==='calculator'){toast('محاسبه‌گر برآورد از نسخه نهایی حذف شده است');go('home')}else if(r==='cultivation')cultivation();else if(r==='profile')profile();else if(r==='account')account();else if(r==='settings')settings();else if(r==='manager')managerChat();else if(r==='ads')ads();else if(r==='news')news();else if(r==='yar')yar();else if(r==='game')game();else home();document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.r===r))}
 function landThumb(l){
   const ps=l&&l.measurement&&Array.isArray(l.measurement.points)?l.measurement.points:[];
   let poly='38,62 72,30 126,24 178,43 196,84 160,106 94,104 48,86';
@@ -896,30 +891,7 @@ function landThumb(l){
 }
 
 function landCard(l){let t=totals(l.id);return `<article class="card"><div class="row land-title-row"><div class="land-title-wrap">${landThumb(l)}<div class="land-title-text"><h3>${esc(l.name)}</h3><span class="badge">${l.ownership==='rent'?'اجاره‌ای':'مالک'}</span></div></div><b>${n(l.area).toLocaleString('fa-IR')} هکتار</b></div><p class="muted small">${esc(l.region||'موقعیت ثبت نشده')} · ${esc(l.crop||'کشت ثبت نشده')}</p><div class="row small"><span>هزینه: ${money(t.cost)}</span><span>سود: ${money(t.profit)}</span></div><div class="actions"><button class="primary" onclick="openLand('${l.id}')">پرونده زمین</button><button class="secondary" onclick="weatherFor('${l.id}')">هوا</button></div></article>`}
-function home(){
- head('خانه');
- const t=totals(),area=state.lands.reduce((a,l)=>a+n(l.area),0);
- const activeId=localStorage.getItem('yk-active-land')||selected||'';
- const active=state.lands.find(l=>l.id===activeId)||state.lands[0]||null;
- if(active) { selected=active.id; localStorage.setItem('yk-active-land',active.id); }
- const mode=localStorage.getItem('yk-mode-v2')||'offline';
- const cropMap={};
- state.lands.forEach(l=>{const c=String(l.crop||'').trim();if(c){if(!cropMap[c])cropMap[c]={lands:0,area:0};cropMap[c].lands++;cropMap[c].area+=n(l.area)}});
- const crops=Object.entries(cropMap).sort((a,b)=>b[1].area-a[1].area);
- const activeHtml=active?`<div class="active-land-card"><div class="active-land-head"><div><span class="legacy-badge">🌾 زمین فعال</span><h3 style="margin:7px 0 2px">${esc(active.name||'زمین بدون نام')}</h3><div class="small muted">${esc(active.region||'موقعیت ثبت نشده')} · ${esc(active.crop||'محصول ثبت نشده')}</div></div><button class="secondary" onclick="go('lands')">تغییر</button></div><div class="active-land-meta"><div><small>مساحت</small><b>${n(active.area).toLocaleString('fa-IR')} هکتار</b></div><div><small>هزینه</small><b>${money(totals(active.id).cost)}</b></div><div><small>سود</small><b>${money(totals(active.id).profit)}</b></div></div><div class="actions" style="margin-top:9px"><button class="primary" onclick="openLand('${active.id}')">📋 پرونده زمین</button><button class="secondary" onclick="yarLandMode=true;selected='${active.id}';go('yar')">✦ کشاورزیار</button></div></div>`:`<div class="active-land-card"><b>🌾 هنوز زمین فعالی انتخاب نشده</b><p class="small muted">یک زمین ثبت کن یا از فهرست زمین‌ها انتخابش کن.</p><button class="primary" onclick="go('lands')">انتخاب زمین</button></div>`;
- const cropHtml=crops.length?crops.slice(0,8).map(([name,x])=>`<div class="registered-crop" onclick="selectCropLand('${esc(name).replace(/'/g,"\\'")}')"><div class="registered-crop-main"><b>🌱 ${esc(name)}</b><small>${x.lands.toLocaleString('fa-IR')} زمین ثبت‌شده</small></div><div class="registered-crop-stats"><b>${x.area.toLocaleString('fa-IR',{maximumFractionDigits:2})}</b><small>هکتار</small></div></div>`).join(''):`<div class="card empty">هنوز محصولی در زمین‌ها ثبت نشده است.</div>`;
- app.innerHTML=`<section class="hero" style="background-image:linear-gradient(180deg,rgba(0,45,32,.18),rgba(0,45,32,.72)),url('wheat-hero.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;"><h1>یار کشاورز</h1><p>مدیریت حرفه‌ای زمین، کشت، هزینه، انبار و کشاورزیار</p></section>
- <div class="home-control"><div class="mode-card"><div class="mode-title"><b>🌐 حالت برنامه</b><span class="legacy-badge">${mode==='online'?'آنلاین':'آفلاین'}</span></div><div class="mode-buttons"><button class="${mode==='online'?'active':''}" onclick="setAppMode('online')">آنلاین</button><button class="${mode==='offline'?'active':''}" onclick="setAppMode('offline')">آفلاین</button></div></div><div class="mode-card"><div class="mode-title"><b>📊 خلاصه امروز</b><span class="small muted">محلی</span></div><div class="small muted" style="margin-top:9px">${state.lands.length.toLocaleString('fa-IR')} زمین · ${area.toLocaleString('fa-IR',{maximumFractionDigits:2})} هکتار</div><div class="small" style="margin-top:5px">هزینه ${money(t.cost)} · درآمد ${money(t.income)}</div></div></div>
- ${activeHtml}
- <div class="home-section-head"><h3>🌱 محصولات ثبت‌شده</h3><button class="secondary" onclick="go('lands')">همه زمین‌ها</button></div><div class="registered-crops">${cropHtml}</div>
- <div class="home-section-head"><h3>🧮 محاسبات عددی</h3><button class="secondary" onclick="go('calculator')">همه</button></div><div class="home-calc-card"><div class="small muted">محاسبات کشاورزی نسخه قدیمی در نسخه جدید فعال است.</div><div class="home-calc-grid"><button onclick="calculatorTab('seed')">🌾 مقدار بذر</button><button onclick="calculatorTab('plant')">🌱 تعداد بوته</button><button onclick="calculatorTab('water')">💧 آب آبیاری</button><button onclick="calculatorTab('fertilizer')">🧪 مقدار کود</button><button onclick="calculatorTab('breakEven')">💰 نقطه سربه‌سر</button><button onclick="calculatorTab('economy')">📈 هزینه و سود</button></div></div>
- <div id="homeWeather" class="home-weather"><div class="home-weather-head"><b>🌤️ آب‌وهوای امروز</b><span class="small muted">در حال دریافت…</span></div></div>
- <div class="section"><h3>دسترسی سریع</h3></div><div class="quick"><button onclick="go('add')"><span class="qi">🌾</span>ثبت زمین</button><button onclick="go('measure')"><span class="qi">📐</span>اندازه‌گیری</button><button onclick="go('inventory')"><span class="qi">📦</span>انبار</button><button onclick="go('equipment')"><span class="qi">🚜</span>ادوات</button><button onclick="go('calculator')"><span class="qi">🧮</span>محاسبه‌گر</button></div>
- <div class="section"><h3>زمین‌های اخیر</h3><button class="secondary" onclick="go('lands')">همه</button></div><div class="list">${state.lands.slice(0,3).map(landCard).join('')||'<div class="card empty">هنوز زمینی ثبت نشده است.</div>'}</div>`;
- loadHomeWeather();
-}
-function setAppMode(mode){localStorage.setItem('yk-mode-v2',mode);home();toast(mode==='online'?'حالت آنلاین انتخاب شد':'حالت آفلاین انتخاب شد');}
-function selectCropLand(name){const l=state.lands.find(x=>String(x.crop||'').trim()===name);if(l){selected=l.id;localStorage.setItem('yk-active-land',l.id);openLand(l.id)}else go('lands')}
+function home(){head('خانه');let t=totals(),area=state.lands.reduce((a,l)=>a+n(l.area),0);app.innerHTML=`<section class="hero" style="background-image:linear-gradient(180deg,rgba(0,45,32,.18),rgba(0,45,32,.72)),url('wheat-hero.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;"><h1>یار کشاورز</h1><p>مدیریت حرفه‌ای زمین، کشت، هزینه، انبار و آب‌وهوا</p></section><div class="grid"><div class="card"><span class="muted">زمین‌ها</span><div class="metric">${state.lands.length.toLocaleString('fa-IR')}</div></div><div class="card"><span class="muted">مساحت</span><div class="metric">${area.toLocaleString('fa-IR')}</div><span class="small muted">هکتار</span></div><div class="card"><span class="muted">هزینه</span><div class="metric">${money(t.cost)}</div></div><div class="card"><span class="muted">درآمد</span><div class="metric">${money(t.income)}</div></div></div><div id="homeWeather" class="home-weather"><div class="home-weather-head"><b>🌤️ آب‌وهوای امروز</b><span class="small muted">در حال دریافت…</span></div></div><div class="section"><h3>دسترسی سریع</h3></div><div class="quick"><button onclick="go('add')"><span class="qi">🌾</span>ثبت زمین</button><button onclick="go('measure')"><span class="qi">📐</span>اندازه‌گیری</button><button onclick="go('inventory')"><span class="qi">📦</span>انبار</button><button onclick="go('equipment')"><span class="qi">🚜</span>ادوات</button></div><div class="section"><h3>زمین‌های اخیر</h3><button class="secondary" onclick="go('lands')">همه</button></div><div class="list">${state.lands.slice(0,3).map(landCard).join('')||'<div class="card empty">هنوز زمینی ثبت نشده است.</div>'}</div>`;loadHomeWeather()}
 function lands(){head('زمین‌ها');app.innerHTML=`<div class="section"><h2>زمین‌های من</h2><button class="primary" onclick="go('add')">＋ زمین جدید</button></div><div class="list">${state.lands.map(landCard).join('')||'<div class="card empty">هنوز زمینی ثبت نشده است.</div>'}</div>`}
 function add(){
 head('ثبت زمین');
@@ -1052,37 +1024,6 @@ function moneyInput(id){
  e.addEventListener('blur',()=>{if(e.value.trim())e.value=n(e.value).toLocaleString('fa-IR')});
 }
 function activeCultivationId(l){return l.activeCultivationId||'legacy'}
-
-let calculatorCurrentTab=localStorage.getItem('yk-calc-tab')||'seed';
-function calcVal(id){return n(document.getElementById(id)?.value||0)}
-function calculatorTab(tab){calculatorCurrentTab=tab;localStorage.setItem('yk-calc-tab',tab);go('calculator')}
-function calculator(){
- head('محاسبات عددی');
- const l=state.lands.find(x=>x.id===(selected||localStorage.getItem('yk-active-land')))||state.lands[0]||null;
- if(l){selected=l.id;localStorage.setItem('yk-active-land',l.id)}
- const crop=esc(l?.crop||'محصول انتخاب نشده');
- app.innerHTML=`<div class="calculator-wrap"><div class="calculator-hero"><span class="legacy-badge" style="background:rgba(255,255,255,.18);color:#fff">محاسبات کشاورزی قدیمی</span><h2>🧮 محاسبات عددی مزرعه</h2><div class="small" style="opacity:.86">${l?`زمین فعال: ${esc(l.name)} · ${crop}`:'ابتدا یک زمین انتخاب کن'}</div></div><div class="calc-tabs"><button class="${calculatorCurrentTab==='seed'?'active':''}" onclick="calculatorTab('seed')">🌾 بذر</button><button class="${calculatorCurrentTab==='plant'?'active':''}" onclick="calculatorTab('plant')">🌱 بوته</button><button class="${calculatorCurrentTab==='water'?'active':''}" onclick="calculatorTab('water')">💧 آب</button><button class="${calculatorCurrentTab==='fertilizer'?'active':''}" onclick="calculatorTab('fertilizer')">🧪 کود</button><button class="${calculatorCurrentTab==='breakEven'?'active':''}" onclick="calculatorTab('breakEven')">💰 سربه‌سر</button><button class="${calculatorCurrentTab==='economy'?'active':''}" onclick="calculatorTab('economy')">📈 اقتصاد</button></div><div id="calculatorBody"></div></div>`;
- renderCalculatorBody(l);
-}
-function renderCalculatorBody(l){
- const b=document.getElementById('calculatorBody');if(!b)return;
- const areaHa=n(l?.area),areaM2=n(l?.areaM2)||areaHa*10000;
- let html='';
- if(calculatorCurrentTab==='seed') html=`<div class="calc-box"><h3>🌾 محاسبه مقدار بذر</h3><div class="calc-fields"><label>مساحت (هکتار)<input id="cSeedArea" type="number" step="0.01" value="${areaHa||1}"></label><label>میزان بذر در هکتار (کیلوگرم)<input id="cSeedRate" type="number" step="0.1" value=""></label></div><button class="primary" style="margin-top:10px;width:100%" onclick="runSeedCalc()">محاسبه</button><div id="calcResult" class="calc-output"><small>فرمول: مساحت × میزان بذر در هکتار</small></div></div>`;
- else if(calculatorCurrentTab==='plant') html=`<div class="calc-box"><h3>🌱 محاسبه تعداد بوته / نشا</h3><div class="calc-fields"><label>مساحت (مترمربع)<input id="cPlantArea" type="number" step="1" value="${areaM2||10000}"></label><label>فاصله ردیف (سانتی‌متر)<input id="cRow" type="number" step="0.1" value=""></label><label>فاصله بوته (سانتی‌متر)<input id="cPlant" type="number" step="0.1" value=""></label></div><button class="primary" style="margin-top:10px;width:100%" onclick="runPlantCalc()">محاسبه</button><div id="calcResult" class="calc-output"><small>فرمول: مساحت ÷ (فاصله ردیف × فاصله بوته)</small></div></div>`;
- else if(calculatorCurrentTab==='water') html=`<div class="calc-box"><h3>💧 حجم آب آبیاری</h3><div class="calc-fields"><label>مساحت (مترمربع)<input id="cWaterArea" type="number" step="1" value="${areaM2||10000}"></label><label>عمق آب (میلی‌متر)<input id="cDepth" type="number" step="0.1" value=""></label></div><button class="primary" style="margin-top:10px;width:100%" onclick="runWaterCalc()">محاسبه</button><div id="calcResult" class="calc-output"><small>هر ۱ میلی‌متر روی ۱ مترمربع = ۱ لیتر آب</small></div></div>`;
- else if(calculatorCurrentTab==='fertilizer') html=`<div class="calc-box"><h3>🧪 مقدار محصول کود</h3><div class="calc-fields"><label>نیاز ماده غذایی (کیلوگرم)<input id="cNutrient" type="number" step="0.1" value=""></label><label>درصد ماده مؤثر کود<input id="cPercent" type="number" step="0.1" value=""></label></div><button class="primary" style="margin-top:10px;width:100%" onclick="runFertilizerCalc()">محاسبه</button><div id="calcResult" class="calc-output"><small>مقدار محصول = نیاز ماده غذایی ÷ درصد ماده مؤثر</small></div></div>`;
- else if(calculatorCurrentTab==='breakEven') html=`<div class="calc-box"><h3>💰 نقطه سربه‌سر</h3><div class="calc-fields"><label>هزینه ثابت (تومان)<input id="cFixed" type="number" value=""></label><label>هزینه متغیر هر واحد<input id="cVariable" type="number" step="0.01" value=""></label><label>قیمت فروش هر واحد<input id="cPrice" type="number" step="0.01" value=""></label></div><button class="primary" style="margin-top:10px;width:100%" onclick="runBreakEvenCalc()">محاسبه</button><div id="calcResult" class="calc-output"><small>نقطه سربه‌سر = هزینه ثابت ÷ (قیمت فروش − هزینه متغیر)</small></div></div>`;
- else html=`<div class="calc-box"><h3>📈 اقتصاد زمین</h3>${l?`<div class="calc-fields"><label>هزینه فعلی (تومان)<input id="cCost" type="number" value="${totals(l.id).cost}"></label><label>درآمد فعلی (تومان)<input id="cIncome" type="number" value="${totals(l.id).income}"></label></div><button class="primary" style="margin-top:10px;width:100%" onclick="runEconomyCalc()">محاسبه سود/زیان</button>`:'<p class="small muted">برای محاسبه اقتصاد، یک زمین انتخاب کن.</p>'}<div id="calcResult" class="calc-output"><small>هزینه و درآمد ثبت‌شده همین زمین</small></div></div>`;
- b.innerHTML=html;
-}
-function calcOut(value,unit,note){const el=document.getElementById('calcResult');if(el)el.innerHTML=`<small>نتیجه</small><b>${Number(value).toLocaleString('fa-IR',{maximumFractionDigits:2})} ${unit||''}</b><small>${esc(note||'')}</small>`}
-function runSeedCalc(){const v=calcVal('cSeedArea')*calcVal('cSeedRate');calcOut(v,'کیلوگرم','مساحت × میزان بذر در هکتار')}
-function runPlantCalc(){const a=calcVal('cPlantArea'),r=calcVal('cRow')/100,p=calcVal('cPlant')/100;const v=a>0&&r>0&&p>0?Math.round(a/(r*p)):0;calcOut(v,'بوته','مساحت ÷ (فاصله ردیف × فاصله بوته)')}
-function runWaterCalc(){const v=calcVal('cWaterArea')*calcVal('cDepth');calcOut(v,'لیتر','مساحت × عمق آب؛ هر ۱ میلی‌متر روی ۱ مترمربع برابر ۱ لیتر است')}
-function runFertilizerCalc(){const p=calcVal('cPercent'),v=p>0?calcVal('cNutrient')/(p/100):0;calcOut(v,'کیلوگرم محصول کود','نیاز ماده غذایی ÷ درصد ماده مؤثر')}
-function runBreakEvenCalc(){const f=calcVal('cFixed'),v=calcVal('cVariable'),p=calcVal('cPrice'),x=p>v?f/(p-v):0;calcOut(x,'واحد','هزینه ثابت ÷ (قیمت فروش − هزینه متغیر)')}
-function runEconomyCalc(){const c=calcVal('cCost'),i=calcVal('cIncome'),v=i-c;calcOut(v,'تومان',v>=0?'سود':'زیان')}
 function cultivationTx(l){
  const cid=activeCultivationId(l);
  return (state.transactions||[]).filter(x=>x.landId===l.id && (!x.cultivationId || x.cultivationId===cid));
@@ -1523,7 +1464,7 @@ try{
   localStorage.setItem(YAR_CHAT_KEY,JSON.stringify(_clean.slice(-60)));
   yarMessages=_clean.slice(-60);
 }catch(e){}
-let yarLandMode=false;
+let yarLandMode=false, yarMode=(localStorage.getItem('yk-yar-mode')||'offline');
 const YAR_AI_ENDPOINT='';
 function saveYarChat(){try{const clean=[];for(const m of yarMessages){const last=clean[clean.length-1];if(last&&last.role===m.role&&String(last.text||'')===String(m.text||'')&&!m.image&&!last.image)continue;clean.push(m)}yarMessages=clean.slice(-60);localStorage.setItem(YAR_CHAT_KEY,JSON.stringify(yarMessages))}catch(e){}}
 function yarNum(x){return Number(x||0).toLocaleString('fa-IR',{maximumFractionDigits:2})}
@@ -1679,6 +1620,16 @@ function yarPriorityPlan(id){
   return out.slice(0,3);
 }
 
+function yarSetMode(mode){
+  yarMode=mode==='online'?'online':'offline';
+  localStorage.setItem('yk-yar-mode',yarMode);
+  yar();
+}
+function yarSelectLand(id){
+  const v=String(id||'');
+  if(!v){yarLandMode=false;selected=null;localStorage.removeItem('yk-last-land');yar();return;}
+  selected=v;yarLandMode=true;localStorage.setItem('yk-last-land',v);yar();
+}
 function yar(){
 const l=selected?yarLand(selected):null;
   
@@ -1694,6 +1645,22 @@ const l=selected?yarLand(selected):null;
       ${l?`<button class="yarpro-switch" onclick="yarLandMode=false;selected=null;go('yar')">عمومی</button>`:''}
     </header>
 
+    <div class="yar-context-bar" aria-label="تنظیمات کشاورزیار">
+      <div class="yar-mode-picker">
+        <span class="yar-context-label">حالت</span>
+        <button type="button" class="yar-mode-btn ${yarMode==='online'?'active':''}" onclick="yarSetMode('online')">🌐 آنلاین</button>
+        <button type="button" class="yar-mode-btn ${yarMode==='offline'?'active':''}" onclick="yarSetMode('offline')">📴 آفلاین</button>
+      </div>
+      <div class="yar-land-picker">
+        <label class="yar-context-label" for="yarLandSelect">زمین</label>
+        <select id="yarLandSelect" onchange="yarSelectLand(this.value)">
+          <option value="" ${!l?'selected':''}>دستیار عمومی</option>
+          ${state.lands.map(x=>`<option value="${esc(x.id)}" ${l&&String(l.id)===String(x.id)?'selected':''}>${esc(x.name||'زمین بدون نام')} · ${n(x.area).toLocaleString('fa-IR')} هکتار${x.crop?' · '+esc(x.crop):''}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    ${l?`<div class="yar-selected-land"><div><b>🌾 ${esc(l.name)}</b><span>${n(l.area).toLocaleString('fa-IR')} هکتار · ${esc(l.crop||'محصول ثبت نشده')}</span></div><button type="button" class="secondary" onclick="go('land')">پرونده زمین</button></div>`:''}
+
     <div id="yarChat" class="yarpro-chat"></div>
     <input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden>
     <input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden>
@@ -1706,7 +1673,7 @@ const l=selected?yarLand(selected):null;
       <button type="button" onclick="yarAsk('اقتصاد مزرعه و هزینه و درآمد را بررسی کن')"><span>💰</span><b>اقتصاد مزرعه</b></button>
       <button type="button" onclick="yarPickPhoto()"><span>📷</span><b>تحلیل عکس</b></button>
     </div>
-    <div class="yarpro-hint">${l?'این گفت‌وگو به پرونده همین زمین متصل است.':'حالت عمومی فعال است؛ برای سؤال درباره یک قطعه، از داخل پرونده همان زمین وارد کشاورزیار شو.'}</div>
+    <div class="yarpro-hint">${l?`این گفت‌وگو به پرونده «${esc(l.name)}» متصل است؛ محاسبات و پاسخ‌ها بر اساس همین زمین انجام می‌شوند.`:'حالت عمومی فعال است؛ برای محاسبه و تحلیل یک قطعه، از همین‌جا زمین را انتخاب کن.'}${yarMode==='online'?' · حالت آنلاین انتخاب شده است.':' · حالت آفلاین فعال است.'}</div>
   </section>`;
   yarRender();
   yarBindInput();
@@ -1759,6 +1726,16 @@ if('serviceWorker' in navigator){
 <style id="ownership-rent-modern">.ownership-choice{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ownership-option{display:flex;align-items:center;gap:10px;text-align:right;border:1.5px solid #d8e6df;background:#fbfdfc;color:#173f32;border-radius:18px;padding:12px;min-height:72px;cursor:pointer}.ownership-option.active{border-color:#2f9b6c;background:linear-gradient(135deg,#eefaf4,#f7fcf9);box-shadow:0 8px 22px rgba(25,110,74,.10)}.ownership-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:#e7f4ed;font-size:22px;flex:0 0 42px}.ownership-option b,.ownership-option small{display:block}.ownership-option small{color:#70847a;font-size:11px;margin-top:3px}.rent-details{margin-top:10px;padding:12px;border:1px solid #d9e8df;border-radius:18px;background:rgba(239,248,243,.8)}.rent-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.rent-grid .field{margin:0}.rent-grid input{width:100%;box-sizing:border-box}@media(max-width:430px){.rent-grid{grid-template-columns:1fr}.ownership-choice{gap:7px}.ownership-option{padding:9px;min-height:66px}.ownership-icon{width:38px;height:38px;flex-basis:38px}} 
 .expense-list{margin-top:12px;display:grid;gap:8px}.expense-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid #e7ece9}.expense-row-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}.mini-btn{padding:6px 9px!important;font-size:12px!important}.expense-row-actions>b{white-space:nowrap}
   /* ===== KESHAVAR-YAR CLEAN FULLSCREEN ===== */
+
+
+.yar-context-bar{display:grid;gap:10px;margin:0 0 10px;padding:10px;background:#fff;border:1px solid #dbe9e2;border-radius:16px;box-shadow:0 5px 18px rgba(23,102,75,.06)}
+.yar-mode-picker,.yar-land-picker{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.yar-context-label{font-size:12px;font-weight:800;color:#527064;min-width:42px}
+.yar-mode-btn{border:1px solid #d7e5df;background:#f7faf8;color:#315b4b;border-radius:12px;padding:8px 12px;font-weight:800;cursor:pointer}
+.yar-mode-btn.active{background:#17664b;color:#fff;border-color:#17664b}
+.yar-land-picker select{flex:1;min-width:0;border:1px solid #d7e5df;background:#f8fbf9;border-radius:12px;padding:9px 10px;color:#234b3d;font:inherit;font-weight:700}
+.yar-selected-land{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;padding:11px 12px;background:#edf7f1;border:1px solid #cfe3d8;border-radius:14px}
+.yar-selected-land b{display:block;color:#17664b}.yar-selected-land span{display:block;margin-top:3px;font-size:12px;color:#60756a}
 
 /* خود صفحه کشاورزیار */
 .yar-final.yarpro{
@@ -2082,7 +2059,6 @@ html.yk-dark img,html.yk-dark video,html.yk-dark svg,html.yk-dark .logo{filter:i
 html.yk-font-small{font-size:92%}
 html.yk-font-large{font-size:108%}
 </style>
-<script src="./offline/legacy-crop-catalog.js?v=20260928-legacy-home-v2"></script>
 <script src="./offline/crop-ui.js?v=20260921-accordion-v1"></script>
 </body>
 </html>
