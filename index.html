@@ -411,6 +411,17 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 </style>
 
 
+<style id="yar-entry-click-fix-v26">
+.yar-entry-page{position:relative!important;inset:auto!important;z-index:10!important;width:100%!important;height:auto!important;min-height:100vh!important;max-width:none!important;overflow:visible!important;padding:10px 10px 110px!important}
+.yar-entry-page .yar-land-list,.yar-entry-page .yar-land-option{position:relative!important;z-index:100!important;pointer-events:auto!important}
+.yar-entry-page .yar-land-option{touch-action:manipulation!important;-webkit-tap-highlight-color:rgba(23,102,75,.12)!important}
+</style>
+// Fallback touch/click delegation for mobile browsers and cached DOMs.
+if(!window.__yarLandDelegation){
+  window.__yarLandDelegation=true;
+  document.addEventListener('click',function(e){const b=e.target.closest&&e.target.closest('[data-yar-land]');if(b){e.preventDefault();e.stopPropagation();yarOpenLand(b.dataset.yarLand)}},true);
+  document.addEventListener('pointerup',function(e){const b=e.target.closest&&e.target.closest('[data-yar-land]');if(b){e.preventDefault();e.stopPropagation();yarOpenLand(b.dataset.yarLand)}},true);
+}
 <style id="yar-real-flow-v1">
 .yar-real-page{direction:rtl!important;background:linear-gradient(180deg,#eef7f1,#f9fcfa)!important;color:#17362a!important}
 .yar-flow-card{background:#fff;border:1px solid #dce9e1;border-radius:22px;padding:14px;margin:10px 0;box-shadow:0 8px 24px rgba(18,70,48,.06)}
@@ -1660,11 +1671,15 @@ function yarSetCrop(v){
   if(crop)yarLoadCropProfile(crop).finally(()=>yar());else yar();
 }
 function yarSetMode(mode){yarMode=mode==='online'?'online':'offline';localStorage.setItem('yk-yar-mode',yarMode);yar()}
-function yarSelectLand(id){
-  const v=String(id||'');
-  if(!v){yarLandMode=false;selected=null;localStorage.removeItem('yk-last-land');yarCropProfile=null;yar();return}
-  selected=v;yarLandMode=true;localStorage.setItem('yk-last-land',v);yarCalc={};const c=yarSelectedCrop(v)||yarLand(v)?.crop||'';yarCropProfile=null;if(c)yarLoadCropProfile(c).finally(()=>yar());else yar();
+function yarOpenLand(id){
+  const v=String(id||'').trim();
+  const l=state.lands.find(x=>String(x.id)===v);
+  if(!l){toast('زمین انتخاب‌شده پیدا نشد؛ دوباره امتحان کن.');return false}
+  selected=l.id;yarLandMode=true;localStorage.setItem('yk-last-land',String(l.id));yarCalc={};yarCropProfile=null;route='yar';
+  yar();
+  return false;
 }
+function yarSelectLand(id){return yarOpenLand(id)}
 function yarRegisteredProducts(l){
   const own=yarLandProducts(l);return own.length?own:yarAllProducts();
 }
@@ -1684,7 +1699,7 @@ function yar(){
   const areaHa=l?Number(l.area||0):0,areaM2=l?Number(l.areaM2||areaHa*10000):0,profile=yarCropProfile,eco=l?yarLandEconomy(l):null;
   const products=l?yarRegisteredProducts(l):[];
   const rows=profile?[['خلاصه',profile.summary],['اقلیم',profile.climate],['خاک',profile.soil],['pH',profile.ph],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases],['برداشت',profile.harvest]].filter(x=>x[1]):[];
-  const landCards=lands.map(x=>`<button type="button" class="yar-land-option" data-yar-land="${esc(x.id)}" onclick="yarSelectLand('${esc(x.id)}')"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${Number(x.area||0).toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}</small></span><strong>›</strong></button>`).join('');
+  const landCards=lands.map(x=>`<button type="button" class="yar-land-option" data-yar-land="${esc(x.id)}" onclick="event.preventDefault();event.stopPropagation();yarOpenLand('${esc(x.id)}');return false" onpointerup="event.preventDefault();event.stopPropagation();yarOpenLand('${esc(x.id)}');return false"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${Number(x.area||0).toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}</small></span><strong>›</strong></button>`).join('');
   const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" onclick="yarSetMode('online')">🌐<b>آنلاین</b><small>${YAR_AI_ENDPOINT?'آماده اتصال':'اتصال آنلاین در پروژه تنظیم نشده'}</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" onclick="yarSetMode('offline')">📴<b>آفلاین</b><small>بانک و دستیار داخل برنامه</small></button></div></section>`;
   const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
   const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر زمین</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div>${eco?`<div class="yar-economy-strip"><span>💸 هزینه ${money(eco.cost)}</span><span>💵 درآمد ${money(eco.income)}</span><span>📈 ${eco.profit>=0?'سود':'زیان'} ${money(Math.abs(eco.profit))}</span></div>`:''}</section>`:'';
