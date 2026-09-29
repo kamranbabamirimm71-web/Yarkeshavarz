@@ -1181,6 +1181,168 @@ body:has(.yar-detail-shell) #app{
 }
 </style>
 
+
+<style id="yar-v53-horizontal-pages">
+/* V53: کشاورزیار به صفحات تمام‌صفحه افقی تبدیل می‌شود. */
+.yar-detail-shell{
+  width:100vw!important;
+  max-width:none!important;
+  min-width:100vw!important;
+  margin:0!important;
+  padding:0!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  overflow:hidden!important;
+  background:transparent!important;
+}
+.yar-detail-shell .yarpro-head{
+  width:100vw!important;
+  max-width:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  box-sizing:border-box!important;
+}
+.yar-horizontal-pages{
+  direction:ltr!important;
+  display:flex!important;
+  flex-direction:row!important;
+  width:100vw!important;
+  height:calc(100dvh - 82px)!important;
+  min-height:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-behavior:smooth!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-x:contain!important;
+  overscroll-behavior-y:none!important;
+  scrollbar-width:none!important;
+}
+.yar-horizontal-pages::-webkit-scrollbar{display:none!important}
+.yar-horizontal-panel{
+  direction:rtl!important;
+  flex:0 0 100vw!important;
+  width:100vw!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scroll-snap-align:start!important;
+  scroll-snap-stop:always!important;
+  padding:10px 12px calc(90px + env(safe-area-inset-bottom))!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+.yar-horizontal-panel > .yar-flow-card,
+.yar-horizontal-panel > .yar-legacy-section{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.yar-horizontal-panel .yar-page-step{
+  position:sticky!important;
+  top:0!important;
+  z-index:50!important;
+  margin:0 0 10px!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+}
+.yar-swipe-hint{
+  margin:12px auto 4px!important;
+  text-align:center!important;
+  color:#547267!important;
+  font-size:11px!important;
+  padding:8px 12px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.72)!important;
+}
+.yar-panel-nav{
+  position:sticky!important;
+  bottom:8px!important;
+  z-index:60!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  width:100%!important;
+  margin:12px 0 0!important;
+  padding:7px!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.86)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  box-shadow:0 8px 24px rgba(13,55,40,.12)!important;
+  box-sizing:border-box!important;
+}
+.yar-panel-nav button.primary,
+.yar-panel-nav button.secondary{
+  min-width:76px!important;
+  min-height:38px!important;
+}
+.yar-panel-dots{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  direction:ltr!important;
+}
+.yar-panel-dots button{
+  width:8px!important;
+  height:8px!important;
+  min-width:8px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:#c8d9d1!important;
+}
+.yar-panel-dots button.active{
+  width:22px!important;
+  border-radius:999px!important;
+  background:#19825d!important;
+}
+.yar-chat-panel .yar-chat-section{
+  min-height:calc(100% - 20px)!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.yar-chat-panel .yarpro-chat{
+  flex:1 1 auto!important;
+  height:auto!important;
+  min-height:220px!important;
+  max-height:none!important;
+}
+.yar-chat-panel .yarpro-form{
+  position:relative!important;
+  bottom:auto!important;
+  margin-top:10px!important;
+}
+.yar-chat-panel .yar-final-tools{
+  position:relative!important;
+  margin-top:8px!important;
+}
+@media(max-width:600px){
+  .yar-horizontal-pages{height:calc(100dvh - 82px)!important}
+  .yar-horizontal-panel{padding:8px 8px calc(86px + env(safe-area-inset-bottom))!important}
+}
+</style>
+
+
+<style id="yar-v53-final-overrides">
+.yar-detail-shell .yar-detail-content{
+  width:100vw!important;
+  height:calc(100dvh - 82px)!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  margin:0!important;
+  padding:0!important;
+}
+.yar-detail-shell .yar-detail-content > *{
+  margin:0!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2189,16 +2351,43 @@ function yar(){
   }
   const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(yarCropRegistry?.[crop]?.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div></section>`;
   const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
-  const detailPage=`<div class="yar-page-step"><b>مرحله ۲ از ۲</b><span>برنامه کشت و مدیریت محصول</span></div>${landSelected}${areaSummary}${productSummary}${scenarioSection}${guideSection}${cultivationSection}${calcSection}
-    <section class="yar-flow-card yar-chat-section">
-      <div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>مشاور کشت برای زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div>
-      <div id="yarChat" class="yarpro-chat"></div>
-      <input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden>
-      <input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden>
-      <div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div>
-      <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="درباره همین زمین و محصول سؤال کن…"><button type="submit" class="yarpro-send">➤</button></form>
-      <div class="yar-final-tools"><button type="button" onclick="yarAnalyzeLand('${l.id}')"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div>
-    </section>`;
+  const yarPanelNav=(idx,total=5)=>`<div class="yar-panel-nav"><button type="button" class="secondary" onclick="yarSlide(${idx-1})" ${idx<=0?'disabled':''}>‹ قبلی</button><div class="yar-panel-dots">${Array.from({length:total},(_,i)=>`<button type="button" class="${i===idx?'active':''}" aria-label="صفحه ${i+1}" onclick="yarSlide(${i})"></button>`).join('')}</div><button type="button" class="primary" onclick="yarSlide(${idx+1})" ${idx>=total-1?'disabled':''}>بعدی ›</button></div>`;
+  const detailPage=`<div id="yarHorizontalPages" class="yar-horizontal-pages">
+    <section class="yar-horizontal-panel">
+      <div class="yar-page-step"><b>صفحه ۱ از ۵</b><span>محصول و برنامه کشت</span></div>
+      ${productSummary}${scenarioSection}
+      <div class="yar-swipe-hint">↔️ برای رفتن به صفحه بعد، انگشتت را افقی بکش</div>
+      ${yarPanelNav(0)}
+    </section>
+    <section class="yar-horizontal-panel">
+      <div class="yar-page-step"><b>صفحه ۲ از ۵</b><span>راهنمای محصول</span></div>
+      ${guideSection}
+      ${yarPanelNav(1)}
+    </section>
+    <section class="yar-horizontal-panel">
+      <div class="yar-page-step"><b>صفحه ۳ از ۵</b><span>کاشت تا برداشت</span></div>
+      ${cultivationSection}
+      ${yarPanelNav(2)}
+    </section>
+    <section class="yar-horizontal-panel">
+      <div class="yar-page-step"><b>صفحه ۴ از ۵</b><span>محاسبات و سود و زیان</span></div>
+      ${calcSection}
+      ${yarPanelNav(3)}
+    </section>
+    <section class="yar-horizontal-panel yar-chat-panel">
+      <div class="yar-page-step"><b>صفحه ۵ از ۵</b><span>مشاور کشاورزیار</span></div>
+      <section class="yar-flow-card yar-chat-section">
+        <div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>مشاور کشت برای زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div>
+        <div id="yarChat" class="yarpro-chat"></div>
+        <input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden>
+        <input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden>
+        <div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div>
+        <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="درباره همین زمین و محصول سؤال کن…"><button type="submit" class="yarpro-send">➤</button></form>
+        <div class="yar-final-tools"><button type="button" onclick="yarAnalyzeLand('${l.id}')"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div>
+      </section>
+      ${yarPanelNav(4)}
+    </section>
+  </div>`;
   app.innerHTML=`<section class="yarpro yar-real-page ${crop&&yarProductPage==='detail'?'yar-detail-shell':'yar-final yar-product-select-page'}">
     <header class="yarpro-head">
       <button type="button" class="yarpro-switch" data-yar-route="home">✕</button>
@@ -2213,6 +2402,13 @@ function yar(){
   document.querySelectorAll('[data-yar-clear-land]').forEach(b=>b.onclick=()=>yarSelectLand(''));
   document.querySelectorAll('[data-yar-route]').forEach(b=>b.onclick=()=>go(b.dataset.yarRoute));
   yarRender();yarBindInput();
+}
+function yarSlide(index){
+  const el=document.getElementById('yarHorizontalPages');
+  if(!el)return;
+  const total=el.children.length;
+  const i=Math.max(0,Math.min(Number(index)||0,total-1));
+  el.scrollTo({left:i*el.clientWidth,behavior:'smooth'});
 }
 function yarAreaM2(){const l=(yarLandMode&&selected)?yarLand(selected):null;if(!l)return 0;const m2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);if(m2>0)return m2;const ha=Number(l.measurement?.hectare||l.area||0);return ha>0?ha*10000:0;}
 function yarSaveCultivation(){
