@@ -835,70 +835,118 @@ main, #app {
 </style>
 
 
-<style id="yar-v49-detail-flow-fix">
-/* V49: جزئیات محصول باید یک جریان عادی و پیوسته داشته باشد؛
-   هیچ ناحیه‌ی خالیِ تمام‌قد بین بخش‌ها نباشد. */
-html, body, main, #app {
-  overflow-x: hidden !important;
+<style id="yar-v50-real-fix">
+/* V50: restore the farm photo as the app background, but keep content readable. */
+html, body {
+  background:
+    linear-gradient(rgba(238,248,242,.72),rgba(238,248,242,.84)),
+    url("wheat-hero.jpg") center top / cover fixed no-repeat !important;
 }
-body {
-  overflow-y: auto !important;
+body::before {
+  content:"" !important;
+  position:fixed !important;
+  inset:0 !important;
+  z-index:-5 !important;
+  background:
+    linear-gradient(rgba(238,248,242,.18),rgba(238,248,242,.30)),
+    url("wheat-hero.jpg") center center / cover no-repeat !important;
+  pointer-events:none !important;
 }
+main, #app {
+  background: transparent !important;
+}
+
+/* The product-detail page must be a normal document, not the old fixed chat shell. */
+html:has(.yar-final.yar-product-detail-page),
+body:has(.yar-final.yar-product-detail-page),
+body:has(.yar-final.yar-product-detail-page) #app {
+  height:auto !important;
+  min-height:100% !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+}
+
 .yar-final.yar-product-detail-page {
-  position: relative !important;
-  inset: auto !important;
-  display: block !important;
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
-  margin: 0 !important;
-  padding: 0 8px 100px !important;
-  box-sizing: border-box !important;
+  position:relative !important;
+  inset:auto !important;
+  left:auto !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:100% !important;
+  max-width:none !important;
+  min-width:0 !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 8px 110px !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  display:block !important;
 }
-.yar-final.yar-product-detail-page > * {
-  position: relative !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  max-height: none !important;
+
+.yar-final.yar-product-detail-page > .yarpro-head,
+.yar-final.yar-product-detail-page > .yar-page-step,
+.yar-final.yar-product-detail-page > .yar-flow-card {
+  position:relative !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  transform:none !important;
 }
-.yar-final.yar-product-detail-page .yar-flow-card,
-.yar-final.yar-product-detail-page .yar-legacy-section,
-.yar-final.yar-product-detail-page .yar-page-step {
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
+
+.yar-final.yar-product-detail-page > .yarpro-head {
+  position:sticky !important;
+  top:0 !important;
+  z-index:1000 !important;
 }
-.yar-final.yar-product-detail-page .yar-chat-section {
-  position: relative !important;
-  display: block !important;
-  height: auto !important;
-  min-height: 0 !important;
+
+.yar-final.yar-product-detail-page .yar-chat-section,
+.yar-final.yar-product-detail-page .yar-chat-section .yarpro-chat,
+.yar-final.yar-product-detail-page .yarpro-form.yar-final-form,
+.yar-final.yar-product-detail-page .yar-final-tools {
+  position:static !important;
+  inset:auto !important;
+  float:none !important;
+  clear:both !important;
 }
+
 .yar-final.yar-product-detail-page .yarpro-chat {
-  position: relative !important;
-  display: block !important;
-  width: 100% !important;
-  height: 240px !important;
-  min-height: 120px !important;
-  max-height: 240px !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
+  width:100% !important;
+  height:280px !important;
+  min-height:220px !important;
+  max-height:45vh !important;
+  overflow:auto !important;
+  box-sizing:border-box !important;
+  margin:10px 0 0 !important;
 }
-.yar-final.yar-product-detail-page .yar-cultivation-file,
-.yar-final.yar-product-detail-page .yar-cultivation-form,
-.yar-final.yar-product-detail-page .yar-stage-actions,
-.yar-final.yar-product-detail-page .yar-ledger,
-.yar-final.yar-product-detail-page .yar-cost-breakdown {
-  position: relative !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+
+.yar-final.yar-product-detail-page .yarpro-form.yar-final-form {
+  width:100% !important;
+  height:62px !important;
+  min-height:62px !important;
+  max-height:62px !important;
+  margin:9px 0 0 !important;
 }
-.yar-final.yar-product-detail-page .yar-cultivation-form {
-  display: grid !important;
+
+.yar-final.yar-product-detail-page .yar-final-tools {
+  width:100% !important;
+  height:auto !important;
+  min-height:76px !important;
+  margin:8px 0 0 !important;
+}
+
+.yar-final.yar-product-detail-page .yar-flow-card {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+@media(max-width:620px){
+  .yar-final.yar-product-detail-page {
+    padding-bottom:100px !important;
+  }
 }
 </style>
 
