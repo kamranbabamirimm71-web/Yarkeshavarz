@@ -23,8 +23,8 @@
 
   'use strict';
 
-  if (window.__YK_MEASUREMENT_V1__) return;
-  window.__YK_MEASUREMENT_V1__ = true;
+  if (window.__YK_MEASUREMENT_V2__) return;
+  window.__YK_MEASUREMENT_V2__ = true;
 
   let leafletReady = null;
 
@@ -34,43 +34,50 @@
 
   function loadLeaflet() {
 
-    if (window.L) {
-      return Promise.resolve(window.L);
-    }
-
-    if (leafletReady) {
-      return leafletReady;
-    }
+    if (leafletReady) return leafletReady;
 
     leafletReady = new Promise(function (resolve, reject) {
 
+      function loadRotatePlugin() {
+        if (window.L && window.L.Map && window.L.Map.prototype && typeof window.L.Map.prototype.setBearing === 'function') {
+          resolve(window.L);
+          return;
+        }
+
+        const plugin = document.createElement('script');
+        plugin.id = 'yk-leaflet-rotate-js';
+        plugin.src = 'https://cdn.jsdelivr.net/npm/@tomickigrzegorz/leaflet-rotate@0.2.4/dist/leaflet-rotate.umd.min.js';
+        plugin.onload = function () { resolve(window.L); };
+        plugin.onerror = function () {
+          // The measurement screen still works without rotation if the CDN is unavailable.
+          resolve(window.L);
+        };
+        document.head.appendChild(plugin);
+      }
+
+      function loadLeafletScript() {
+        if (window.L) {
+          loadRotatePlugin();
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.id = 'yk-leaflet-js';
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = loadRotatePlugin;
+        script.onerror = function () { reject(new Error('Leaflet load failed')); };
+        document.head.appendChild(script);
+      }
+
       if (!document.getElementById('yk-leaflet-css')) {
-
         const css = document.createElement('link');
-
         css.id = 'yk-leaflet-css';
         css.rel = 'stylesheet';
-        css.href =
-          'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-
+        css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
         document.head.appendChild(css);
       }
 
-      const script = document.createElement('script');
-
-      script.src =
-        'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-
-      script.onload = function () {
-        resolve(window.L);
-      };
-
-      script.onerror = function () {
-        reject(new Error('Leaflet load failed'));
-      };
-
-      document.head.appendChild(script);
-
+      loadLeafletScript();
     });
 
     return leafletReady;
@@ -315,216 +322,62 @@
 
 
     appElement.innerHTML = `
+      <div class="yk-measure-screen">
+        <div class="yk-measure-map" id="measureMap"></div>
 
-      <div class="measure-wrap">
-
-        <div class="measure-head">
-
-          <input
-            id="measureSearch"
-            type="search"
-            placeholder="جستجوی شهر، روستا یا مکان..."
-            autocomplete="off"
-          >
-
-          <button
-            class="primary"
-            id="measureSearchBtn"
-            type="button"
-          >
-            🔎 جستجو
-          </button>
-
+        <div class="yk-measure-top">
+          <button class="yk-m-icon" id="measureClose" type="button" aria-label="بازگشت">‹</button>
+          <div class="yk-m-title">
+            <b>اندازه‌گیری زمین</b>
+            <span id="measureModeHint">نقطه‌های گوشه زمین را روی نقشه بزن</span>
+          </div>
+          <button class="yk-m-icon" id="measureLocate" type="button" aria-label="موقعیت من">⌖</button>
         </div>
 
-
-        <div
-          id="measureMap"
-          class="measure-map"
-          style="
-            width:100%;
-            min-height:55vh;
-            border-radius:18px;
-            overflow:hidden;
-            background:#e8eee9;
-          "
-        ></div>
-
-
-        <div
-          class="measure-tools"
-          style="
-            display:flex;
-            gap:8px;
-            flex-wrap:wrap;
-            margin-top:10px;
-          "
-        >
-
-          <button
-            class="secondary"
-            id="measureLocate"
-            type="button"
-          >
-            📍 موقعیت من
-          </button>
-
-          <button
-            class="secondary"
-            id="measureSat"
-            type="button"
-          >
-            🛰️ ماهواره
-          </button>
-
-          <button
-            class="secondary"
-            id="measureUndo"
-            type="button"
-          >
-            ↶ حذف آخرین نقطه
-          </button>
-
-          <button
-            class="secondary"
-            id="measureClear"
-            type="button"
-          >
-            🗑️ پاک کردن
-          </button>
-
-          <button
-            class="secondary"
-            id="measureClose"
-            type="button"
-          >
-            ✕ بازگشت
-          </button>
-
+        <div class="yk-measure-search">
+          <input id="measureSearch" type="search" placeholder="جستجوی شهر، روستا یا مکان..." autocomplete="off">
+          <button id="measureSearchBtn" type="button">جستجو</button>
         </div>
 
-
-        <div
-          class="card"
-          style="margin-top:12px;"
-        >
-
-          <div
-            class="grid"
-            style="
-              grid-template-columns:
-              repeat(2,minmax(0,1fr));
-            "
-          >
-
-            <div>
-              <span class="muted">
-                مساحت
-              </span>
-
-              <div
-                class="metric"
-                id="ma"
-              >
-                ۰
-              </div>
-
-              <small>
-                مترمربع
-              </small>
-            </div>
-
-
-            <div>
-              <span class="muted">
-                هکتار
-              </span>
-
-              <div
-                class="metric"
-                id="mh"
-              >
-                ۰
-              </div>
-            </div>
-
-
-            <div>
-              <span class="muted">
-                محیط
-              </span>
-
-              <div
-                class="metric"
-                id="mp"
-              >
-                ۰
-              </div>
-
-              <small>
-                متر
-              </small>
-            </div>
-
-
-            <div>
-              <span class="muted">
-                تعداد نقاط
-              </span>
-
-              <div
-                class="metric"
-                id="mn"
-              >
-                ۰
-              </div>
-            </div>
-
-          </div>
-
-
-          <div
-            style="
-              display:flex;
-              gap:8px;
-              flex-wrap:wrap;
-              margin-top:14px;
-            "
-          >
-
-            <button
-              class="secondary"
-              id="gpsBtn"
-              type="button"
-            >
-              ▶ شروع پیمایش GPS
-            </button>
-
-            <button
-              class="primary"
-              id="register"
-              type="button"
-              disabled
-            >
-              📐 ثبت اندازه‌گیری
-            </button>
-
-          </div>
-
-
-          <div
-            id="measureStatus"
-            class="small muted"
-            style="margin-top:10px;"
-          >
-            در حال آماده‌سازی نقشه آنلاین...
-          </div>
-
+        <div class="yk-measure-tools">
+          <button id="measureSat" type="button"><span>🛰️</span><b>ماهواره</b></button>
+          <button id="measureUndo" type="button"><span>↶</span><b>حذف نقطه</b></button>
+          <button id="measureClear" type="button"><span>🗑️</span><b>پاک کردن</b></button>
+          <button id="measureResetBearing" type="button"><span>🧭</span><b>شمال</b></button>
         </div>
 
+        <div class="yk-measure-help">
+          <span>● تک‌لمس = انتخاب گوشه زمین</span>
+          <span>● دو انگشت = جابه‌جایی / بزرگ‌نمایی / چرخش نقشه</span>
+        </div>
+
+        <div class="yk-measure-sheet">
+          <div class="yk-measure-sheet-head">
+            <div>
+              <b>اندازه زمین</b>
+              <span id="measureStatus">در حال آماده‌سازی نقشه آنلاین...</span>
+            </div>
+            <div class="yk-point-badge"><b id="mn">۰</b><span>نقطه</span></div>
+          </div>
+
+          <div class="yk-measure-stats">
+            <div><span>مساحت</span><b id="ma">۰</b><small>مترمربع</small></div>
+            <div><span>هکتار</span><b id="mh">۰</b><small>ha</small></div>
+            <div><span>محیط</span><b id="mp">۰</b><small>متر</small></div>
+          </div>
+
+          <div class="yk-measure-actions">
+            <button class="yk-gps" id="gpsBtn" type="button">📍 شروع پیمایش زمین</button>
+            <button class="yk-register" id="ykMeasureRegister" type="button" disabled>✓ ثبت زمین</button>
+          </div>
+
+          <div class="yk-measure-foot">برای مساحت دقیق حداقل ۳ گوشه را مشخص کن.</div>
+        </div>
       </div>
-
     `;
+
+    injectMeasurementStyles();
+
 
 
     /* -------------------------------------------------------
@@ -685,7 +538,7 @@
 
     const registerButton =
       document.getElementById(
-        'register'
+        'ykMeasureRegister'
       );
 
     if (registerButton) {
@@ -769,6 +622,8 @@
     }
 
 
+    const rotationSupported = !!(L.Map && L.Map.prototype && typeof L.Map.prototype.setBearing === 'function');
+
     mapInstance =
       L.map(
         'measureMap',
@@ -779,7 +634,16 @@
           scrollWheelZoom: true,
           doubleClickZoom: true,
           boxZoom: false,
-          keyboard: true
+          keyboard: true,
+          tap: false,
+          ...(rotationSupported ? {
+            rotate: true,
+            touchRotate: true,
+            dragRotate: false,
+            shiftKeyRotate: false,
+            rotateClockwise: true,
+            preventPageGestures: true
+          } : {})
         }
       );
 
@@ -820,20 +684,53 @@
 
 
     /* -------------------------------------------------------
-       کلیک روی نقشه
+       لمس امن نقشه: تک لمس = نقطه، دو انگشت = حرکت/چرخش/زوم
        ------------------------------------------------------- */
 
-    mapInstance.on(
-      'click',
-      function (event) {
+    (function bindMapInput(){
+      const container = mapInstance.getContainer();
+      let multiTouch = false;
+      let multiTouchTimer = null;
 
-        addPoint(
-          event.latlng.lat,
-          event.latlng.lng
-        );
+      container.style.touchAction = 'none';
+      container.style.overscrollBehavior = 'none';
 
+      container.addEventListener('touchstart', function(event){
+        if (event.touches && event.touches.length >= 2) {
+          multiTouch = true;
+          clearTimeout(multiTouchTimer);
+        }
+      }, {passive:true});
+
+      container.addEventListener('touchend', function(event){
+        if (multiTouch && (!event.touches || event.touches.length === 0)) {
+          multiTouchTimer = setTimeout(function(){ multiTouch = false; }, 550);
+        }
+      }, {passive:true});
+
+      mapInstance.on('click', function(event){
+        if (multiTouch) return;
+        if (!event || !event.latlng) return;
+        addPoint(event.latlng.lat, event.latlng.lng);
+      });
+
+      const resetBearingButton = document.getElementById('measureResetBearing');
+      if (resetBearingButton) {
+        resetBearingButton.onclick = function(){
+          if (mapInstance && typeof mapInstance.setBearing === 'function') {
+            mapInstance.setBearing(0);
+            measurementToast('🧭 جهت نقشه به شمال برگشت.');
+          } else {
+            measurementToast('چرخش دو انگشتی در این مرورگر در دسترس نیست.');
+          }
+        };
       }
-    );
+
+      const hint = document.getElementById('measureModeHint');
+      if (hint && typeof mapInstance.setBearing === 'function') {
+        hint.textContent = 'تک‌لمس برای گوشه‌ها؛ دو انگشت برای حرکت، زوم و چرخش';
+      }
+    })();
 
 
     /* -------------------------------------------------------
@@ -857,6 +754,12 @@
 
         }
       );
+
+      try {
+        if (window.points.length) {
+          mapInstance.fitBounds(window.points, {padding:[50,50], maxZoom:17});
+        }
+      } catch (error) {}
 
 
       redrawPolygon();
@@ -1090,7 +993,7 @@
       document.getElementById('mn');
 
     const registerElement =
-      document.getElementById('register');
+      document.getElementById('ykMeasureRegister');
 
     const statusElement =
       document.getElementById(
@@ -1488,7 +1391,7 @@
     if (button) {
 
       button.textContent =
-        '■ توقف پیمایش GPS';
+        '■ توقف پیمایش زمین';
 
     }
 
@@ -1523,7 +1426,7 @@
     if (button) {
 
       button.textContent =
-        '▶ شروع پیمایش GPS';
+        '📍 شروع پیمایش زمین';
 
     }
 
@@ -2050,6 +1953,39 @@
 
   }
 
+
+  /* ---------------------------------------------------------
+     ظاهر مستقل صفحه اندازه‌گیری
+     --------------------------------------------------------- */
+  function injectMeasurementStyles(){
+    if (document.getElementById('yk-measure-v65-style')) return;
+    const style=document.createElement('style');
+    style.id='yk-measure-v65-style';
+    style.textContent=`
+      .yk-measure-screen{position:fixed;inset:0;z-index:7000;background:#dfe8e3;overflow:hidden;font-family:Tahoma,Arial,sans-serif}
+      .yk-measure-map{position:absolute;inset:0;z-index:0;touch-action:none;overscroll-behavior:none}
+      .yk-measure-map .leaflet-control-zoom{margin-top:120px!important;margin-right:10px!important;border:0!important;box-shadow:0 7px 20px #0003!important}
+      .yk-measure-map .leaflet-control-zoom a{width:40px!important;height:40px!important;line-height:40px!important;font-size:22px!important;background:#fff!important;color:#145b40!important}
+      .yk-measure-top{position:absolute;z-index:7100;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:grid;grid-template-columns:46px 1fr 46px;align-items:center;gap:8px;pointer-events:none}
+      .yk-m-title{min-width:0;background:#fffffff0;border-radius:17px;padding:9px 13px;text-align:center;box-shadow:0 8px 24px #0002;backdrop-filter:blur(12px);pointer-events:auto}
+      .yk-m-title b{display:block;font-size:14px;color:#123e31}.yk-m-title span{display:block;font-size:9px;color:#65776f;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .yk-m-icon{width:46px;height:46px;border:0;border-radius:15px;background:#0b3d2e;color:#fff;font-size:28px;line-height:1;box-shadow:0 8px 22px #0003;pointer-events:auto}
+      .yk-measure-search{position:absolute;z-index:7100;top:76px;left:10px;right:10px;display:grid;grid-template-columns:1fr 82px;gap:7px}
+      .yk-measure-search input{min-width:0;border:0;background:#fffffff0;border-radius:15px;padding:12px 13px;outline:0;box-shadow:0 7px 20px #0002;font-size:12px}
+      .yk-measure-search button{border:0;border-radius:15px;background:#17664b;color:#fff;font-weight:900;box-shadow:0 7px 20px #0002}
+      .yk-measure-tools{position:absolute;z-index:7100;top:130px;right:10px;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+      .yk-measure-tools button{min-width:66px;height:56px;border:0;border-radius:16px;background:#fffffff2;color:#174d3a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 7px 20px #0002;pointer-events:auto;padding:4px 6px}
+      .yk-measure-tools button span{font-size:21px;line-height:20px}.yk-measure-tools button b{font-size:8px;white-space:nowrap}
+      .yk-measure-help{position:absolute;z-index:7100;top:130px;left:10px;max-width:205px;display:grid;gap:4px;background:#ffffffe8;border-radius:14px;padding:8px 10px;box-shadow:0 7px 20px #0002;color:#47655a;font-size:8px;line-height:1.5;pointer-events:none}
+      .yk-measure-sheet{position:absolute;z-index:7200;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));background:#fffffff5;border:1px solid #dce8e2;border-radius:22px;padding:11px;box-shadow:0 -10px 35px #0003;backdrop-filter:blur(16px)}
+      .yk-measure-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.yk-measure-sheet-head>div:first-child b{display:block;color:#123e31;font-size:14px}.yk-measure-sheet-head>div:first-child span{display:block;color:#708079;font-size:8px;margin-top:3px}.yk-point-badge{min-width:47px;text-align:center;background:#eaf5ef;border-radius:13px;padding:5px 8px;color:#17664b}.yk-point-badge b{display:block;font-size:14px}.yk-point-badge span{font-size:7px}
+      .yk-measure-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.yk-measure-stats>div{background:#f4f8f6;border:1px solid #e0eae5;border-radius:14px;padding:8px 5px;text-align:center}.yk-measure-stats span{display:block;color:#728079;font-size:8px}.yk-measure-stats b{display:block;color:#123e31;font-size:15px;margin:3px 0}.yk-measure-stats small{font-size:7px;color:#89948f}
+      .yk-measure-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.yk-measure-actions button{min-height:44px;border:0;border-radius:13px;font-weight:900;font-size:11px}.yk-gps{background:#e7f3ec;color:#17664b}.yk-register{background:#0b3d2e;color:#fff}.yk-register:disabled{opacity:.42}.yk-measure-foot{text-align:center;color:#73827c;font-size:8px;margin-top:6px}
+      .yk-measure-screen .leaflet-control-attribution{font-size:8px!important;background:#ffffffe0!important}
+      @media(max-width:430px){.yk-measure-tools button{min-width:58px;height:52px}.yk-measure-help{max-width:180px}.yk-measure-search{top:74px}}
+    `;
+    document.head.appendChild(style);
+  }
 
   /* =========================================================
      بستن صفحه
