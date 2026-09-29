@@ -1631,6 +1631,93 @@ body:has(.yar-detail-shell) #app{
 .yar-detail-shell .yar-legacy-scenario-grid>div{padding:8px!important}
 </style>
 
+<style id="yar-v58-final-page-layout">
+/* V58: four fixed full-screen sheets; no vertical page scrolling; fixed navigation. */
+.yar-horizontal-pages{
+  width:100vw!important;
+  height:100dvh!important;
+  overflow:hidden!important;
+}
+.yar-horizontal-track{
+  width:400vw!important;
+  height:100dvh!important;
+  display:flex!important;
+  flex-direction:row!important;
+  transition:transform .28s cubic-bezier(.22,.7,.2,1)!important;
+}
+.yar-horizontal-panel{
+  flex:0 0 100vw!important;
+  width:100vw!important;
+  min-width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  padding:78px 10px 78px!important;
+  position:relative!important;
+}
+.yar-horizontal-panel.yar-page-one{
+  padding-top:68px!important;
+  padding-bottom:78px!important;
+}
+.yar-horizontal-panel .yar-page-step{
+  position:relative!important;
+  top:auto!important;
+  margin:0 0 7px!important;
+  min-height:42px!important;
+  padding:8px 12px!important;
+  box-sizing:border-box!important;
+}
+.yar-page-one .yar-flow-card,
+.yar-page-one .yar-legacy-section{
+  margin-top:5px!important;
+  margin-bottom:5px!important;
+}
+.yar-page-one .yar-swipe-hint{
+  margin:4px auto 0!important;
+  padding:5px 9px!important;
+  font-size:10px!important;
+}
+/* Navigation is a stable control bar in every sheet. */
+.yar-horizontal-panel .yar-panel-nav{
+  position:absolute!important;
+  left:12px!important;
+  right:12px!important;
+  bottom:max(10px, env(safe-area-inset-bottom))!important;
+  width:auto!important;
+  height:52px!important;
+  min-height:52px!important;
+  margin:0!important;
+  padding:6px!important;
+  z-index:100!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  box-sizing:border-box!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.98)!important;
+  box-shadow:0 6px 20px rgba(13,55,40,.16)!important;
+}
+.yar-panel-nav button.primary,
+.yar-panel-nav button.secondary{
+  min-width:88px!important;
+  width:88px!important;
+  height:40px!important;
+  min-height:40px!important;
+  padding:0 10px!important;
+  flex:0 0 88px!important;
+  box-sizing:border-box!important;
+}
+.yar-panel-dots{
+  flex:1 1 auto!important;
+  height:40px!important;
+}
+.yar-panel-dots button{flex:0 0 auto!important}
+/* Keep every sheet visually contained; only the horizontal pager changes sheets. */
+.yar-horizontal-panel > *{max-height:none!important}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2676,39 +2763,26 @@ function yar(){
   const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
   const yarPanelNav=(idx,total=5)=>`<div class="yar-panel-nav"><button type="button" class="secondary" onclick="yarSlide(${idx-1})" ${idx<=0?'disabled':''}>‹ قبلی</button><div class="yar-panel-dots">${Array.from({length:total},(_,i)=>`<button type="button" class="${i===idx?'active':''}" aria-label="صفحه ${i+1}" onclick="yarSlide(${i})"></button>`).join('')}</div><button type="button" class="primary" onclick="yarSlide(${idx+1})" ${idx>=total-1?'disabled':''}>بعدی ›</button></div>`;
   const detailPage=`<div id="yarHorizontalPages" class="yar-horizontal-pages"><div class="yar-horizontal-track">
-    <section class="yar-horizontal-panel">
-      <div class="yar-page-step"><b>صفحه ۱ از ۵</b><span>محصول و برنامه کشت</span></div>
+    <section class="yar-horizontal-panel yar-page-one">
+      <div class="yar-page-step"><b>صفحه ۱ از ۴</b><span>محصول و برنامه کشت</span></div>
       ${productSummary}${scenarioSection}
       <div class="yar-swipe-hint">↔️ برای رفتن به صفحه بعد، انگشتت را افقی بکش</div>
-      ${yarPanelNav(0)}
+      ${yarPanelNav(0,4)}
     </section>
     <section class="yar-horizontal-panel">
-      <div class="yar-page-step"><b>صفحه ۲ از ۵</b><span>راهنمای محصول</span></div>
+      <div class="yar-page-step"><b>صفحه ۲ از ۴</b><span>راهنمای محصول</span></div>
       ${guideSection}
-      ${yarPanelNav(1)}
+      ${yarPanelNav(1,4)}
     </section>
     <section class="yar-horizontal-panel">
-      <div class="yar-page-step"><b>صفحه ۳ از ۵</b><span>کاشت تا برداشت</span></div>
+      <div class="yar-page-step"><b>صفحه ۳ از ۴</b><span>کاشت تا برداشت</span></div>
       ${cultivationSection}
-      ${yarPanelNav(2)}
+      ${yarPanelNav(2,4)}
     </section>
     <section class="yar-horizontal-panel">
-      <div class="yar-page-step"><b>صفحه ۴ از ۵</b><span>محاسبات و سود و زیان</span></div>
+      <div class="yar-page-step"><b>صفحه ۴ از ۴</b><span>محاسبات و سود و زیان</span></div>
       ${calcSection}
-      ${yarPanelNav(3)}
-    </section>
-    <section class="yar-horizontal-panel yar-chat-panel">
-      <div class="yar-page-step"><b>صفحه ۵ از ۵</b><span>مشاور کشاورزیار</span></div>
-      <section class="yar-flow-card yar-chat-section">
-        <div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>مشاور کشت برای زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div>
-        <div id="yarChat" class="yarpro-chat"></div>
-        <input id="yarPhotoInputGallery" type="file" accept="image/*" onchange="yarPhotoSelected(this)" hidden>
-        <input id="yarPhotoInputCamera" type="file" accept="image/*" capture="environment" onchange="yarPhotoSelected(this)" hidden>
-        <div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div>
-        <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="درباره همین زمین و محصول سؤال کن…"><button type="submit" class="yarpro-send">➤</button></form>
-        <div class="yar-final-tools"><button type="button" onclick="yarAnalyzeLand('${l.id}')"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div>
-      </section>
-      ${yarPanelNav(4)}
+      ${yarPanelNav(3,4)}
     </section>
   </div></div>`;
   app.innerHTML=`<section class="yarpro yar-real-page ${crop&&yarProductPage==='detail'?'yar-detail-shell':'yar-final yar-product-select-page'}">
