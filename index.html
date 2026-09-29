@@ -1420,6 +1420,128 @@ body:has(.yar-detail-shell) .bottom{
 }
 </style>
 
+
+<style id="yar-v56-fullscreen-rtl-quality">
+/* V56
+   1) صفحه جزئیات واقعاً کل viewport را می‌گیرد.
+   2) در رابط فارسی، کشیدن به راست = صفحه بعد.
+   3) لایه‌های نیمه‌شفاف و blur اضافی حذف می‌شوند تا نوشته و کارت‌ها شارپ‌تر دیده شوند.
+*/
+html, body{
+  width:100%!important;
+  min-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+}
+body:has(.yar-detail-shell){
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  -webkit-font-smoothing:antialiased!important;
+  text-rendering:optimizeLegibility!important;
+}
+body:has(.yar-detail-shell) #app{
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+.yar-detail-shell{
+  position:fixed!important;
+  inset:0!important;
+  z-index:9990!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  background:transparent!important;
+}
+.yar-detail-shell .yarpro-head{
+  position:absolute!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+  width:100vw!important;
+  max-width:none!important;
+  height:auto!important;
+  min-height:76px!important;
+  margin:0!important;
+  z-index:10000!important;
+  border-radius:0!important;
+  box-sizing:border-box!important;
+  background:rgba(255,255,255,.94)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.yar-detail-shell .yar-detail-content{
+  position:absolute!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+.yar-horizontal-pages{
+  position:absolute!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  background:transparent!important;
+}
+.yar-horizontal-track{
+  height:100dvh!important;
+}
+.yar-horizontal-panel{
+  width:100vw!important;
+  min-width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  padding:88px 10px calc(20px + env(safe-area-inset-bottom))!important;
+  box-sizing:border-box!important;
+  background:rgba(238,248,243,.08)!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+.yar-horizontal-panel .yar-page-step{
+  margin-top:0!important;
+  background:rgba(232,247,239,.96)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.yar-horizontal-panel .yar-flow-card,
+.yar-horizontal-panel .yar-legacy-section{
+  background:rgba(255,255,255,.98)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:0 5px 18px rgba(20,55,42,.10)!important;
+  -webkit-transform:translateZ(0)!important;
+  transform:translateZ(0)!important;
+}
+.yar-panel-nav{
+  background:rgba(255,255,255,.98)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.yar-swipe-hint{
+  background:rgba(255,255,255,.96)!important;
+  backdrop-filter:none!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2513,13 +2635,13 @@ function yarBindHorizontal(){
     if(!drag)return;
     drag=false;
     if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.15){
-      yarSlide(yarHorizontalIndex+(dx<0?1:-1));
+      yarSlide(yarHorizontalIndex+(dx>0?1:-1));
     }
   },{passive:true});
   el.addEventListener('touchcancel',()=>{drag=false},{passive:true});
   el.addEventListener('pointerup',e=>{
     if(e.pointerType!=='touch' && Math.abs(e.movementX)>45){
-      yarSlide(yarHorizontalIndex+(e.movementX<0?1:-1));
+      yarSlide(yarHorizontalIndex+(e.movementX>0?1:-1));
     }
   });
   yarSlide(0);
