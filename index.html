@@ -817,6 +817,23 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 .yar-legacy-area-strip span,.yar-legacy-area-strip b{font-size:14px}.yar-legacy-area-strip b{color:#145a45}
 @media(max-width:520px){.yar-legacy-scenario-grid{grid-template-columns:1fr}.yar-legacy-title{align-items:flex-start;flex-direction:column}}
 </style>
+
+<style id="yar-v48-background-fix">
+/* V48: prevent the farm photo from covering the whole application */
+html, body {
+  background: #eef8f2 !important;
+  background-image: none !important;
+}
+body::before {
+  display: none !important;
+  background: none !important;
+}
+main, #app {
+  background: #eef8f2 !important;
+  background-image: none !important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
