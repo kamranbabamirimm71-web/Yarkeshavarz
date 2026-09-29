@@ -950,6 +950,93 @@ body:has(.yar-final.yar-product-detail-page) #app {
 }
 </style>
 
+
+<style id="yar-v51-real-page-fix">
+/* V51: keep the original farm photo, but do not wash it out. */
+html, body {
+  background:
+    linear-gradient(rgba(12,42,27,.24),rgba(12,42,27,.38)),
+    url("wheat-hero.jpg") center center / cover fixed no-repeat !important;
+}
+body::before {
+  content:"" !important;
+  position:fixed !important;
+  inset:0 !important;
+  z-index:-5 !important;
+  background:none !important;
+  display:block !important;
+  pointer-events:none !important;
+}
+main, #app { background:transparent !important; }
+
+.yar-final.yar-product-detail-page {
+  background:transparent !important;
+  position:relative !important;
+  inset:auto !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+  display:block !important;
+  padding:0 8px 120px !important;
+  box-sizing:border-box !important;
+}
+
+.yar-final.yar-product-detail-page .yar-detail-content {
+  display:block !important;
+  position:relative !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  transform:none !important;
+  z-index:2 !important;
+}
+
+.yar-final.yar-product-detail-page .yar-detail-content > * {
+  display:block !important;
+  position:relative !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  transform:none !important;
+  float:none !important;
+  clear:both !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+.yar-final.yar-product-detail-page .yar-detail-content > .yar-page-step {
+  display:flex !important;
+}
+
+.yar-final.yar-product-detail-page .yar-detail-content .yar-flow-card {
+  background:rgba(255,255,255,.96) !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+.yar-final.yar-product-detail-page .yar-detail-content .yar-legacy-section {
+  display:block !important;
+  background:rgba(255,255,255,.96) !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+
+.yar-final.yar-product-detail-page .yarpro-head {
+  position:sticky !important;
+  top:0 !important;
+  z-index:1000 !important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -1974,7 +2061,7 @@ function yar(){
       <div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>زمین «${esc(l.name)}» · ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div></div>
       <button class="yarpro-switch" data-yar-clear-land>تغییر</button>
     </header>
-    ${crop&&yarProductPage==='detail'?detailPage:selectPage}
+    ${crop&&yarProductPage==='detail'?`<div class="yar-detail-content">${detailPage}</div>`:selectPage}
   </section>`;
   document.querySelectorAll('[data-yar-crop]').forEach(b=>b.onclick=()=>yarSetCrop(b.dataset.yarCrop));
   document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=()=>yarSetMode(b.dataset.yarMode));
