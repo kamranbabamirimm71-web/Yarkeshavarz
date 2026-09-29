@@ -2905,7 +2905,15 @@ function yarAutoEstimate(l,crop,profile,areaHa){
 }
 function yar(){
   const l=(yarLandMode&&selected)?yarLand(selected):null;
-  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());return}
+  /* V68: never block the page transition on the product registry.
+     On mobile/GitHub Pages the dynamic module can be delayed or unavailable;
+     the selected-land screen must still render immediately. */
+  if(!yarCropRegistry){
+    yarCropRegistry={};
+    yarLoadCropRegistry().then(()=>{
+      if(route==='yar') yar();
+    });
+  }
   const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
   if(crop&&!yarCropProfile){yarLoadCropProfile(crop).then(()=>yar());return}
   head(l?'کشاورزیار — '+l.name:'کشاورزیار');
@@ -2920,7 +2928,7 @@ function yar(){
   const products=l?yarRegisteredProducts(l):[];
   const rows=profile?[['خلاصه',profile.summary],['اقلیم',profile.climate],['خاک',profile.soil],['pH',profile.ph],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases],['برداشت',profile.harvest]].filter(x=>x[1]):[];
   const landCards=lands.map(x=>{const xm2=Number(x.areaM2||x.measurement?.areaM2||x.measurement?.area||0);const xha=xm2>0?xm2/10000:Number(x.measurement?.hectare||x.area||0);return `<button type="button" class="yar-land-option ${String(selected)===String(x.id)?'active':''}" data-yar-land="${esc(x.id)}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${xha.toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}${String(selected)===String(x.id)?' · ✓ انتخاب شد':''}</small></span><strong>${String(selected)===String(x.id)?'✓':'›'}</strong></button>`}).join('');
-  const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" >🌐<b>آنلاین</b><small>ورود به صفحه کشاورزیار</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" >📴<b>آفلاین</b><small>ورود به صفحه کشاورزیار</small></button></div></section>`;
+  const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" onclick="yarSetMode('online')" >🌐<b>آنلاین</b><small>ورود به صفحه کشاورزیار</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" onclick="yarSetMode('offline')" >📴<b>آفلاین</b><small>ورود به صفحه کشاورزیار</small></button></div></section>`;
   const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
   const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر زمین</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div>${eco?`<div class="yar-economy-strip"><span>💸 هزینه ${money(eco.cost)}</span><span>💵 درآمد ${money(eco.income)}</span><span>📈 ${eco.profit>=0?'سود':'زیان'} ${money(Math.abs(eco.profit))}</span></div>`:''}</section>`:'';
   const groups=Object.entries((yarCropRegistry&&window.__yarGroups)||{});
