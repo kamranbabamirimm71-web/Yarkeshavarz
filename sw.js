@@ -1,4 +1,4 @@
-const CACHE='yar-keshavarz-shell-v45';
+const CACHE='yar-keshavarz-shell-v46';
 const CORE=[
   './','./index.html','./offline/offline-ai.js','./offline/agriculture-db.js',
   './offline/agriculture-db-extended.js','./offline/calculators.js',
@@ -21,7 +21,6 @@ self.addEventListener('fetch',e=>{
   if(r.method!=='GET') return;
   const u=new URL(r.url);
   if(u.origin!==location.origin) return;
-  // Always fetch HTML fresh so a newly committed index.html is not hidden by an old shell cache.
   if(u.pathname.endsWith('/index.html') || u.pathname==='/' || u.pathname.endsWith('/sw.js')){
     e.respondWith(fetch(r,{cache:'no-store'}).then(res=>{
       if(res.ok && !u.pathname.endsWith('/sw.js')){

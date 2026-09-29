@@ -2372,5 +2372,71 @@ html.yk-font-large{font-size:108%}
   .yar-final.yar-product-detail-page{padding-bottom:24px!important}
   .yar-final.yar-product-detail-page .yarpro-chat{height:280px!important;max-height:42vh!important}
 }
+<style id="yar-v46-library-detail-fix">
+/* V46: نام کامل دسته‌ها + اسکرول مطمئن صفحه جزئیات محصول در موبایل */
+.yar-category-library .yar-category-card{
+  height:auto!important;
+  min-height:82px!important;
+  box-sizing:border-box!important;
+  align-items:center!important;
+}
+.yar-category-library .yar-category-text{
+  min-width:0!important;
+  overflow:visible!important;
+  white-space:normal!important;
+}
+.yar-category-library .yar-category-text b{
+  display:block!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:normal!important;
+  overflow-wrap:break-word!important;
+  line-height:1.65!important;
+}
+.yar-category-library .yar-category-text small{
+  display:block!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  line-height:1.5!important;
+}
+
+/* صفحه جزئیات روی موبایل به‌جای اسکرول داخلی، اسکرول خود صفحه را استفاده می‌کند. */
+html:has(.yar-final.yar-product-detail-page),
+body:has(.yar-final.yar-product-detail-page){
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  height:auto!important;
+  min-height:100%!important;
+}
+body:has(.yar-final.yar-product-detail-page){
+  touch-action:auto!important;
+}
+.yar-final.yar-product-detail-page{
+  position:absolute!important;
+  inset:0 auto auto 0!important;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:none!important;
+  height:auto!important;
+  min-height:100vh!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:0 8px 110px!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  touch-action:auto!important;
+  overscroll-behavior-y:auto!important;
+}
+.yar-final.yar-product-detail-page .yarpro-head{
+  position:sticky!important;
+  top:0!important;
+  z-index:1000!important;
+}
+.yar-final.yar-product-detail-page .yar-chat-section,
+.yar-final.yar-product-detail-page .yar-final-tools,
+.yar-final.yar-product-detail-page .yarpro-form.yar-final-form{
+  position:static!important;
+}
 </style></body>
 </html>
