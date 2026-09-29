@@ -834,6 +834,74 @@ main, #app {
 }
 </style>
 
+
+<style id="yar-v49-detail-flow-fix">
+/* V49: جزئیات محصول باید یک جریان عادی و پیوسته داشته باشد؛
+   هیچ ناحیه‌ی خالیِ تمام‌قد بین بخش‌ها نباشد. */
+html, body, main, #app {
+  overflow-x: hidden !important;
+}
+body {
+  overflow-y: auto !important;
+}
+.yar-final.yar-product-detail-page {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 8px 100px !important;
+  box-sizing: border-box !important;
+}
+.yar-final.yar-product-detail-page > * {
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  max-height: none !important;
+}
+.yar-final.yar-product-detail-page .yar-flow-card,
+.yar-final.yar-product-detail-page .yar-legacy-section,
+.yar-final.yar-product-detail-page .yar-page-step {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+.yar-final.yar-product-detail-page .yar-chat-section {
+  position: relative !important;
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+.yar-final.yar-product-detail-page .yarpro-chat {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: 240px !important;
+  min-height: 120px !important;
+  max-height: 240px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+.yar-final.yar-product-detail-page .yar-cultivation-file,
+.yar-final.yar-product-detail-page .yar-cultivation-form,
+.yar-final.yar-product-detail-page .yar-stage-actions,
+.yar-final.yar-product-detail-page .yar-ledger,
+.yar-final.yar-product-detail-page .yar-cost-breakdown {
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.yar-final.yar-product-detail-page .yar-cultivation-form {
+  display: grid !important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
