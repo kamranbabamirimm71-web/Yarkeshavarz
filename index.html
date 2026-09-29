@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0b3d2e">
 <meta name="description" content="یار کشاورز — مدیریت زمین، کشت، هزینه، انبار و آب‌وهوا">
 <!-- YarKeshavarz OFFLINE V1 -->
-<title>یار کشاورز — نسخه v69</title>
+<title>یار کشاورز — نسخه آفلاین</title>
 <link rel="manifest" href="manifest.webmanifest">
 <style>
 :root{--g:#0b3d2e;--g2:#17664b;--bg:#f4f7f4;--card:#fff;--text:#17352b;--muted:#71817a;--line:#e1e9e4;--red:#a33a3a;--shadow:0 10px 28px rgba(14,55,41,.08)}
@@ -579,7 +579,7 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 </style>
 
 
-<style id="yar-photo-analysis-v64">
+<style id="yar-photo-analysis-v63">
 .yar-photo-card{margin:14px 0;background:#fff;border-radius:22px;padding:16px;box-shadow:0 8px 25px rgba(0,0,0,.08);border:1px solid #e5eee8}
 .yar-photo-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .yar-photo-actions button{flex:1;min-width:130px}
@@ -587,7 +587,7 @@ hr{border:0!important;border-top:1px solid var(--line)!important}
 .yar-preview{display:none;margin-top:12px;text-align:center}
 .yar-preview img{max-width:100%;max-height:240px;border-radius:18px}
 </style>
-<style id="analysis-history-v66">
+<style id="analysis-history-v65">
 .analysis-history{display:flex;flex-direction:column;gap:10px;margin-top:12px}.analysis-item{background:#f6f9f7;border-radius:16px;padding:12px;border:1px solid rgba(30,80,60,.12)}.analysis-item .small{margin-top:6px}
 </style>
 <style id="yar-bottom-chat-fix">
@@ -1804,121 +1804,6 @@ body:has(.yar-detail-shell) #app{
 }
 </style>
 
-
-<style id="yar-v60-equal-page-frame">
-/* V60: one product-change control only; the second control becomes product intro.
-   All four sheets share the exact same top-to-navigation frame. */
-.yar-legacy-scenario-head{
-  gap:8px!important;
-}
-.yar-short-product-intro{
-  flex:1 1 auto!important;
-  min-width:0!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:flex-start!important;
-  justify-content:center!important;
-  text-align:right!important;
-  padding:4px 2px!important;
-}
-.yar-short-product-intro span{
-  color:#17664b!important;
-  font-weight:800!important;
-  font-size:12px!important;
-  line-height:1.35!important;
-}
-.yar-short-product-intro small{
-  display:-webkit-box!important;
-  -webkit-box-orient:vertical!important;
-  -webkit-line-clamp:2!important;
-  overflow:hidden!important;
-  color:#687a73!important;
-  font-size:10px!important;
-  line-height:1.5!important;
-  margin-top:2px!important;
-}
-
-/* Same frame on all four pages: identical top offset, content window,
-   and fixed previous/next bar. */
-.yar-horizontal-panel{
-  height:100dvh!important;
-  min-height:100dvh!important;
-  max-height:100dvh!important;
-  box-sizing:border-box!important;
-  padding:84px 10px 78px!important;
-  overflow:hidden!important;
-  position:relative!important;
-}
-.yar-horizontal-panel .yar-page-step{
-  flex:0 0 42px!important;
-  height:42px!important;
-  min-height:42px!important;
-  max-height:42px!important;
-  margin:0 0 7px!important;
-  padding:7px 12px!important;
-  box-sizing:border-box!important;
-}
-.yar-horizontal-panel .yar-panel-nav{
-  position:absolute!important;
-  left:12px!important;
-  right:12px!important;
-  bottom:max(10px,env(safe-area-inset-bottom))!important;
-  width:auto!important;
-  height:52px!important;
-  min-height:52px!important;
-  max-height:52px!important;
-  margin:0!important;
-  box-sizing:border-box!important;
-}
-
-/* Each page gets the same content-height window above the navigation.
-   Page 1 keeps its product summary compact and gives the rest to its
-   main program card. Pages 2–4 use the full remaining window. */
-.yar-horizontal-panel:not(.yar-page-one) > .yar-legacy-section,
-.yar-horizontal-panel:not(.yar-page-one) > .yar-flow-card{
-  height:calc(100dvh - 84px - 42px - 7px - 78px)!important;
-  max-height:calc(100dvh - 84px - 42px - 7px - 78px)!important;
-  min-height:0!important;
-  box-sizing:border-box!important;
-  overflow:hidden!important;
-  margin:0!important;
-}
-.yar-horizontal-panel.yar-page-one > .yar-flow-card:first-of-type{
-  flex:0 0 auto!important;
-}
-.yar-horizontal-panel.yar-page-one > .yar-legacy-section{
-  height:calc(100dvh - 84px - 42px - 7px - 78px - 132px)!important;
-  max-height:calc(100dvh - 84px - 42px - 7px - 78px - 132px)!important;
-  min-height:0!important;
-  box-sizing:border-box!important;
-  overflow:hidden!important;
-  margin:0!important;
-}
-.yar-horizontal-panel.yar-page-one > .yar-swipe-hint{
-  display:none!important;
-}
-
-/* Keep the internal grids compact instead of creating different page heights. */
-.yar-horizontal-panel .yar-legacy-guide-grid{
-  max-height:100%!important;
-  overflow:hidden!important;
-}
-.yar-horizontal-panel .yar-legacy-scenario-grid,
-.yar-horizontal-panel .yar-auto-grid,
-.yar-horizontal-panel .yar-auto-economy{
-  overflow:hidden!important;
-}
-</style>
-
-
-<style id="yar-v61-mode-click-fix">
-/* V61: make the Online/Offline entry controls unambiguously tappable after land selection. */
-.yar-entry-page .yar-mode-row{position:relative!important;z-index:1000!important;pointer-events:auto!important}
-.yar-entry-page .yar-big-mode{position:relative!important;z-index:1001!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important;-webkit-user-select:none!important;user-select:none!important}
-.yar-entry-page .yar-flow-card{position:relative!important;z-index:50!important}
-.yar-entry-page .yarpro-head{z-index:30!important}
-</style>
-
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -1991,14 +1876,6 @@ const KEY='yar-keshavarz-v4-single',app=document.getElementById('app'),title=doc
 const base={lands:[],inventory:[],transactions:[],equipment:[],profile:{name:'',phone:'',email:'',photo:''}};
   const HERO_IMG='wheat-hero.jpg';
 let state=load(),route='home',selected=null,map=null,points=[],markers=[],polygon=null,watch=null,satellite=false,measureReturn=null;
-/* Measurement bridge: the online measurement module runs as an external script,
-   so expose the app's lexical state through window without duplicating state. */
-try{
-  Object.defineProperty(window,'state',{configurable:true,get:()=>state,set:v=>{state=v}});
-  Object.defineProperty(window,'selected',{configurable:true,get:()=>selected,set:v=>{selected=v}});
-  Object.defineProperty(window,'measureReturn',{configurable:true,get:()=>measureReturn,set:v=>{measureReturn=v}});
-}catch(e){ window.state=state; window.selected=selected; window.measureReturn=measureReturn; }
-
 function openSelectedTool(r){let id=selected||localStorage.getItem('yk-last-land');if(id&&state.lands.some(x=>x.id===id)){selected=id;go(r)}else{toast('برای استفاده از این بخش، ابتدا یک زمین را باز کن');go('lands')}}
 function load(){try{let x={...base,...JSON.parse(localStorage.getItem(KEY)||'{}')};x.lands=x.lands||[];x.inventory=x.inventory||[];x.transactions=x.transactions||[];x.equipment=x.equipment||[];x.profile={...base.profile,...(x.profile||{})};return x}catch{return JSON.parse(JSON.stringify(base))}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){console.error(e);toast('ذخیره‌سازی انجام نشد؛ حافظه مرورگر پر است.');return false}}
@@ -2034,7 +1911,7 @@ function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt
 function toast(x){alert(x)}
 function head(x){title.textContent=x}
 function totals(id){let t=state.transactions.filter(x=>!id||x.landId===id),c=t.filter(x=>x.type==='expense').reduce((a,x)=>a+n(x.amount),0),i=t.filter(x=>x.type==='income').reduce((a,x)=>a+n(x.amount),0);return{cost:c,income:i,profit:i-c}}
-function go(r){if(r==='measure'&&!measureReturn){selected=null;measureReturn='add'}route=r;window.scrollTo({top:0,left:0,behavior:'instant'});if(r==='home')home();else if(r==='lands')lands();else if(r==='add')add();else if(r==='measure'){if(typeof window.measure==='function')window.measure();else measureOffline();}else if(r==='inventory')inventory();else if(r==='weather')weather();else if(r==='equipment')equipment();else if(r==='calculator'){toast('محاسبه‌گر برآورد از نسخه نهایی حذف شده است');go('home')}else if(r==='cultivation')cultivation();else if(r==='profile')profile();else if(r==='account')account();else if(r==='settings')settings();else if(r==='manager')managerChat();else if(r==='ads')ads();else if(r==='news')news();else if(r==='yar'){yar();}else if(r==='game')game();else home();document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.r===r))}
+function go(r){if(r==='measure'&&!measureReturn){selected=null;measureReturn='add'}route=r;window.scrollTo({top:0,left:0,behavior:'instant'});if(r==='home')home();else if(r==='lands')lands();else if(r==='add')add();else if(r==='measure')measure();else if(r==='inventory')inventory();else if(r==='weather')weather();else if(r==='equipment')equipment();else if(r==='calculator'){toast('محاسبه‌گر برآورد از نسخه نهایی حذف شده است');go('home')}else if(r==='cultivation')cultivation();else if(r==='profile')profile();else if(r==='account')account();else if(r==='settings')settings();else if(r==='manager')managerChat();else if(r==='ads')ads();else if(r==='news')news();else if(r==='yar'){yar();}else if(r==='game')game();else home();document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.r===r))}
 function landThumb(l){
   const ps=l&&l.measurement&&Array.isArray(l.measurement.points)?l.measurement.points:[];
   let poly='38,62 72,30 126,24 178,43 196,84 160,106 94,104 48,86';
@@ -2058,7 +1935,7 @@ let areaValue=pending&&pending.areaM2?((pending.areaM2/10000).toFixed(4).replace
 app.innerHTML=`<div class="section"><h2>ثبت زمین جدید</h2><button class="secondary" onclick="startMeasureForNewLand()">📐 اندازه‌گیری</button></div><form class="card form" id="landForm"><div class="field"><label>نام زمین</label><input name="name" required placeholder="مثلاً زمین شمالی"></div><div class="field"><label>مساحت (هکتار)</label><input name="area" inputmode="decimal" required value="${areaValue}" placeholder="مثلاً 2.5"></div><div class="card" style="padding:10px;background:#f3f8f5"><b>📐 اندازه‌گیری</b><div class="small muted" id="measureSummary">${pending&&pending.areaM2?`مساحت اندازه‌گیری‌شده: ${Math.round(pending.areaM2).toLocaleString('fa-IR')} مترمربع · محیط: ${Math.round(pending.perimeter||0).toLocaleString('fa-IR')} متر`:'هنوز اندازه‌گیری نشده'}</div></div><div class="field"><label>روستا / شهر / منطقه</label><input name="region"></div><div class="field"><label>نوع مالکیت</label><div class="ownership-choice" id="ownershipChoice"><button type="button" class="ownership-option active" data-value="own" onclick="setOwnership('own')"><span class="ownership-icon">🏠</span><span><b>ملکی</b><small>زمین متعلق به خودم</small></span></button><button type="button" class="ownership-option" data-value="rent" onclick="setOwnership('rent')"><span class="ownership-icon">🔑</span><span><b>اجاره‌ای</b><small>زمین اجاره‌ای</small></span></button></div><input type="hidden" name="ownership" id="ownershipValue" value="own"><div id="rentDetails" class="rent-details" hidden><div class="rent-grid"><div class="field"><label>مبلغ اجاره</label><input name="rentAmount" inputmode="numeric" placeholder="مثلاً ۵۰٬۰۰۰٬۰۰۰ تومان"></div><div class="field"><label>نام مالک زمین</label><input name="landlord" placeholder="نام مالک"></div><div class="field"><label>شروع اجاره</label><input name="rentStart" placeholder="مثلاً ۱۴۰۵/۰۷/۰۱"></div><div class="field"><label>پایان اجاره</label><input name="rentEnd" placeholder="مثلاً ۱۴۰۶/۰۶/۳۱"></div></div></div></div><div class="field"><label>نوع خاک</label><input name="soil"></div><div class="field"><label>منبع آب</label><input name="water"></div><div class="field"><label>آبیاری</label><input name="irrigation"></div><div class="field"><label>محصول</label><input name="crop"></div><div class="field"><label>توضیحات</label><textarea name="notes"></textarea></div><button class="primary" type="submit">💾 ذخیره زمین</button></form>`;
 document.getElementById('landForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);let l={id:uid(),name:f.get('name'),area:n(f.get('area')),region:f.get('region'),ownership:f.get('ownership'),soil:f.get('soil'),water:f.get('water'),irrigation:f.get('irrigation'),crop:f.get('crop'),notes:f.get('notes'),lat:pending?.lat??null,lng:pending?.lng??null,areaM2:pending?.areaM2??null,perimeter:pending?.perimeter??null,measurement:pending?.points?{points:pending.points}:null,rentAmount:n(f.get('rentAmount')),landlord:f.get('landlord')||'',rentStart:f.get('rentStart')||'',rentEnd:f.get('rentEnd')||''};state.lands.push(l);save();sessionStorage.removeItem('yk-pending-measure');selected=l.id;openLand(l.id)}}
 function setOwnership(v){const hidden=document.getElementById('ownershipValue');if(hidden)hidden.value=v;document.querySelectorAll('.ownership-option').forEach(b=>b.classList.toggle('active',b.dataset.value===v));const box=document.getElementById('rentDetails');if(box)box.hidden=v!=='rent'}
-function startMeasureForNewLand(){selected=null;measureReturn='add';if(typeof window.measure==='function')window.measure();else go('measure')}
+function startMeasureForNewLand(){selected=null;measureReturn='add';go('measure')}
 function landSchematic(l){
   const ps=l&&l.measurement&&Array.isArray(l.measurement.points)?l.measurement.points:[];
   if(ps.length<3) return '<div class="land-schematic empty"><div>📐</div><b>شماتیک زمین هنوز ثبت نشده</b><small>بعد از اندازه‌گیری زمین، شکل شماتیک آن اینجا نمایش داده می‌شود.</small></div>';
@@ -2090,7 +1967,7 @@ function openLand(id){
  loadLandWeather(l);
  document.getElementById('landPhoto').onchange=async e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{l.photos=l.photos||[];l.photos.unshift(r.result);l.photos=l.photos.slice(0,12);save();openLand(id)};r.readAsDataURL(f)}
 }
-function editLandPoints(id){selected=id;measureReturn='land';if(typeof window.measure==='function')window.measure(id);else measureOffline(id)}
+function editLandPoints(id){selected=id;measureReturn='land';measure(id)}
 function editLand(id){
   let l=state.lands.find(x=>x.id===id);if(!l)return;head('ویرایش زمین');
   app.innerHTML=`<div class="section"><h2>✏️ ویرایش اطلاعات زمین</h2><button class="secondary" onclick="openLand('${id}')">بازگشت</button></div>
@@ -2512,7 +2389,7 @@ function areaM(ps){
 
   return Math.abs(sum)/2;
   }
-function measureOffline(landId){if(landId)selected=landId;if(!measureReturn)measureReturn=landId?'land':'add';head('اندازه‌گیری آفلاین');app.innerHTML=`<div class="measure-wrap"><div id="measureMap" class="measure-map" style="background:linear-gradient(145deg,#edf7f0,#dcefe3);display:flex;align-items:center;justify-content:center;overflow:hidden"><svg id="offlineMeasureSvg" viewBox="0 0 360 520" width="100%" height="100%" style="touch-action:none"><defs><pattern id="offlineGrid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#cfe3d8" stroke-width="1"/></pattern></defs><rect width="360" height="520" fill="url(#offlineGrid)"/><text x="180" y="35" text-anchor="middle" fill="#17664b" font-size="15" font-weight="800">📐 اندازه‌گیری آفلاین</text><text x="180" y="57" text-anchor="middle" fill="#60756a" font-size="10">با لمس صفحه نقاط زمین را مشخص کن</text></svg></div><div class="measure-tools"><button onclick="locate()">⌖</button><button onclick="toggleSat()">🛰️</button><button onclick="undo()">↶</button><button onclick="clearMeasure()">↺</button><button onclick="closeMeasure()">×</button></div><div class="measure-bottom"><div class="measure-stats"><div><span>مساحت</span><b id="ma">۰</b></div><div><span>هکتار</span><b id="mh">۰</b></div><div><span>محیط</span><b id="mp">۰</b></div><div><span>نقاط</span><b id="mn">۰</b></div></div><div class="measure-actions"><button class="gps" id="gpsBtn" onclick="toggleGPS()">▶ ثبت با GPS</button><button class="primary" id="register" disabled onclick="registerMeasured()">📐 ثبت زمین</button></div><div id="measureStatus" class="hint">حداقل ۳ نقطه لازم است.</div></div></div>`;setTimeout(initMap,20)}
+function measure(landId){if(landId)selected=landId;if(!measureReturn)measureReturn=landId?'land':'add';head('اندازه‌گیری آفلاین');app.innerHTML=`<div class="measure-wrap"><div id="measureMap" class="measure-map" style="background:linear-gradient(145deg,#edf7f0,#dcefe3);display:flex;align-items:center;justify-content:center;overflow:hidden"><svg id="offlineMeasureSvg" viewBox="0 0 360 520" width="100%" height="100%" style="touch-action:none"><defs><pattern id="offlineGrid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#cfe3d8" stroke-width="1"/></pattern></defs><rect width="360" height="520" fill="url(#offlineGrid)"/><text x="180" y="35" text-anchor="middle" fill="#17664b" font-size="15" font-weight="800">📐 اندازه‌گیری آفلاین</text><text x="180" y="57" text-anchor="middle" fill="#60756a" font-size="10">با لمس صفحه نقاط زمین را مشخص کن</text></svg></div><div class="measure-tools"><button onclick="locate()">⌖</button><button onclick="toggleSat()">🛰️</button><button onclick="undo()">↶</button><button onclick="clearMeasure()">↺</button><button onclick="closeMeasure()">×</button></div><div class="measure-bottom"><div class="measure-stats"><div><span>مساحت</span><b id="ma">۰</b></div><div><span>هکتار</span><b id="mh">۰</b></div><div><span>محیط</span><b id="mp">۰</b></div><div><span>نقاط</span><b id="mn">۰</b></div></div><div class="measure-actions"><button class="gps" id="gpsBtn" onclick="toggleGPS()">▶ ثبت با GPS</button><button class="primary" id="register" disabled onclick="registerMeasured()">📐 ثبت زمین</button></div><div id="measureStatus" class="hint">حداقل ۳ نقطه لازم است.</div></div></div>`;setTimeout(initMap,20)}
 function initMap(){points=[];if(selected&&measureReturn==='land'){let ll=state.lands.find(x=>x.id===selected);if(ll&&ll.measurement&&Array.isArray(ll.measurement.points))points=ll.measurement.points.map(x=>[+x[0],+x[1]])}const svg=document.getElementById('offlineMeasureSvg');if(!svg)return;svg.addEventListener('click',offlineMeasureClick);redraw()}
 function offlineMeasureClick(e){const svg=document.getElementById('offlineMeasureSvg'),r=svg.getBoundingClientRect(),x=Math.max(0,Math.min(360,(e.clientX-r.left)/r.width*360)),y=Math.max(0,Math.min(520,(e.clientY-r.top)/r.height*520));addPoint(35.7+(260-y)*.00001,51.4+(x-180)*.00001)}
 function coordToXY(p){if(!points.length)return[180,260];const xs=points.map(q=>q[1]),ys=points.map(q=>q[0]),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),pad=55,w=Math.max(maxX-minX,1e-9),h=Math.max(maxY-minY,1e-9);return[pad+(p[1]-minX)/w*(360-pad*2),pad+(maxY-p[0])/h*(520-pad*2)]}
@@ -2815,7 +2692,7 @@ function yarOpenLand(id){
   localStorage.setItem('yk-last-land',String(l.id));
   yarCalc={};yarCropProfile=null;
   yarProductPage='select';
-  yarLandMode=true;
+  yarLandMode=false;
   route='yar';
   yar();
   return false;
@@ -2843,45 +2720,24 @@ function yarSelectLand(id){
   return false;
 }
 function yarSetMode(mode){
-  const chosen=String(selected||'').trim();
-  const l=chosen?yarLand(chosen):null;
-  if(!l){
+  if(!selected){
     toast('اول زمین موردنظر را انتخاب کن، بعد آنلاین یا آفلاین را بزن.');
-    return false;
+    return;
+  }
+  const l=yarLand(selected);
+  if(!l){
+    toast('زمین انتخاب‌شده پیدا نشد؛ دوباره امتحان کن.');
+    return;
   }
   yarMode=mode==='online'?'online':'offline';
   yarProductPage='select';
   yarCropCategory='';
-  selected=l.id;
-  yarLandMode=true;
-  route='yar';
   localStorage.setItem('yk-yar-mode',yarMode);
   localStorage.setItem('yk-last-land',String(l.id));
-  /* V69: render the destination synchronously. Do not navigate through go() or
-     wait for any product/registry promise. */
-  try{ yar(); }catch(err){
-    console.error('YAR_ENTRY_RENDER',err);
-    /* Emergency minimal destination: this guarantees that a valid selected land
-       cannot leave the user visually stuck on the entry screen. */
-    head('کشاورزیار — '+l.name);
-    const areaM2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);
-    const areaHa=areaM2>0?areaM2/10000:Number(l.measurement?.hectare||l.area||0);
-    app.innerHTML=`<section class="yarpro yar-final yar-real-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" onclick="go('home')">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>زمین «${esc(l.name)}» · ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div></div></header><div class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name)}</h3><small>${areaM2.toLocaleString('fa-IR')} مترمربع · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div></div><button type="button" class="primary" onclick="yarChangeProduct()">🌱 انتخاب محصول</button></div></section>`;
-  }
-  return false;
+  yarLandMode=true;
+  route='yar';
+  yar();
 }
-function yarEnterOffline(){return yarSetMode('offline')}
-function yarEnterOnline(){return yarSetMode('online')}
-
-/* V69 mobile guard: capture pointer/touch activation even if a stale inline handler
-   or an overlay interferes with the button's normal click event. */
-document.addEventListener('pointerup',function(e){
-  const b=e.target?.closest?.('[data-yar-mode]');
-  if(!b)return;
-  if(route!=='yar')return;
-  e.preventDefault();e.stopPropagation();
-  yarSetMode(b.dataset.yarMode);
-},true);
 
 function yarChangeProduct(){yarProductPage='select';yarCropCategory='';yar();}
 function yarRegisteredProducts(l){
@@ -2919,15 +2775,7 @@ function yarAutoEstimate(l,crop,profile,areaHa){
 }
 function yar(){
   const l=(yarLandMode&&selected)?yarLand(selected):null;
-  /* V68: never block the page transition on the product registry.
-     On mobile/GitHub Pages the dynamic module can be delayed or unavailable;
-     the selected-land screen must still render immediately. */
-  if(!yarCropRegistry){
-    yarCropRegistry={};
-    yarLoadCropRegistry().then(()=>{
-      if(route==='yar') yar();
-    });
-  }
+  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());return}
   const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
   if(crop&&!yarCropProfile){yarLoadCropProfile(crop).then(()=>yar());return}
   head(l?'کشاورزیار — '+l.name:'کشاورزیار');
@@ -2942,7 +2790,7 @@ function yar(){
   const products=l?yarRegisteredProducts(l):[];
   const rows=profile?[['خلاصه',profile.summary],['اقلیم',profile.climate],['خاک',profile.soil],['pH',profile.ph],['آبیاری',profile.irrigation],['کاشت',profile.planting],['تغذیه',profile.nutrition],['آفات',Array.isArray(profile.pests)?profile.pests.join('، '):profile.pests],['بیماری‌ها',Array.isArray(profile.diseases)?profile.diseases.join('، '):profile.diseases],['برداشت',profile.harvest]].filter(x=>x[1]):[];
   const landCards=lands.map(x=>{const xm2=Number(x.areaM2||x.measurement?.areaM2||x.measurement?.area||0);const xha=xm2>0?xm2/10000:Number(x.measurement?.hectare||x.area||0);return `<button type="button" class="yar-land-option ${String(selected)===String(x.id)?'active':''}" data-yar-land="${esc(x.id)}"><span class="yar-land-icon">🌾</span><span><b>${esc(x.name||'زمین بدون نام')}</b><small>${xha.toLocaleString('fa-IR')} هکتار${x.region?' · '+esc(x.region):''}${x.crop?' · '+esc(x.crop):' · محصول ثبت نشده'}${String(selected)===String(x.id)?' · ✓ انتخاب شد':''}</small></span><strong>${String(selected)===String(x.id)?'✓':'›'}</strong></button>`}).join('');
-  const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" onclick="yarSetMode('online')" >🌐<b>آنلاین</b><small>ورود به صفحه کشاورزیار</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" onclick="yarSetMode('offline')" >📴<b>آفلاین</b><small>ورود به صفحه کشاورزیار</small></button></div></section>`;
+  const modeCard=`<section class="yar-flow-card"><div class="yar-flow-title"><b>🌱 کشاورزیار</b><small>همه مراحل داخل خود کشاورزیار</small></div><div class="yar-mode-row"><button type="button" class="yar-big-mode ${yarMode==='online'?'active':''}" data-yar-mode="online" onclick="yarSetMode('online')">🌐<b>آنلاین</b><small>ورود به صفحه کشاورزیار</small></button><button type="button" class="yar-big-mode ${yarMode==='offline'?'active':''}" data-yar-mode="offline" onclick="yarSetMode('offline')">📴<b>آفلاین</b><small>ورود به صفحه کشاورزیار</small></button></div></section>`;
   const landChooser=!l?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>انتخاب زمین ثبت‌شده</b><small>مساحت همین زمین مبنای محاسبات خواهد بود.</small></div><span>${lands.length.toLocaleString('fa-IR')} زمین</span></div>${lands.length?`<div class="yar-land-list">${landCards}</div>`:`<div class="yar-empty">هنوز زمینی ثبت نشده است.<button type="button" class="primary" data-yar-route="lands">ثبت زمین</button></div>`}</section>`:'';
   const landSelected=l?`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name||'زمین بدون نام')}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع${l.region?' · '+esc(l.region):''}</small></div><button type="button" class="secondary" data-yar-clear-land>تغییر زمین</button></div><div class="yar-land-facts"><span>🪨 ${esc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${esc(l.water||'آب ثبت نشده')}</span><span>🚿 ${esc(l.irrigation||'آبیاری ثبت نشده')}</span></div>${eco?`<div class="yar-economy-strip"><span>💸 هزینه ${money(eco.cost)}</span><span>💵 درآمد ${money(eco.income)}</span><span>📈 ${eco.profit>=0?'سود':'زیان'} ${money(Math.abs(eco.profit))}</span></div>`:''}</section>`:'';
   const groups=Object.entries((yarCropRegistry&&window.__yarGroups)||{});
@@ -2986,15 +2834,13 @@ function yar(){
     ['🌾','برداشت',profile?.harvest||'برداشت بر اساس رسیدگی محصول، کیفیت هدف و شرایط بازار برنامه‌ریزی شود.']
   ];
   const guideSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>راهنمای مدیریت محصول</b><small>${crop?`راهنمای «${esc(crop)}»`:'ابتدا محصول را انتخاب کن تا راهنما اختصاصی شود.'}</small></div><div class="yar-legacy-guide-grid">${guideItems.map(x=>`<article class="yar-legacy-guide-card"><h3>${x[0]} ${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`).join('')}</div></section>`:'';
-  const scenarioSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>برنامه کشت خودکار</b><small>بر اساس محصول، مساحت و منطقه ثبت‌شده</small></div><div class="yar-legacy-scenario-head"><div><span>🌱 محصول</span><b>${esc(crop||'هنوز انتخاب نشده')}</b></div><div class="yar-short-product-intro"><span>📘 معرفی کوتاه محصول</span><small>${esc(cropDescription)}</small></div></div><div class="yar-legacy-scenario-grid"><div><b>🌾 بذر تقریبی</b><span>${esc(auto.seed)}</span></div><div><b>📅 کاشت</b><span>${esc(auto.planting)}</span></div><div><b>📅 برداشت</b><span>${esc(auto.harvest)}</span></div><div><b>💧 آبیاری</b><span>${esc(auto.irrigation)}</span></div><div><b>📐 متراژ</b><span>${areaM2.toLocaleString('fa-IR')} مترمربع</span></div><div><b>📈 سود تقریبی</b><span>${auto.profit}</span></div></div></section>`:'';
+  const scenarioSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>برنامه کشت خودکار</b><small>بر اساس محصول، مساحت و منطقه ثبت‌شده</small></div><div class="yar-legacy-scenario-head"><div><span>🌱 محصول</span><b>${esc(crop||'هنوز انتخاب نشده')}</b></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر</button></div><div class="yar-legacy-scenario-grid"><div><b>🌾 بذر تقریبی</b><span>${esc(auto.seed)}</span></div><div><b>📅 کاشت</b><span>${esc(auto.planting)}</span></div><div><b>📅 برداشت</b><span>${esc(auto.harvest)}</span></div><div><b>💧 آبیاری</b><span>${esc(auto.irrigation)}</span></div><div><b>📐 متراژ</b><span>${areaM2.toLocaleString('fa-IR')} مترمربع</span></div><div><b>📈 سود تقریبی</b><span>${auto.profit}</span></div></div></section>`:'';
   const areaSummary=l?`<div class="yar-legacy-area-strip"><span>📐 متراژ زمین</span><b>${areaM2.toLocaleString('fa-IR')} مترمربع</b><span>🌾 ${areaHa.toLocaleString('fa-IR')} هکتار</span><span>📶 حالت: ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div>`:'';
 
   // صفحه اول کشاورزیار فقط برای انتخاب حالت و زمین است؛ چت بعد از انتخاب زمین باز می‌شود.
   if(!l){
     app.innerHTML=`<section class="yarpro yar-final yar-real-page yar-entry-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" data-yar-route="home">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>دستیار کشاورزی · شروع کار</span></div></div></header><div class="yar-entry-hero"><b>🌱 شروع کشاورزیار</b><span>ابتدا زمین را انتخاب کن؛ سپس با زدن آنلاین یا آفلاین وارد صفحه کشاورزیار شو.</span></div>${modeCard}${landChooser}</section>`;
-    document.querySelectorAll('[data-yar-mode]').forEach(b=>{
-      b.onclick=(e)=>{e.preventDefault();e.stopPropagation();return yarSetMode(b.dataset.yarMode)};
-    });
+    document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=()=>yarSetMode(b.dataset.yarMode));
     document.querySelectorAll('[data-yar-land]').forEach(b=>b.onclick=()=>yarSelectLand(b.dataset.yarLand));
     document.querySelectorAll('[data-yar-route]').forEach(b=>b.onclick=()=>go(b.dataset.yarRoute));
     return;
@@ -3036,7 +2882,7 @@ function yar(){
     ${crop&&yarProductPage==='detail'?`<div class="yar-detail-content">${detailPage}</div>`:selectPage}
   </section>`;
   document.querySelectorAll('[data-yar-crop]').forEach(b=>b.onclick=()=>yarSetCrop(b.dataset.yarCrop));
-  document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=(e)=>{e.preventDefault();e.stopPropagation();return yarSetMode(b.dataset.yarMode)});
+  document.querySelectorAll('[data-yar-mode]').forEach(b=>b.onclick=()=>yarSetMode(b.dataset.yarMode));
   document.querySelectorAll('[data-yar-land]').forEach(b=>b.onclick=()=>yarSelectLand(b.dataset.yarLand));
   document.querySelectorAll('[data-yar-clear-land]').forEach(b=>b.onclick=()=>yarSelectLand(''));
   document.querySelectorAll('[data-yar-route]').forEach(b=>b.onclick=()=>go(b.dataset.yarRoute));
@@ -3485,7 +3331,7 @@ html.yk-font-small{font-size:92%}
 html.yk-font-large{font-size:108%}
 </style>
 <script src="./offline/crop-ui.js?v=20260921-accordion-v1"></script>
-<script src="./modules/measurement.js?v=20260930-online-v66"></script>
+<script src="./modules/measurement.js?v=20260929-online-v1"></script>
 <style id="yar-category-inline">.yar-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.yar-category-card{border:1px solid #dce8e1;background:#fff;border-radius:16px;padding:10px 8px;text-align:right;font-family:inherit;display:grid;grid-template-columns:34px 1fr;grid-template-rows:auto auto;column-gap:7px;align-items:center}.yar-category-card span{grid-row:1/3;width:34px;height:34px;border-radius:11px;background:#eef7f1;display:grid;place-items:center;font-size:20px}.yar-category-card b{font-size:11px;color:#214f40}.yar-category-card small{font-size:8px;color:#74847d;margin-top:2px}.yar-category-card.active{border-color:#25825d;background:#eaf7ef;box-shadow:0 0 0 1px #cde8d9 inset}.yar-product-catalog{scroll-margin-top:20px}@media(min-width:600px){.yar-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:360px){.yar-category-grid{grid-template-columns:1fr}}</style>
 <style id="yar-cultivation-inline">.yar-product-catalog{display:grid;gap:9px;margin-top:10px}.yar-product-group{background:#f7faf8;border:1px solid #e1ebe5;border-radius:16px;padding:9px}.yar-product-group-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;color:#1c5d46}.yar-product-group-head span{font-size:9px;color:#7a8b83}.yar-product-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.yar-product-choice{border:1px solid #e0e9e4;background:#fff;border-radius:13px;padding:9px;text-align:right;display:flex;align-items:center;gap:7px;font-family:inherit}.yar-product-choice.active{border-color:#2a805d;background:#e9f6ef}.yar-product-choice span{width:24px;height:24px;border-radius:8px;background:#eef6f1;display:grid;place-items:center;color:#18724e;font-size:12px}.yar-product-choice b{font-size:10px}.yar-cultivation-file{scroll-margin-top:20px}.yar-economy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.yar-economy-grid>div{background:#f4f8f6;border-radius:13px;padding:10px;text-align:center}.yar-economy-grid span{display:block;font-size:9px;color:#6f7e77}.yar-economy-grid b{display:block;margin-top:5px;font-size:11px}.yar-economy-grid .ok{background:#eaf7ef}.yar-economy-grid .bad{background:#fff1f0}.yar-cultivation-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}.yar-cultivation-form>div{display:grid;gap:4px}.yar-cultivation-form .full{grid-column:1/-1}.yar-cultivation-form label{font-size:9px;color:#63766d}.yar-cultivation-form input,.yar-cultivation-form textarea{width:100%;box-sizing:border-box;border:1px solid #d8e5de;border-radius:12px;padding:9px;font-family:inherit;background:#fbfdfc}.yar-cultivation-form textarea{min-height:70px;resize:vertical}.yar-stage-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.yar-stage-title{font-weight:900;color:#1c5d46;font-size:11px;margin:12px 0 7px}.yar-ledger{display:grid;gap:6px}.yar-ledger-row{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#f7faf8;border:1px solid #e4ece7;border-radius:12px;padding:9px}.yar-ledger-row small{display:block;color:#7a8881;font-size:8px;margin-top:3px}.yar-ledger-row strong{font-size:10px;color:#1c5d46}.yar-cost-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}.yar-cost-breakdown div{display:flex;justify-content:space-between;background:#fff;border:1px solid #e6ece8;border-radius:10px;padding:7px;font-size:8px}.yar-cost-breakdown b{font-size:9px}@media(max-width:430px){.yar-economy-grid{grid-template-columns:1fr}.yar-cultivation-form{grid-template-columns:1fr}.yar-stage-actions{grid-template-columns:1fr}.yar-product-grid{grid-template-columns:1fr 1fr}}
 /* V44: کتابخانه محصولات به‌صورت آکاردئون؛ فقط دسته بازشده محصولاتش را نشان می‌دهد. */
