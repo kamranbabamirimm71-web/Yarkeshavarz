@@ -1343,6 +1343,67 @@ body:has(.yar-detail-shell) #app{
 }
 </style>
 
+
+<style id="yar-v54-real-swipe">
+/* V54: ورق‌زدن واقعی با لمس، بدون تکیه به RTL scrollLeft */
+.yar-horizontal-pages{
+  position:relative!important;
+  display:block!important;
+  width:100vw!important;
+  height:calc(100dvh - 82px)!important;
+  overflow:hidden!important;
+  touch-action:pan-y!important;
+  overscroll-behavior:none!important;
+}
+.yar-horizontal-track{
+  direction:ltr!important;
+  display:flex!important;
+  flex-direction:row!important;
+  width:500vw!important;
+  height:100%!important;
+  transform:translate3d(0,0,0);
+  transition:transform .32s cubic-bezier(.22,.7,.2,1)!important;
+  will-change:transform;
+}
+.yar-horizontal-panel{
+  direction:rtl!important;
+  flex:0 0 100vw!important;
+  width:100vw!important;
+  height:100%!important;
+  min-width:100vw!important;
+  box-sizing:border-box!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  scroll-snap-align:none!important;
+  touch-action:pan-y!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+.yar-horizontal-panel[aria-hidden="true"]{
+  pointer-events:none!important;
+}
+.yar-horizontal-panel[aria-hidden="false"]{
+  pointer-events:auto!important;
+}
+body:has(.yar-detail-shell) > .bottom,
+body:has(.yar-detail-shell) .bottom{
+  display:none!important;
+}
+.yar-detail-shell .yar-detail-content{
+  width:100vw!important;
+  height:calc(100dvh - 82px)!important;
+  overflow:hidden!important;
+}
+.yar-detail-shell{
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+}
+.yar-horizontal-panel .yar-panel-nav{
+  position:sticky!important;
+  bottom:8px!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2352,7 +2413,7 @@ function yar(){
   const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(yarCropRegistry?.[crop]?.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div></section>`;
   const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
   const yarPanelNav=(idx,total=5)=>`<div class="yar-panel-nav"><button type="button" class="secondary" onclick="yarSlide(${idx-1})" ${idx<=0?'disabled':''}>‹ قبلی</button><div class="yar-panel-dots">${Array.from({length:total},(_,i)=>`<button type="button" class="${i===idx?'active':''}" aria-label="صفحه ${i+1}" onclick="yarSlide(${i})"></button>`).join('')}</div><button type="button" class="primary" onclick="yarSlide(${idx+1})" ${idx>=total-1?'disabled':''}>بعدی ›</button></div>`;
-  const detailPage=`<div id="yarHorizontalPages" class="yar-horizontal-pages">
+  const detailPage=`<div id="yarHorizontalPages" class="yar-horizontal-pages"><div class="yar-horizontal-track">
     <section class="yar-horizontal-panel">
       <div class="yar-page-step"><b>صفحه ۱ از ۵</b><span>محصول و برنامه کشت</span></div>
       ${productSummary}${scenarioSection}
@@ -2387,7 +2448,7 @@ function yar(){
       </section>
       ${yarPanelNav(4)}
     </section>
-  </div>`;
+  </div></div>`;
   app.innerHTML=`<section class="yarpro yar-real-page ${crop&&yarProductPage==='detail'?'yar-detail-shell':'yar-final yar-product-select-page'}">
     <header class="yarpro-head">
       <button type="button" class="yarpro-switch" data-yar-route="home">✕</button>
@@ -2401,14 +2462,51 @@ function yar(){
   document.querySelectorAll('[data-yar-land]').forEach(b=>b.onclick=()=>yarSelectLand(b.dataset.yarLand));
   document.querySelectorAll('[data-yar-clear-land]').forEach(b=>b.onclick=()=>yarSelectLand(''));
   document.querySelectorAll('[data-yar-route]').forEach(b=>b.onclick=()=>go(b.dataset.yarRoute));
-  yarRender();yarBindInput();
+  yarRender();yarBindInput();yarBindHorizontal();
 }
+let yarHorizontalIndex=0;
 function yarSlide(index){
   const el=document.getElementById('yarHorizontalPages');
   if(!el)return;
   const total=el.children.length;
   const i=Math.max(0,Math.min(Number(index)||0,total-1));
-  el.scrollTo({left:i*el.clientWidth,behavior:'smooth'});
+  yarHorizontalIndex=i;
+  const track=el.querySelector('.yar-horizontal-track')||el;
+  if(track!==el) track.style.transform=`translate3d(${-i*100}%,0,0)`;
+  else el.scrollTo({left:i*el.clientWidth,behavior:'smooth'});
+  el.querySelectorAll('.yar-horizontal-panel').forEach((p,n)=>p.setAttribute('aria-hidden',n===i?'false':'true'));
+}
+function yarBindHorizontal(){
+  const el=document.getElementById('yarHorizontalPages');
+  if(!el || el.dataset.bound==='1')return;
+  el.dataset.bound='1';
+  yarHorizontalIndex=0;
+  const track=el.querySelector('.yar-horizontal-track');
+  if(track) track.style.transform='translate3d(0,0,0)';
+  let sx=0,sy=0,dx=0,dy=0,drag=false;
+  el.addEventListener('touchstart',e=>{
+    if(!e.touches||e.touches.length!==1)return;
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY; dx=dy=0; drag=true;
+  },{passive:true});
+  el.addEventListener('touchmove',e=>{
+    if(!drag||!e.touches||e.touches.length!==1)return;
+    dx=e.touches[0].clientX-sx; dy=e.touches[0].clientY-sy;
+    if(Math.abs(dx)>Math.abs(dy)+8 && Math.abs(dx)>10)e.preventDefault?.();
+  },{passive:false});
+  el.addEventListener('touchend',()=>{
+    if(!drag)return;
+    drag=false;
+    if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.15){
+      yarSlide(yarHorizontalIndex+(dx<0?1:-1));
+    }
+  },{passive:true});
+  el.addEventListener('touchcancel',()=>{drag=false},{passive:true});
+  el.addEventListener('pointerup',e=>{
+    if(e.pointerType!=='touch' && Math.abs(e.movementX)>45){
+      yarSlide(yarHorizontalIndex+(e.movementX<0?1:-1));
+    }
+  });
+  yarSlide(0);
 }
 function yarAreaM2(){const l=(yarLandMode&&selected)?yarLand(selected):null;if(!l)return 0;const m2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);if(m2>0)return m2;const ha=Number(l.measurement?.hectare||l.area||0);return ha>0?ha*10000:0;}
 function yarSaveCultivation(){
