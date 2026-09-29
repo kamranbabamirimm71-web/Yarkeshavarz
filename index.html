@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0b3d2e">
 <meta name="description" content="یار کشاورز — مدیریت زمین، کشت، هزینه، انبار و آب‌وهوا">
 <!-- YarKeshavarz OFFLINE V1 -->
-<title>یار کشاورز — نسخه آفلاین</title>
+<title>یار کشاورز — نسخه v69</title>
 <link rel="manifest" href="manifest.webmanifest">
 <style>
 :root{--g:#0b3d2e;--g2:#17664b;--bg:#f4f7f4;--card:#fff;--text:#17352b;--muted:#71817a;--line:#e1e9e4;--red:#a33a3a;--shadow:0 10px 28px rgba(14,55,41,.08)}
@@ -2844,30 +2844,44 @@ function yarSelectLand(id){
 }
 function yarSetMode(mode){
   const chosen=String(selected||'').trim();
-  if(!chosen){
-    toast('اول زمین موردنظر را انتخاب کن، بعد آنلاین یا آفلاین را بزن.');
-    return false;
-  }
-  const l=yarLand(chosen);
+  const l=chosen?yarLand(chosen):null;
   if(!l){
-    toast('زمین انتخاب‌شده پیدا نشد؛ دوباره امتحان کن.');
+    toast('اول زمین موردنظر را انتخاب کن، بعد آنلاین یا آفلاین را بزن.');
     return false;
   }
   yarMode=mode==='online'?'online':'offline';
   yarProductPage='select';
   yarCropCategory='';
-  selected=String(l.id);
+  selected=l.id;
   yarLandMode=true;
+  route='yar';
   localStorage.setItem('yk-yar-mode',yarMode);
   localStorage.setItem('yk-last-land',String(l.id));
-  route='yar';
-  /* V66: enter the selected land directly. The old flow depended on a secondary flag
-     that could be lost during re-render on mobile. Keep the transition state explicit. */
-  yar();
+  /* V69: render the destination synchronously. Do not navigate through go() or
+     wait for any product/registry promise. */
+  try{ yar(); }catch(err){
+    console.error('YAR_ENTRY_RENDER',err);
+    /* Emergency minimal destination: this guarantees that a valid selected land
+       cannot leave the user visually stuck on the entry screen. */
+    head('کشاورزیار — '+l.name);
+    const areaM2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);
+    const areaHa=areaM2>0?areaM2/10000:Number(l.measurement?.hectare||l.area||0);
+    app.innerHTML=`<section class="yarpro yar-final yar-real-page"><header class="yarpro-head"><button type="button" class="yarpro-switch" onclick="go('home')">✕</button><div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>زمین «${esc(l.name)}» · ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div></div></header><div class="yar-flow-card"><div class="yar-selected-head"><div><b>زمین انتخاب‌شده</b><h3>🌾 ${esc(l.name)}</h3><small>${areaM2.toLocaleString('fa-IR')} مترمربع · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div></div><button type="button" class="primary" onclick="yarChangeProduct()">🌱 انتخاب محصول</button></div></section>`;
+  }
   return false;
 }
 function yarEnterOffline(){return yarSetMode('offline')}
 function yarEnterOnline(){return yarSetMode('online')}
+
+/* V69 mobile guard: capture pointer/touch activation even if a stale inline handler
+   or an overlay interferes with the button's normal click event. */
+document.addEventListener('pointerup',function(e){
+  const b=e.target?.closest?.('[data-yar-mode]');
+  if(!b)return;
+  if(route!=='yar')return;
+  e.preventDefault();e.stopPropagation();
+  yarSetMode(b.dataset.yarMode);
+},true);
 
 function yarChangeProduct(){yarProductPage='select';yarCropCategory='';yar();}
 function yarRegisteredProducts(l){
