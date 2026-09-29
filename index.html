@@ -1404,6 +1404,22 @@ body:has(.yar-detail-shell) .bottom{
 }
 </style>
 
+
+<style id="yar-v55-swipe-correctness">
+/* V55: fix the two bugs that kept v54 on page 1:
+   total was counting the wrapper instead of the panels, and percentage
+   transforms were relative to a 500vw track. */
+.yar-horizontal-track{
+  width:500vw!important;
+  flex:none!important;
+}
+.yar-horizontal-panel{
+  flex:0 0 100vw!important;
+  width:100vw!important;
+  min-width:100vw!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2468,13 +2484,13 @@ let yarHorizontalIndex=0;
 function yarSlide(index){
   const el=document.getElementById('yarHorizontalPages');
   if(!el)return;
-  const total=el.children.length;
+  const panels=el.querySelectorAll('.yar-horizontal-panel');
+  const total=panels.length;
   const i=Math.max(0,Math.min(Number(index)||0,total-1));
   yarHorizontalIndex=i;
-  const track=el.querySelector('.yar-horizontal-track')||el;
-  if(track!==el) track.style.transform=`translate3d(${-i*100}%,0,0)`;
-  else el.scrollTo({left:i*el.clientWidth,behavior:'smooth'});
-  el.querySelectorAll('.yar-horizontal-panel').forEach((p,n)=>p.setAttribute('aria-hidden',n===i?'false':'true'));
+  const track=el.querySelector('.yar-horizontal-track');
+  if(track) track.style.transform=`translate3d(${-i*(100/total)}%,0,0)`;
+  panels.forEach((p,n)=>p.setAttribute('aria-hidden',n===i?'false':'true'));
 }
 function yarBindHorizontal(){
   const el=document.getElementById('yarHorizontalPages');
