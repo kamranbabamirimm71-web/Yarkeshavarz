@@ -544,7 +544,8 @@
 
     if (
       landId &&
-      window.state
+      window.state &&
+      Array.isArray(window.state.lands)
     ) {
 
       const land =
@@ -1857,6 +1858,7 @@
     if (
       window.measureReturn === 'land' &&
       window.state &&
+      Array.isArray(window.state.lands) &&
       window.selected
     ) {
 
