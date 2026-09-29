@@ -1037,6 +1037,150 @@ main, #app { background:transparent !important; }
 }
 </style>
 
+
+<style id="yar-v52-detail-shell">
+/* V52: صفحه جزئیات از پوسته قدیمی yar-final جدا می‌شود.
+   پوسته قدیمی چند بار position:fixed/absolute را روی کل صفحه اعمال می‌کرد
+   و نتیجه‌اش ناپدید شدن کارت‌های مرحله ۲ بود. */
+.yar-detail-shell{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  max-width:760px!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0 auto!important;
+  padding:0 8px 120px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  background:transparent!important;
+  color:#17362a!important;
+  z-index:20!important;
+}
+.yar-detail-shell .yarpro-head{
+  position:sticky!important;
+  top:0!important;
+  left:auto!important;
+  right:auto!important;
+  z-index:1000!important;
+  width:100%!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  background:rgba(255,255,255,.97)!important;
+}
+.yar-detail-shell .yar-detail-content{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+  visibility:visible!important;
+  opacity:1!important;
+  z-index:30!important;
+}
+.yar-detail-shell .yar-detail-content > *{
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin-top:10px!important;
+  margin-bottom:10px!important;
+  box-sizing:border-box!important;
+  visibility:visible!important;
+  opacity:1!important;
+  transform:none!important;
+  float:none!important;
+  clear:both!important;
+  overflow:visible!important;
+  z-index:31!important;
+}
+.yar-detail-shell .yar-detail-content > .yar-page-step{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  background:rgba(238,250,245,.97)!important;
+  z-index:32!important;
+}
+.yar-detail-shell .yar-detail-content .yar-flow-card,
+.yar-detail-shell .yar-detail-content .yar-legacy-section{
+  background:rgba(255,255,255,.97)!important;
+  border:1px solid #dce9e1!important;
+  box-shadow:0 8px 24px rgba(18,70,48,.10)!important;
+  border-radius:22px!important;
+}
+.yar-detail-shell .yar-detail-content .yar-legacy-section{
+  border-radius:26px!important;
+}
+.yar-detail-shell .yar-chat-section{
+  position:relative!important;
+  display:block!important;
+  padding-bottom:20px!important;
+}
+.yar-detail-shell .yar-chat-section .yarpro-chat{
+  position:relative!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  width:100%!important;
+  height:280px!important;
+  min-height:220px!important;
+  max-height:45vh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  box-sizing:border-box!important;
+  margin:10px 0 0!important;
+  background:#f7faf8!important;
+}
+.yar-detail-shell .yar-chat-section .yarpro-form.yar-final-form{
+  position:relative!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  width:100%!important;
+  height:62px!important;
+  min-height:62px!important;
+  max-height:62px!important;
+  margin:9px 0 0!important;
+  z-index:40!important;
+}
+.yar-detail-shell .yar-final-tools{
+  position:relative!important;
+  display:flex!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:70px!important;
+  margin:8px 0 0!important;
+  z-index:40!important;
+}
+html:has(.yar-detail-shell),
+body:has(.yar-detail-shell){
+  height:auto!important;
+  min-height:100%!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+body:has(.yar-detail-shell) #app{
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+  background:transparent!important;
+}
+@media(max-width:620px){
+  .yar-detail-shell{
+    max-width:none!important;
+    padding:0 7px 110px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2055,7 +2199,7 @@ function yar(){
       <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="درباره همین زمین و محصول سؤال کن…"><button type="submit" class="yarpro-send">➤</button></form>
       <div class="yar-final-tools"><button type="button" onclick="yarAnalyzeLand('${l.id}')"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div>
     </section>`;
-  app.innerHTML=`<section class="yarpro yar-final yar-real-page ${crop&&yarProductPage==='detail'?'yar-product-detail-page':'yar-product-select-page'}">
+  app.innerHTML=`<section class="yarpro yar-real-page ${crop&&yarProductPage==='detail'?'yar-detail-shell':'yar-final yar-product-select-page'}">
     <header class="yarpro-head">
       <button type="button" class="yarpro-switch" data-yar-route="home">✕</button>
       <div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>زمین «${esc(l.name)}» · ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div></div>
