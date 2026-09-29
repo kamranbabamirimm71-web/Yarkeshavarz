@@ -1804,6 +1804,112 @@ body:has(.yar-detail-shell) #app{
 }
 </style>
 
+
+<style id="yar-v60-equal-page-frame">
+/* V60: one product-change control only; the second control becomes product intro.
+   All four sheets share the exact same top-to-navigation frame. */
+.yar-legacy-scenario-head{
+  gap:8px!important;
+}
+.yar-short-product-intro{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  text-align:right!important;
+  padding:4px 2px!important;
+}
+.yar-short-product-intro span{
+  color:#17664b!important;
+  font-weight:800!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+}
+.yar-short-product-intro small{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+  overflow:hidden!important;
+  color:#687a73!important;
+  font-size:10px!important;
+  line-height:1.5!important;
+  margin-top:2px!important;
+}
+
+/* Same frame on all four pages: identical top offset, content window,
+   and fixed previous/next bar. */
+.yar-horizontal-panel{
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:100dvh!important;
+  box-sizing:border-box!important;
+  padding:84px 10px 78px!important;
+  overflow:hidden!important;
+  position:relative!important;
+}
+.yar-horizontal-panel .yar-page-step{
+  flex:0 0 42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  max-height:42px!important;
+  margin:0 0 7px!important;
+  padding:7px 12px!important;
+  box-sizing:border-box!important;
+}
+.yar-horizontal-panel .yar-panel-nav{
+  position:absolute!important;
+  left:12px!important;
+  right:12px!important;
+  bottom:max(10px,env(safe-area-inset-bottom))!important;
+  width:auto!important;
+  height:52px!important;
+  min-height:52px!important;
+  max-height:52px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+
+/* Each page gets the same content-height window above the navigation.
+   Page 1 keeps its product summary compact and gives the rest to its
+   main program card. Pages 2–4 use the full remaining window. */
+.yar-horizontal-panel:not(.yar-page-one) > .yar-legacy-section,
+.yar-horizontal-panel:not(.yar-page-one) > .yar-flow-card{
+  height:calc(100dvh - 84px - 42px - 7px - 78px)!important;
+  max-height:calc(100dvh - 84px - 42px - 7px - 78px)!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  margin:0!important;
+}
+.yar-horizontal-panel.yar-page-one > .yar-flow-card:first-of-type{
+  flex:0 0 auto!important;
+}
+.yar-horizontal-panel.yar-page-one > .yar-legacy-section{
+  height:calc(100dvh - 84px - 42px - 7px - 78px - 132px)!important;
+  max-height:calc(100dvh - 84px - 42px - 7px - 78px - 132px)!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  margin:0!important;
+}
+.yar-horizontal-panel.yar-page-one > .yar-swipe-hint{
+  display:none!important;
+}
+
+/* Keep the internal grids compact instead of creating different page heights. */
+.yar-horizontal-panel .yar-legacy-guide-grid{
+  max-height:100%!important;
+  overflow:hidden!important;
+}
+.yar-horizontal-panel .yar-legacy-scenario-grid,
+.yar-horizontal-panel .yar-auto-grid,
+.yar-horizontal-panel .yar-auto-economy{
+  overflow:hidden!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2834,7 +2940,7 @@ function yar(){
     ['🌾','برداشت',profile?.harvest||'برداشت بر اساس رسیدگی محصول، کیفیت هدف و شرایط بازار برنامه‌ریزی شود.']
   ];
   const guideSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>راهنمای مدیریت محصول</b><small>${crop?`راهنمای «${esc(crop)}»`:'ابتدا محصول را انتخاب کن تا راهنما اختصاصی شود.'}</small></div><div class="yar-legacy-guide-grid">${guideItems.map(x=>`<article class="yar-legacy-guide-card"><h3>${x[0]} ${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`).join('')}</div></section>`:'';
-  const scenarioSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>برنامه کشت خودکار</b><small>بر اساس محصول، مساحت و منطقه ثبت‌شده</small></div><div class="yar-legacy-scenario-head"><div><span>🌱 محصول</span><b>${esc(crop||'هنوز انتخاب نشده')}</b></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر</button></div><div class="yar-legacy-scenario-grid"><div><b>🌾 بذر تقریبی</b><span>${esc(auto.seed)}</span></div><div><b>📅 کاشت</b><span>${esc(auto.planting)}</span></div><div><b>📅 برداشت</b><span>${esc(auto.harvest)}</span></div><div><b>💧 آبیاری</b><span>${esc(auto.irrigation)}</span></div><div><b>📐 متراژ</b><span>${areaM2.toLocaleString('fa-IR')} مترمربع</span></div><div><b>📈 سود تقریبی</b><span>${auto.profit}</span></div></div></section>`:'';
+  const scenarioSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>برنامه کشت خودکار</b><small>بر اساس محصول، مساحت و منطقه ثبت‌شده</small></div><div class="yar-legacy-scenario-head"><div><span>🌱 محصول</span><b>${esc(crop||'هنوز انتخاب نشده')}</b></div><div class="yar-short-product-intro"><span>📘 معرفی کوتاه محصول</span><small>${esc(cropDescription)}</small></div></div><div class="yar-legacy-scenario-grid"><div><b>🌾 بذر تقریبی</b><span>${esc(auto.seed)}</span></div><div><b>📅 کاشت</b><span>${esc(auto.planting)}</span></div><div><b>📅 برداشت</b><span>${esc(auto.harvest)}</span></div><div><b>💧 آبیاری</b><span>${esc(auto.irrigation)}</span></div><div><b>📐 متراژ</b><span>${areaM2.toLocaleString('fa-IR')} مترمربع</span></div><div><b>📈 سود تقریبی</b><span>${auto.profit}</span></div></div></section>`:'';
   const areaSummary=l?`<div class="yar-legacy-area-strip"><span>📐 متراژ زمین</span><b>${areaM2.toLocaleString('fa-IR')} مترمربع</b><span>🌾 ${areaHa.toLocaleString('fa-IR')} هکتار</span><span>📶 حالت: ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div>`:'';
 
   // صفحه اول کشاورزیار فقط برای انتخاب حالت و زمین است؛ چت بعد از انتخاب زمین باز می‌شود.
