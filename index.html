@@ -1804,6 +1804,59 @@ body:has(.yar-detail-shell) #app{
 }
 </style>
 
+
+<style id="yar-v72-content-frame">
+/* V72: محتوای هر صفحه دقیقاً بین هدرِ ضربدر و نوار قبلی/بعدی قرار می‌گیرد. */
+.yar-detail-shell .yar-detail-content{
+  position:absolute!important;
+  left:0!important; right:0!important;
+  top:76px!important;
+  bottom:70px!important;
+  width:100vw!important;
+  height:auto!important;
+  margin:0!important; padding:0!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+.yar-horizontal-pages{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+.yar-horizontal-track{
+  width:400vw!important;
+  height:100%!important;
+}
+.yar-horizontal-panel{
+  width:100vw!important;
+  min-width:100vw!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:8px 10px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.yar-horizontal-panel.yar-page-one{
+  padding:8px 10px!important;
+}
+.yar-horizontal-panel .yar-panel-nav{
+  position:fixed!important;
+  left:12px!important; right:12px!important;
+  bottom:max(8px,env(safe-area-inset-bottom))!important;
+  height:52px!important;
+  min-height:52px!important;
+  z-index:10001!important;
+}
+@media(max-width:600px){
+  .yar-detail-shell .yar-detail-content{top:76px!important;bottom:68px!important}
+  .yar-horizontal-panel,.yar-horizontal-panel.yar-page-one{padding:6px 8px!important}
+}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
