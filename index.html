@@ -322,6 +322,8 @@ main{position:relative}
 .yar-final-tools button b{font-size:9px!important;white-space:nowrap!important}
 .yar-final .yarpro-chat{height:calc(100dvh - 190px)!important;min-height:0!important;max-height:none!important}
 .yar-final .yarpro-form{margin-top:8px!important}
+
+.yar-page-step{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;padding:10px 12px;border-radius:14px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);font-size:13px}.yar-page-step b{color:#0f766e}.yar-page-step span{color:#475569}
 </style>
 <style id="yar-v3-modern-overrides">:root{--g:#0b4f38;--g2:#16825a;--ink:#102f25;--muted:#71847b;--bg:#eef4f0;--line:#dce8e1;--shadow:0 14px 38px rgba(13,55,40,.09)}html{background:var(--bg)}body{background:radial-gradient(circle at 100% 0%,rgba(45,151,103,.09),transparent 28%),linear-gradient(180deg,#f7faf8,var(--bg));color:var(--ink)}.top{height:70px;background:rgba(7,57,42,.94);backdrop-filter:blur(18px);box-shadow:0 8px 30px rgba(3,35,25,.18)}main{max-width:760px;padding:15px 12px 108px}.card{border-color:rgba(214,229,220,.9);border-radius:20px;box-shadow:var(--shadow)}.primary{background:linear-gradient(135deg,var(--g),var(--g2));box-shadow:0 8px 18px rgba(11,79,56,.18)}.secondary{background:#eaf4ee;color:var(--g);border:1px solid #d7e8de}.field input,.field select,.field textarea{border-color:#d6e4dc;background:#fbfdfc;border-radius:14px;padding:12px}.field input:focus,.field select:focus,.field textarea:focus{border-color:#56a985;box-shadow:0 0 0 3px rgba(46,145,100,.1)}.hero{min-height:285px;border-radius:28px;background-position:center;background-size:cover;box-shadow:0 18px 50px rgba(11,58,42,.18)}.hero h1{font-size:31px}.grid{gap:9px}.quick{gap:9px}.quick button{min-height:94px;border-radius:20px;box-shadow:0 9px 25px rgba(13,55,40,.06)}.section{margin:22px 2px 11px}.section h2,.section h3{font-size:19px}.land-card{padding:15px}.land-card h3{font-size:16px}.tabs{scrollbar-width:none}.tabs button{border-color:#dbe7e0;background:#fff}.tabs button.active{background:linear-gradient(135deg,var(--g),var(--g2));box-shadow:0 7px 16px rgba(11,79,56,.16)}.bottom{height:78px;background:rgba(255,255,255,.91);border-top:1px solid #dbe6e0;box-shadow:0 -10px 35px rgba(16,49,37,.08);backdrop-filter:blur(18px)}.bottom button.active{color:var(--g2)}.weather-now{border-radius:23px;background:linear-gradient(145deg,#0a4b36,#1e7d59)}.calc-total{border-radius:22px}.home-weather,.weather-mini{border-radius:20px}.yar-land-entry{border-radius:22px!important}.yar41-head,.yar41-field,.yar41-form{border-radius:20px!important}.yar41-tools button{border-radius:16px!important;box-shadow:0 8px 22px rgba(13,55,40,.06)!important}@media(max-width:460px){main{padding-left:9px;padding-right:9px}.hero{min-height:260px}.quick{grid-template-columns:1fr 1fr}} </style><style id="land-thumb-modern">.land-title-row{align-items:center;gap:10px}.land-title-wrap{display:flex;align-items:center;gap:10px;min-width:0}.land-title-text{min-width:0}.land-title-text h3{margin:0 0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.land-thumb{width:82px;height:58px;flex:0 0 82px;border-radius:15px;overflow:hidden;background:#f2f8f4;border:1px solid rgba(207,226,216,.95);box-shadow:0 7px 16px rgba(13,55,40,.08)}.land-thumb svg{display:block;width:100%;height:100%}.land-title-row>b{white-space:nowrap;font-size:13px}@media(max-width:390px){.land-thumb{width:72px;flex-basis:72px;height:52px}.land-title-row>b{font-size:12px}} 
 /* ===== KESHAVAR-YAR PRO V2 UI ===== */
@@ -1561,7 +1563,9 @@ function yarQuickAnalysis(id){
   const t=c.t, notes=[];
   if(!l.crop)notes.push('🌱 محصول این قطعه ثبت نشده؛ مرحله رشد قابل ارزیابی دقیق نیست.');
   else notes.push(`🌱 محصول ثبت‌شده: ${l.crop}.`);
-  notes.push(`📐 مساحت: ${yarNum(l.area)} هکتار.`);
+  const measuredM2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);
+  const measuredHa=measuredM2>0?measuredM2/10000:Number(l.measurement?.hectare||l.area||0);
+  notes.push(`📐 مساحت: ${yarNum(measuredHa)} هکتار${measuredM2>0?` (${yarNum(measuredM2)} مترمربع)`:''}.`);
   notes.push(`💰 هزینه: ${yarMoney(t.cost)} | درآمد: ${yarMoney(t.income)} | سود ثبت‌شده: ${yarMoney(t.profit)}.`);
   notes.push(l.water?`💧 منبع آب: ${l.water}.`:'💧 منبع آب ثبت نشده است.');
   notes.push(l.irrigation?`🚿 آبیاری: ${l.irrigation}.`:'🚿 روش آبیاری ثبت نشده است.');
@@ -1653,6 +1657,7 @@ function yarPriorityPlan(id){
 
 let yarCropRegistry=null, yarCropProfile=null, yarCalc={};
 let yarCropCategory='همه';
+let yarProductPage='select';
 const YAR_CROP_KEY='yk-yar-selected-crop-v2';
 async function yarLoadCropProfile(name){
   const crop=String(name||'').trim();
@@ -1687,6 +1692,7 @@ function yarSetCrop(v){
   yarSaveSelectedCrop(l.id,crop);
   if(crop){l.crop=crop;if(!l.activeCultivationId)l.activeCultivationId=uid();if(l.cultivationStatus!=='archived')l.cultivationStatus='active';save();}
   yarCalc={};yarCropProfile=null;
+  yarProductPage=crop?'detail':'select';
   if(crop)yarLoadCropProfile(crop).finally(()=>yar());else yar();
 }
 /* IMPORTANT: selected is only the chosen land on the entry screen; yarLandMode means the user pressed Online/Offline and opened it. */
@@ -1697,6 +1703,7 @@ function yarOpenLand(id){
   selected=l.id;
   localStorage.setItem('yk-last-land',String(l.id));
   yarCalc={};yarCropProfile=null;
+  yarProductPage='select';
   yarLandMode=false;
   route='yar';
   yar();
@@ -1718,6 +1725,7 @@ function yarSelectLand(id){
   selected=l.id;
   localStorage.setItem('yk-last-land',String(l.id));
   yarCalc={};yarCropProfile=null;
+  yarProductPage='select';
   yarLandMode=false;
   route='yar';
   yar();
@@ -1734,6 +1742,8 @@ function yarSetMode(mode){
     return;
   }
   yarMode=mode==='online'?'online':'offline';
+  yarProductPage='select';
+  yarCropCategory='همه';
   localStorage.setItem('yk-yar-mode',yarMode);
   localStorage.setItem('yk-last-land',String(l.id));
   yarLandMode=true;
@@ -1741,6 +1751,7 @@ function yarSetMode(mode){
   yar();
 }
 
+function yarChangeProduct(){yarProductPage='select';yarCropCategory='همه';yar();}
 function yarRegisteredProducts(l){
   const own=yarLandProducts(l);return own.length?own:yarAllProducts();
 }
@@ -1814,13 +1825,9 @@ function yar(){
     document.querySelectorAll('[data-yar-route]').forEach(b=>b.onclick=()=>go(b.dataset.yarRoute));
     return;
   }
-  app.innerHTML=`<section class="yarpro yar-final yar-real-page">
-    <header class="yarpro-head">
-      <button type="button" class="yarpro-switch" data-yar-route="home">✕</button>
-      <div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>زمین «${esc(l.name)}» · ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div></div>
-      <button class="yarpro-switch" data-yar-clear-land>تغییر</button>
-    </header>
-    ${landSelected}${areaSummary}${guideSection}${scenarioSection}${productSection}${cultivationSection}${calcSection}
+  const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(yarCropRegistry?.[crop]?.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div></section>`;
+  const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
+  const detailPage=`<div class="yar-page-step"><b>مرحله ۲ از ۲</b><span>برنامه کشت و مدیریت محصول</span></div>${landSelected}${areaSummary}${productSummary}${scenarioSection}${guideSection}${cultivationSection}${calcSection}
     <section class="yar-flow-card yar-chat-section">
       <div class="yar-section-head"><div><b>💬 گفت‌وگوی کشاورزیار</b><small>مشاور کشت برای زمین «${esc(l.name)}»${crop?' · '+esc(crop):''}</small></div><button type="button" class="secondary" onclick="yarClear()">پاک‌کردن گفتگو</button></div>
       <div id="yarChat" class="yarpro-chat"></div>
@@ -1829,7 +1836,14 @@ function yar(){
       <div id="yarPhotoPreview" class="yar-photo-preview" style="display:none"><img id="yarPhotoPreviewImg" alt="پیش‌نمایش عکس"><button type="button" onclick="yarRemovePhoto()">×</button></div>
       <form class="yarpro-form yar-final-form" onsubmit="event.preventDefault();yarSend()"><button type="button" class="yarpro-type" onclick="yarFocusInput()">⌨️</button><button type="button" class="yarpro-camera" onclick="yarPickCamera()">📷</button><input id="yarInput" autocomplete="off" placeholder="درباره همین زمین و محصول سؤال کن…"><button type="submit" class="yarpro-send">➤</button></form>
       <div class="yar-final-tools"><button type="button" onclick="yarAnalyzeLand('${l.id}')"><span>🌾</span><b>تحلیل زمین</b></button><button type="button" onclick="yarAsk('برای این محصول چه توصیه‌ای داری؟')"><span>🌱</span><b>مشاور کشت</b></button><button type="button" onclick="yarAsk('وضعیت آب و آبیاری را بررسی کن')"><span>💧</span><b>آب و آبیاری</b></button><button type="button" onclick="yarAsk('تغذیه و کوددهی را بررسی کن')"><span>🧪</span><b>تغذیه</b></button></div>
-    </section>
+    </section>`;
+  app.innerHTML=`<section class="yarpro yar-final yar-real-page">
+    <header class="yarpro-head">
+      <button type="button" class="yarpro-switch" data-yar-route="home">✕</button>
+      <div class="yarpro-brand"><div class="yarpro-avatar">✦</div><div><h2>کشاورزیار</h2><span>زمین «${esc(l.name)}» · ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div></div>
+      <button class="yarpro-switch" data-yar-clear-land>تغییر</button>
+    </header>
+    ${crop&&yarProductPage==='detail'?detailPage:selectPage}
   </section>`;
   document.getElementById('yarCropSelect')?.addEventListener('change',e=>yarSetCrop(e.target.value));
   document.querySelectorAll('[data-yar-crop]').forEach(b=>b.onclick=()=>yarSetCrop(b.dataset.yarCrop));

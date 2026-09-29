@@ -1,4 +1,4 @@
-const CACHE='yar-keshavarz-shell-v39';
+const CACHE='yar-keshavarz-shell-v41';
 const CORE=[
   './','./index.html','./offline/offline-ai.js','./offline/agriculture-db.js',
   './offline/agriculture-db-extended.js','./offline/calculators.js',
@@ -15,7 +15,7 @@ const CORE=[
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE).catch(()=>{})).then(()=>self.skipWaiting()))
 });
-/* v34-cleanup */
+/* v41-flow-cleanup */
 self.addEventListener('activate',e=>{
   e.waitUntil(caches.keys().then(keys=>Promise.all(
     keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))
