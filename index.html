@@ -2950,62 +2950,42 @@ function yarLandEconomy(l){
 }
 
 function yarAutoEstimate(l,crop,profile,areaHa){
-  const name=String(crop||'');
+  const name=String(crop||'').trim();
   const cat=String((yarCropRegistry?.[name]?.label)||profile?.category||'').trim();
   const text=(name+' '+cat).toLowerCase();
-  let cost=[20,35], income=[35,55], irr=[7,10], plant='اوایل مهر تا اواسط مهر', harvest='اواخر خرداد تا اواسط تیر', seed='۱۵۰ تا ۲۲۰ کیلوگرم';
-  if(/حبوبات|نخود|عدس|لوبیا|لپه|ماش|بادام زمینی/.test(text)){cost=[18,32];income=[30,52];irr=[4,7];plant='اواسط مهر تا اوایل آبان';harvest='اواخر اردیبهشت تا اواسط خرداد';seed='۸۰ تا ۱۶۰ کیلوگرم'}
-  if(/دانه‌های روغنی|کلزا|آفتابگردان|کنجد|سویا/.test(text)){cost=[25,42];income=[45,72];irr=[5,8];plant='اواخر شهریور تا اواسط مهر';harvest='اواخر خرداد تا تیر';seed='۵ تا ۱۵ کیلوگرم'}
-  if(/سبزی و صیفی|سیب‌زمینی|پیاز|گوجه|خیار|فلفل|کاهو/.test(text)){cost=[55,95];income=[90,170];irr=[12,20];plant='بسته به محصول: اوایل بهار تا اواخر تابستان';harvest='حدود ۲ تا ۵ ماه پس از کاشت';seed='مقدار بذر/نشا وابسته به محصول'}
-  if(/میوه‌ها و باغی|باغ|انگور|سیب|هلو|زردآلو|انار|پسته/.test(text)){cost=[70,130];income=[130,260];irr=[8,15];plant='اواخر زمستان تا اوایل بهار';harvest='تابستان تا اوایل پاییز';seed='برای باغ، تعداد نهال بر پایه فاصله کاشت'}
-  if(/خشکبار و مغزها|بادام|گردو|فندق|گردو|پسته/.test(text)){cost=[80,150];income=[150,300];irr=[8,16];plant='اواخر زمستان تا اوایل بهار';harvest='اواخر تابستان تا پاییز';seed='تعداد نهال بر پایه فاصله کاشت'}
-  if(/گرمسیری|خرما|موز|مرکبات/.test(text)){cost=[90,170];income=[170,340];irr=[12,24];plant='اواخر زمستان تا بهار';harvest='تابستان تا پاییز';seed='تعداد نهال/درخت بر پایه فاصله کاشت'}
-  if(/علوفه‌ای|یونجه|شبدر/.test(text)){cost=[22,38];income=[35,65];irr=[8,14];plant='اوایل بهار یا پاییز، بسته به محصول';harvest='چند چین در فصل رشد';seed='۱۵ تا ۳۰ کیلوگرم'}
-  if(/صنعتی|چغندر|پنبه|نیشکر/.test(text)){cost=[35,65];income=[60,120];irr=[8,14];plant='بسته به محصول و دمای منطقه';harvest='تابستان تا پاییز';seed='بر اساس نوع محصول'}
-  // Region is intentionally only used as context label; exact weather data is not assumed.
+  let cost=[20,35], income=[35,55], irr=[7,10], plant='اوایل مهر تا اواسط مهر', harvest='اواخر خرداد تا اواسط تیر';
+  if(/حبوبات|نخود|عدس|لوبیا|لپه|ماش|بادام زمینی/.test(text)){cost=[18,32];income=[30,52];irr=[4,7];plant='اواسط مهر تا اوایل آبان';harvest='اواخر اردیبهشت تا اواسط خرداد'}
+  if(/دانه‌های روغنی|کلزا|آفتابگردان|کنجد|سویا/.test(text)){cost=[25,42];income=[45,72];irr=[5,8];plant='اواخر شهریور تا اواسط مهر';harvest='اواخر خرداد تا تیر'}
+  if(/سبزی و صیفی|سیب‌زمینی|سیب زمینی|پیاز|گوجه|خیار|فلفل|کاهو/.test(text)){cost=[55,95];income=[90,170];irr=[12,20];plant='بسته به محصول: اوایل بهار تا اواخر تابستان';harvest='حدود ۲ تا ۵ ماه پس از کاشت'}
+  if(/میوه‌ها و باغی|باغ|انگور|سیب|هلو|زردآلو|انار|پسته/.test(text)){cost=[70,130];income=[130,260];irr=[8,15];plant='اواخر زمستان تا اوایل بهار';harvest='تابستان تا اوایل پاییز'}
+  if(/خشکبار و مغزها|بادام|گردو|فندق|پسته/.test(text)){cost=[80,150];income=[150,300];irr=[8,16];plant='اواخر زمستان تا اوایل بهار';harvest='اواخر تابستان تا پاییز'}
+  if(/گرمسیری|خرما|موز|مرکبات/.test(text)){cost=[90,170];income=[170,340];irr=[12,24];plant='اواخر زمستان تا بهار';harvest='تابستان تا پاییز'}
+  if(/علوفه‌ای|یونجه|شبدر/.test(text)){cost=[22,38];income=[35,65];irr=[8,14];plant='اوایل بهار یا پاییز، بسته به محصول';harvest='چند چین در فصل رشد'}
+  if(/صنعتی|چغندر|پنبه|نیشکر/.test(text)){cost=[35,65];income=[60,120];irr=[8,14];plant='بسته به محصول و دمای منطقه';harvest='تابستان تا پاییز'}
   const scale=Math.max(0,Number(areaHa)||0);
   const range=(r)=>`${money(r[0]*scale*1000000)} تا ${money(r[1]*scale*1000000)}`;
   const profit=[Math.max(0,income[0]-cost[1]),Math.max(0,income[1]-cost[0])];
-  let seedPerHa=seed, seedLand='';
-  // برای محصولات باغی که بذر کیلویی ندارند، یک تراکم پایه روشن ارائه می‌کنیم تا مقدار زمین هم عدد مشخص داشته باشد.
-  let hasTreeEstimate=false;
-  if(!/([0-9۰-۹]+)\s*تا\s*([0-9۰-۹]+)\s*کیلوگرم/.test(String(seed)) && scale>0){
-    let treesPerHa=null, spacing='';
-    if(/سیب/.test(name)) {treesPerHa=400; spacing='فاصله پایه ۵×۵ متر'}
-    else if(/بادام/.test(name)) {treesPerHa=278; spacing='فاصله پایه ۶×۶ متر'}
-    else if(/گردو/.test(name)) {treesPerHa=204; spacing='فاصله پایه ۷×۷ متر'}
-    else if(/پسته/.test(name)) {treesPerHa=278; spacing='فاصله پایه ۶×۶ متر'}
-    else if(/انار|هلو|زردآلو|گیلاس|آلبالو|گلابی/.test(name)) {treesPerHa=400; spacing='فاصله پایه ۵×۵ متر'}
-    if(treesPerHa){
-      const totalTrees=Math.round(treesPerHa*scale);
-      seedPerHa=`${treesPerHa.toLocaleString('fa-IR')} نهال در هکتار`;
-      seedLand=`حدود ${totalTrees.toLocaleString('fa-IR')} نهال برای این زمین (${spacing})`;
-      hasTreeEstimate=true;
-    }
-  }
-  const seedMatch=String(seedPerHa).match(/([0-9۰-۹]+)\s*تا\s*([0-9۰-۹]+)\s*کیلوگرم/);
-  if(seedMatch){
-    const faToEn=v=>String(v).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-    const lo=Number(faToEn(seedMatch[1])), hi=Number(faToEn(seedMatch[2]));
-    const loLand=lo*scale, hiLand=hi*scale;
-    seedPerHa=`${lo.toLocaleString('fa-IR')} تا ${hi.toLocaleString('fa-IR')} کیلوگرم در هکتار`;
-    seedLand=`${loLand.toLocaleString('fa-IR',{maximumFractionDigits:1})} تا ${hiLand.toLocaleString('fa-IR',{maximumFractionDigits:1})} کیلوگرم برای این زمین (${scale.toLocaleString('fa-IR',{maximumFractionDigits:2})} هکتار)`;
-  } else if(seed && !hasTreeEstimate){
-    seedPerHa=seed;
-    seedLand=`مقدار دقیق برای این زمین به فاصله کاشت/نوع محصول وابسته است.`;
-  }
-  const costTotalLo=cost[0]*scale*1000000, costTotalHi=cost[1]*scale*1000000;
-  const costParts=[
-    ['🌾 بذر',.12],['🧪 کود و تغذیه',.20],['🐛 سم و کنترل آفات',.10],
-    ['💧 آب و آبیاری',.12],['🚜 ادوات و ماشین‌آلات',.26],['👨‍🌾 کارگر',.15],['📦 سایر هزینه‌ها',.05]
-  ];
-  const costBreakdown=costParts.map(([label,p])=>({label,amount:money(costTotalLo*p)+' تا '+money(costTotalHi*p)}));
-  return {
-    cost:range(cost), income:range(income), profit:range(profit), costBreakdown,
-    irrigation:`${irr[0].toLocaleString('fa-IR')} تا ${irr[1].toLocaleString('fa-IR')} نوبت`,
-    planting:plant, harvest, seed:seedPerHa, seedPerHa, seedLand,
-    note:`این اعداد برای «${esc(l?.region||'منطقه ثبت‌شده')}» تقریبی‌اند و با آب‌وهوا، رقم، قیمت نهاده و بازار تغییر می‌کنند.`
+  const seedRates={
+    'گندم':[180,220,'کیلوگرم'],'جو':[160,200,'کیلوگرم'],'ذرت':[20,30,'کیلوگرم'],'برنج':[60,80,'کیلوگرم'],
+    'نخود':[120,180,'کیلوگرم'],'عدس':[60,90,'کیلوگرم'],'لوبیا':[80,120,'کیلوگرم'],'باقلا':[150,220,'کیلوگرم'],'ماش':[15,25,'کیلوگرم'],
+    'کلزا':[5,8,'کیلوگرم'],'سویا':[60,80,'کیلوگرم'],'آفتابگردان':[4,7,'کیلوگرم'],'کنجد':[3,5,'کیلوگرم'],
+    'سیب زمینی':[1800,2500,'کیلوگرم غده بذری'],'سیب‌زمینی':[1800,2500,'کیلوگرم غده بذری'],'پیاز':[4,6,'کیلوگرم بذر'],
+    'گوجه فرنگی':[0.15,0.30,'کیلوگرم بذر'],'خیار':[1.5,2.5,'کیلوگرم بذر'],'فلفل':[0.10,0.20,'کیلوگرم بذر'],
+    'بادمجان':[0.20,0.40,'کیلوگرم بذر'],'کاهو':[0.20,0.50,'کیلوگرم بذر'],'هویج':[2,4,'کیلوگرم بذر'],'سیر':[800,1200,'کیلوگرم حبه بذری'],
+    'یونجه':[15,25,'کیلوگرم'],'شبدر':[15,25,'کیلوگرم'],'پنبه':[15,25,'کیلوگرم']
   };
+  const treeDensity={'سیب':[400,600],'گلابی':[400,600],'هلو':[500,700],'شلیل':[500,700],'زردآلو':[300,500],'گیلاس':[400,600],'آلبالو':[400,600],'آلو':[400,600],'انگور':[1200,2500],'انار':[400,700],'انجیر':[250,400],'خرمالو':[400,600],'بادام':[250,400],'گردو':[100,180],'فندق':[500,800],'پسته':[200,300],'پرتقال':[300,500],'نارنگی':[300,500],'لیمو':[300,500],'زیتون':[200,300]};
+  let seedPerHa='',seedLand='',seedUnit='';
+  const exact=seedRates[name];
+  if(exact){const [lo,hi,unit]=exact;seedPerHa=`${lo.toLocaleString('fa-IR')} تا ${hi.toLocaleString('fa-IR')} ${unit} در هکتار`;seedLand=`${(lo*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(hi*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} ${unit} برای این زمین`;seedUnit=unit;}
+  else if(treeDensity[name]||/میوه‌ها و باغی|خشکبار و مغزها|باغ/.test(text)){const [lo,hi]=treeDensity[name]||[400,700];seedPerHa=`حدود ${lo.toLocaleString('fa-IR')} تا ${hi.toLocaleString('fa-IR')} نهال در هکتار`;seedLand=`حدود ${(lo*scale).toLocaleString('fa-IR',{maximumFractionDigits:0})} تا ${(hi*scale).toLocaleString('fa-IR',{maximumFractionDigits:0})} اصله نهال برای این زمین`;seedUnit='اصله نهال';}
+  else if(/دانه‌های روغنی/.test(text)){seedPerHa='حدود ۵ تا ۱۵ کیلوگرم در هکتار';seedLand=`حدود ${(5*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(15*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  else if(/حبوبات/.test(text)){seedPerHa='حدود ۸۰ تا ۱۶۰ کیلوگرم در هکتار';seedLand=`حدود ${(80*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(160*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  else if(/علوفه‌ای/.test(text)){seedPerHa='حدود ۱۵ تا ۳۰ کیلوگرم در هکتار';seedLand=`حدود ${(15*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(30*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  else{seedPerHa='برآورد اولیه: ۵۰ تا ۱۰۰ کیلوگرم در هکتار';seedLand=`حدود ${(50*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(100*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  const costParts={'بذر / نهال':[0.12,'🌱'],'کود و تغذیه':[0.18,'🧪'],'سم و حفاظت':[0.10,'🧴'],'آب و آبیاری':[0.12,'💧'],'ادوات و ماشین‌آلات':[0.18,'🚜'],'کارگر':[0.22,'👷'],'سایر':[0.08,'📌']};
+  const costBreakdown=Object.fromEntries(Object.entries(costParts).map(([label,[share,icon]])=>[label,{icon,low:cost[0]*scale*1000000*share,high:cost[1]*scale*1000000*share,share}]));
+  return {cost:range(cost),income:range(income),profit:range(profit),irrigation:`${irr[0].toLocaleString('fa-IR')} تا ${irr[1].toLocaleString('fa-IR')} نوبت`,planting:plant,harvest,seed:seedPerHa,seedPerHa,seedLand,seedUnit,costBreakdown,note:`این اعداد برآورد اولیه‌اند و برای تصمیم نهایی باید رقم، منطقه، قیمت روز نهاده و شرایط واقعی مزرعه بررسی شود.`};
 }
 function yar(){
   if(!yarLandMode){
@@ -3055,7 +3035,7 @@ function yar(){
   const cIncomeRows=l?cTx.filter(x=>x.type==='income').slice().reverse().map(x=>`<div class="yar-ledger-row"><div><b>💵 ${esc(x.note||'فروش محصول')}</b><small>${x.date?jalaliDate(x.date):''}</small></div><strong>${money(x.amount)}</strong></div>`).join(''):'';
   const auto=yarAutoEstimate(l,crop,profile,areaHa);
   const cultivationDetail=`<div class="yar-auto-grid">
-    <div class="yar-seed-highlight"><span>🌾 مقدار بذر / نهال</span><b>در یک هکتار: ${esc(auto.seedPerHa)}</b><small>در زمین شما (${areaHa.toLocaleString('fa-IR',{maximumFractionDigits:3})} هکتار): <strong>${esc(auto.seedLand)}</strong></small></div>
+    <div class="yar-seed-highlight"><span>🌾 مقدار بذر / نهال</span><b>در یک هکتار: ${esc(auto.seedPerHa)}</b><small>در زمین شما: ${esc(auto.seedLand)}</small></div>
     <div><span>📅 بازه کاشت</span><b>${esc(auto.planting)}</b></div>
     <div><span>🌾 بازه برداشت</span><b>${esc(auto.harvest)}</b></div>
     <div><span>💧 تعداد آبیاری</span><b>${esc(auto.irrigation)}</b></div>
@@ -3066,7 +3046,8 @@ function yar(){
   </div>
   <div class="yar-auto-note">⚠️ ${auto.note}</div>`;
   const cultivationSection=(l&&crop)?`<section class="yar-flow-card yar-cultivation-file"><div class="yar-section-head"><div><b>📋 پرونده خودکار کشت</b><small>${esc(l.name)} · اطلاعات از روی زمین و محصول محاسبه می‌شود</small></div><span>🌱 تقریبی</span></div>${cultivationDetail}</section>`:'';
-  const calcSection=(l)?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>🧮 محاسبات خودکار</b><small>هیچ عددی لازم نیست وارد کنی؛ مساحت و محصول همین زمین مبناست.</small></div><span class="yar-area-badge">${areaHa.toLocaleString('fa-IR')} هکتار</span></div><div class="yar-auto-economy"><div><span>💸 هزینه تقریبی</span><b>${auto.cost}</b></div><div><span>💵 درآمد تقریبی</span><b>${auto.income}</b></div><div><span>📈 سود تقریبی</span><b>${auto.profit}</b></div></div><div class="yar-cost-breakdown"><div class="yar-breakdown-title"><b>📋 ریز هزینه تقریبی همین زمین</b><small>بذر، کود، سم، آب، ادوات و کارگر هم در مجموع هزینه لحاظ شده‌اند.</small></div>${auto.costBreakdown.map(x=>`<div class="yar-breakdown-row"><span>${x.label}</span><b>${x.amount}</b></div>`).join('')}<div class="yar-breakdown-total"><span>💸 جمع هزینه تقریبی</span><b>${auto.cost}</b></div></div><div class="yar-auto-grid yar-auto-small"><div class="yar-seed-highlight"><span>🌾 مقدار بذر / نهال</span><b>در یک هکتار: ${esc(auto.seedPerHa)}</b><small>در زمین شما (${areaHa.toLocaleString('fa-IR',{maximumFractionDigits:3})} هکتار): <strong>${esc(auto.seedLand)}</strong></small></div><div><span>💧 آبیاری</span><b>${esc(auto.irrigation)}</b></div><div><span>📅 کاشت</span><b>${esc(auto.planting)}</b></div><div><span>📅 برداشت</span><b>${esc(auto.harvest)}</b></div></div><div class="yar-auto-note">اعداد تقریبی‌اند و برای تصمیم دقیق باید شرایط واقعی مزرعه و قیمت روز بررسی شود.</div></section>`:'';
+  const autoCostRows=Object.entries(auto.costBreakdown||{}).map(([label,v])=>`<div class="yar-cost-row"><span>${v.icon} ${esc(label)}</span><b>${money(v.low)} تا ${money(v.high)}</b></div>`).join('');
+  const calcSection=(l)?`<section class="yar-flow-card"><div class="yar-section-head"><div><b>🧮 محاسبات خودکار</b><small>مساحت و محصول همین زمین مبناست؛ هزینه‌های اصلی هم جدا دیده می‌شوند.</small></div><span class="yar-area-badge">${areaHa.toLocaleString('fa-IR')} هکتار</span></div><div class="yar-auto-economy"><div><span>💸 هزینه تقریبی کل</span><b>${auto.cost}</b></div><div><span>💵 درآمد تقریبی</span><b>${auto.income}</b></div><div><span>📈 سود تقریبی</span><b>${auto.profit}</b></div></div><div class="yar-seed-box"><b>🌾 بذر / نهال</b><div>در یک هکتار: <strong>${esc(auto.seedPerHa)}</strong></div><div>در زمین شما: <strong>${esc(auto.seedLand)}</strong></div></div><div class="yar-cost-box"><div class="yar-cost-title"><b>💰 جزئیات هزینه تقریبی</b><small>تقسیم‌بندی اولیه است و با ثبت هزینه واقعی زمین قابل جایگزینی است.</small></div>${autoCostRows}</div><div class="yar-auto-grid yar-auto-small"><div><span>💧 آبیاری</span><b>${esc(auto.irrigation)}</b></div><div><span>📅 کاشت</span><b>${esc(auto.planting)}</b></div><div><span>📅 برداشت</span><b>${esc(auto.harvest)}</b></div><div><span>📐 مساحت</span><b>${areaM2.toLocaleString('fa-IR')} مترمربع</b></div></div><div class="yar-auto-note">⚠️ ${esc(auto.note)}</div></section>`:'';
   const guideItems=[
     ['🌡️','اقلیم',profile?.climate||'اقلیم مناسب را بر اساس منطقه، فصل و نیاز محصول تنظیم کن.'],
     ['🪨','خاک',profile?.soil||l?.soil||'اطلاعات خاک ثبت نشده؛ آزمون خاک برای برنامه‌ریزی دقیق‌تر پیشنهاد می‌شود.'],
@@ -3078,7 +3059,7 @@ function yar(){
     ['🌾','برداشت',profile?.harvest||'برداشت بر اساس رسیدگی محصول، کیفیت هدف و شرایط بازار برنامه‌ریزی شود.']
   ];
   const guideSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>راهنمای مدیریت محصول</b><small>${crop?`راهنمای «${esc(crop)}»`:'ابتدا محصول را انتخاب کن تا راهنما اختصاصی شود.'}</small></div><div class="yar-legacy-guide-grid">${guideItems.map(x=>`<article class="yar-legacy-guide-card"><h3>${x[0]} ${esc(x[1])}</h3><p>${esc(x[2])}</p></article>`).join('')}</div></section>`:'';
-  const scenarioSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>برنامه کشت خودکار</b><small>بر اساس محصول، مساحت و منطقه ثبت‌شده</small></div><div class="yar-legacy-scenario-head"><div><span>🌱 محصول</span><b>${esc(crop||'هنوز انتخاب نشده')}</b></div><button type="button" class="secondary" onclick="yarShowProductIntro()">معرفی کوتاه محصول</button></div><div class="yar-legacy-scenario-grid"><div class="yar-seed-highlight"><b>🌾 مقدار بذر / نهال</b><span>در یک هکتار: ${esc(auto.seedPerHa)}</span><small>در زمین شما (${areaHa.toLocaleString('fa-IR',{maximumFractionDigits:3})} هکتار): <strong>${esc(auto.seedLand)}</strong></small></div><div><b>📅 کاشت</b><span>${esc(auto.planting)}</span></div><div><b>📅 برداشت</b><span>${esc(auto.harvest)}</span></div><div><b>💧 آبیاری</b><span>${esc(auto.irrigation)}</span></div><div><b>📐 متراژ</b><span>${areaM2.toLocaleString('fa-IR')} مترمربع</span></div><div><b>📈 سود تقریبی</b><span>${auto.profit}</span></div></div></section>`:'';
+  const scenarioSection=l?`<section class="yar-legacy-section"><div class="yar-legacy-title"><b>برنامه کشت خودکار</b><small>بر اساس محصول، مساحت و منطقه ثبت‌شده</small></div><div class="yar-legacy-scenario-head"><div><span>🌱 محصول</span><b>${esc(crop||'هنوز انتخاب نشده')}</b></div><button type="button" class="secondary" onclick="yarShowProductIntro()">معرفی کوتاه محصول</button></div><div class="yar-legacy-scenario-grid"><div><b>🌾 بذر تقریبی</b><span>${esc(auto.seedPerHa)}</span><small>${esc(auto.seedLand)}</small></div><div><b>📅 کاشت</b><span>${esc(auto.planting)}</span></div><div><b>📅 برداشت</b><span>${esc(auto.harvest)}</span></div><div><b>💧 آبیاری</b><span>${esc(auto.irrigation)}</span></div><div><b>📐 متراژ</b><span>${areaM2.toLocaleString('fa-IR')} مترمربع</span></div><div><b>📈 سود تقریبی</b><span>${auto.profit}</span></div></div></section>`:'';
   const areaSummary=l?`<div class="yar-legacy-area-strip"><span>📐 متراژ زمین</span><b>${areaM2.toLocaleString('fa-IR')} مترمربع</b><span>🌾 ${areaHa.toLocaleString('fa-IR')} هکتار</span><span>📶 حالت: ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div>`:'';
 
   // صفحه اول کشاورزیار فقط برای انتخاب حالت و زمین است؛ چت بعد از انتخاب زمین باز می‌شود.
@@ -3794,27 +3775,28 @@ body:has(.yar-final.yar-product-detail-page){
   position:static!important;
 }
 </style>
-<style id="yar-v78-clarity-costs">
-/* V78: خوانایی دکمه‌های بالای صفحه، بذر شفاف و ریز هزینه کامل */
-.yar-header-actions{display:flex!important;align-items:center!important;gap:7px!important;position:relative!important;z-index:30!important;}
-.yar-header-actions .yarpro-switch{background:#153f34!important;color:#fff!important;border:2px solid #0d2f27!important;box-shadow:0 4px 12px rgba(0,0,0,.22)!important;font-weight:1000!important;opacity:1!important;min-width:42px!important;min-height:42px!important;font-size:22px!important;}
-.yar-detail-back{border:2px solid #17664b!important;background:#17664b!important;color:#fff!important;box-shadow:0 4px 12px rgba(0,0,0,.22)!important;opacity:1!important;font-size:11px!important;font-weight:1000!important;}
-.yar-seed-highlight{background:#eef8f2!important;border:2px solid #9bcdb6!important;border-radius:15px!important;padding:12px!important;box-sizing:border-box!important;}
-.yar-seed-highlight b,.yar-seed-highlight span{color:#14543f!important;}
-.yar-seed-highlight small{display:block!important;margin-top:7px!important;color:#49685b!important;line-height:1.7!important;}
-.yar-seed-highlight small strong{color:#0f6a4b!important;font-size:1.05em!important;}
-.yar-cost-breakdown{margin-top:12px!important;border:1px solid #d7e6df!important;border-radius:16px!important;background:#fff!important;padding:12px!important;}
-.yar-breakdown-title{display:flex!important;flex-direction:column!important;gap:3px!important;margin-bottom:7px!important;color:#14543f!important;}
-.yar-breakdown-title small{color:#65776f!important;line-height:1.55!important;}
-.yar-breakdown-row,.yar-breakdown-total{display:flex!important;justify-content:space-between!important;gap:8px!important;align-items:center!important;padding:8px 4px!important;border-bottom:1px solid #edf2ef!important;font-size:12px!important;}
-.yar-breakdown-row b{color:#315f50!important;font-size:11px!important;}
-.yar-breakdown-total{border-bottom:0!important;margin-top:4px!important;padding-top:10px!important;color:#124c3a!important;font-weight:900!important;}
-.yar-breakdown-total b{color:#0b6a4b!important;font-size:13px!important;}
+<style id="yar-v79-clarity-costs">
+.yar-detail-shell .yar-header-actions{z-index:200!important;}
+.yar-detail-shell .yar-detail-back{border:2px solid #0f513b!important;background:#fff!important;color:#0f513b!important;box-shadow:0 4px 14px rgba(0,0,0,.20)!important;font-size:12px!important;min-height:42px!important;}
+.yar-detail-shell .yarpro-switch{width:42px!important;min-width:42px!important;height:42px!important;min-height:42px!important;border:2px solid #7f1d1d!important;background:#fff!important;color:#991b1b!important;box-shadow:0 4px 14px rgba(0,0,0,.20)!important;font-size:22px!important;font-weight:1000!important;opacity:1!important;}
+.yar-seed-box{margin:12px 0!important;padding:14px!important;border:2px solid #b9d6c7!important;border-radius:16px!important;background:#f4fbf6!important;color:#17362a!important;line-height:1.9!important;}
+.yar-seed-box>b{display:block!important;color:#0f513b!important;font-size:14px!important;margin-bottom:5px!important;}
+.yar-seed-box strong{color:#17664b!important;font-size:15px!important;}
+.yar-cost-box{margin-top:12px!important;padding:13px!important;border:1px solid #d6e5dd!important;border-radius:16px!important;background:#fff!important;}
+.yar-cost-title{display:flex!important;justify-content:space-between!important;gap:10px!important;align-items:flex-start!important;margin-bottom:7px!important;}
+.yar-cost-title b{color:#17362a!important;font-size:14px!important;}
+.yar-cost-title small{color:#64748b!important;font-size:10px!important;line-height:1.6!important;text-align:left!important;}
+.yar-cost-row{display:flex!important;justify-content:space-between!important;gap:10px!important;align-items:center!important;padding:9px 2px!important;border-top:1px solid #edf2ef!important;font-size:12px!important;}
+.yar-cost-row span{color:#475569!important;}
+.yar-cost-row b{color:#17664b!important;font-size:12px!important;white-space:nowrap!important;}
+.yar-seed-highlight{border:2px solid #b9d6c7!important;background:#f4fbf6!important;border-radius:14px!important;padding:10px!important;}
+.yar-seed-highlight b{display:block!important;margin-top:5px!important;color:#17664b!important;}
+.yar-seed-highlight small{display:block!important;margin-top:4px!important;color:#334155!important;font-weight:800!important;}
 </style>
 <style id="yar-v77-product-back">
 .yarpro-head{position:relative!important;}
 .yar-header-actions{display:flex!important;align-items:center!important;gap:7px!important;position:relative!important;z-index:20!important;order:3!important;}
-.yar-detail-back{border:2px solid #17664b!important;background:#17664b!important;color:#fff!important;border-radius:12px!important;padding:9px 11px!important;font-family:inherit!important;font-size:11px!important;font-weight:1000!important;min-height:40px!important;white-space:nowrap!important;box-shadow:0 5px 14px rgba(0,0,0,.18)!important;opacity:1!important;}
+.yar-detail-back{border:1px solid rgba(255,255,255,.28)!important;background:#ffffff18!important;color:#fff!important;border-radius:12px!important;padding:9px 11px!important;font-family:inherit!important;font-size:10px!important;font-weight:900!important;min-height:40px!important;white-space:nowrap!important;box-shadow:0 5px 14px rgba(0,0,0,.10)!important;}
 .yar-detail-back:active{transform:scale(.98)!important;background:#ffffff28!important;}
 @media(max-width:430px){.yar-detail-back{font-size:9px!important;padding:8px 9px!important;max-width:145px!important;white-space:normal!important;line-height:1.35!important}.yar-header-actions{gap:5px!important}.yarpro-head .yarpro-brand{max-width:48%!important}}
 </style>
