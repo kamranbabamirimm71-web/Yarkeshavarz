@@ -1917,6 +1917,53 @@ body:has(.yar-detail-shell) #app{
 }
 </style>
 
+
+<style id="yar-v75-single-fixed-pager">
+/* V75: the pager is OUTSIDE the transformed swipe track, so position:fixed is truly viewport-fixed. */
+.yar-detail-shell .yar-detail-content{
+  position:fixed!important; inset:0!important; width:100vw!important; height:100dvh!important;
+  margin:0!important; padding:0!important; overflow:hidden!important; z-index:9991!important;
+}
+.yar-detail-shell .yar-horizontal-pages{
+  position:absolute!important; top:var(--yar-head-bottom,190px)!important; left:0!important; right:0!important;
+  bottom:var(--yar-pages-bottom,72px)!important; width:100vw!important; height:auto!important;
+  margin:0!important; padding:0!important; overflow:hidden!important;
+}
+.yar-detail-shell .yar-horizontal-track{width:400vw!important;height:100%!important;display:flex!important;}
+.yar-detail-shell .yar-horizontal-panel{
+  flex:0 0 100vw!important; width:100vw!important; min-width:100vw!important; height:100%!important;
+  min-height:0!important; max-height:none!important; overflow:hidden!important; box-sizing:border-box!important;
+  padding:8px 10px!important;
+}
+.yar-detail-shell .yar-panel-nav{
+  position:fixed!important; left:10px!important; right:10px!important;
+  bottom:max(10px,env(safe-area-inset-bottom))!important;
+  width:auto!important; height:62px!important; min-height:62px!important;
+  margin:0!important; padding:7px!important; z-index:11000!important;
+  display:flex!important; align-items:center!important; justify-content:space-between!important; gap:8px!important;
+  box-sizing:border-box!important; direction:ltr!important;
+  background:rgba(255,255,255,.99)!important; border:2px solid #17664b!important;
+  border-radius:18px!important; box-shadow:0 -4px 20px rgba(0,0,0,.20),0 6px 20px rgba(0,0,0,.18)!important;
+}
+.yar-detail-shell .yar-panel-nav button.primary,.yar-detail-shell .yar-panel-nav button.secondary{
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  flex:0 0 105px!important; width:105px!important; min-width:105px!important;
+  height:46px!important; min-height:46px!important; padding:0 8px!important;
+  border-radius:13px!important; font-size:14px!important; font-weight:900!important;
+  opacity:1!important; visibility:visible!important;
+}
+.yar-detail-shell .yar-panel-nav button.primary{background:#17664b!important;color:#fff!important;}
+.yar-detail-shell .yar-panel-nav button.secondary{background:#e7f3eb!important;color:#17664b!important;border:1px solid #b9d6c7!important;}
+.yar-detail-shell .yar-panel-nav button:disabled{opacity:.35!important;filter:none!important;}
+.yar-detail-shell .yar-panel-dots{flex:1 1 auto!important;height:46px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;}
+.yar-detail-shell .yar-panel-dots button{display:block!important;flex:0 0 11px!important;width:11px!important;height:11px!important;min-width:11px!important;min-height:11px!important;padding:0!important;border:0!important;border-radius:50%!important;background:#c6d6cf!important;visibility:visible!important;opacity:1!important;}
+.yar-detail-shell .yar-panel-dots button.active{background:#17664b!important;transform:scale(1.25)!important;}
+@media(max-width:600px){
+  .yar-detail-shell .yar-horizontal-panel{padding:6px 8px!important;}
+  .yar-detail-shell .yar-panel-nav{left:8px!important;right:8px!important;height:64px!important;min-height:64px!important;}
+  .yar-detail-shell .yar-panel-nav button.primary,.yar-detail-shell .yar-panel-nav button.secondary{flex-basis:102px!important;width:102px!important;min-width:102px!important;height:48px!important;min-height:48px!important;font-size:14px!important;}
+}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2986,30 +3033,26 @@ function yar(){
   const cropDescription=String(cropMeta.description||cropMeta.desc||cropMeta.summary||cropMeta.note||'').trim() || `برنامه کشت «${crop}» بر اساس مساحت زمین و منطقه ثبت‌شده به‌صورت تقریبی تنظیم شده است.`;
   const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(cropMeta.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div><div class="yar-product-mini-desc">${esc(cropDescription)}</div></section>`;
   const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
-  const yarPanelNav=(idx,total=4)=>`<div class="yar-panel-nav"><button type="button" class="secondary" onclick="yarSlide(${idx-1})" ${idx<=0?'disabled':''}>‹ قبلی</button><div class="yar-panel-dots">${Array.from({length:total},(_,i)=>`<button type="button" class="${i===idx?'active':''}" aria-label="صفحه ${i+1}" onclick="yarSlide(${i})"></button>`).join('')}</div><button type="button" class="primary" onclick="yarSlide(${idx+1})" ${idx>=total-1?'disabled':''}>بعدی ›</button></div>`;
+  const yarPanelNav=(idx,total=4)=>`<div class="yar-panel-nav" role="navigation" aria-label="پیمایش صفحات"><button data-pager="prev" type="button" class="secondary" onclick="yarSlide(${idx-1})" ${idx<=0?'disabled':''}>‹ قبلی</button><div class="yar-panel-dots">${Array.from({length:total},(_,i)=>`<button type="button" class="${i===idx?'active':''}" aria-label="صفحه ${i+1}" onclick="yarSlide(${i})"></button>`).join('')}</div><button data-pager="next" type="button" class="primary" onclick="yarSlide(${idx+1})" ${idx>=total-1?'disabled':''}>بعدی ›</button></div>`;
   const detailPage=`<div id="yarHorizontalPages" class="yar-horizontal-pages"><div class="yar-horizontal-track">
     <section class="yar-horizontal-panel yar-page-one">
       <div class="yar-page-step"><b>صفحه ۱ از ۴</b><span>محصول و برنامه کشت</span></div>
       ${productSummary}${scenarioSection}
       <div class="yar-swipe-hint">↔️ برای رفتن به صفحه بعد، انگشتت را افقی بکش</div>
-      ${yarPanelNav(0,4)}
     </section>
     <section class="yar-horizontal-panel">
       <div class="yar-page-step"><b>صفحه ۲ از ۴</b><span>راهنمای محصول</span></div>
       ${guideSection}
-      ${yarPanelNav(1,4)}
     </section>
     <section class="yar-horizontal-panel">
       <div class="yar-page-step"><b>صفحه ۳ از ۴</b><span>کاشت تا برداشت</span></div>
       ${cultivationSection}
-      ${yarPanelNav(2,4)}
     </section>
     <section class="yar-horizontal-panel">
       <div class="yar-page-step"><b>صفحه ۴ از ۴</b><span>محاسبات و سود و زیان</span></div>
       ${calcSection}
-      ${yarPanelNav(3,4)}
     </section>
-  </div></div>`;
+  </div></div>${yarPanelNav(0,4)}`;
   app.innerHTML=`<section class="yarpro yar-real-page ${crop&&yarProductPage==='detail'?'yar-detail-shell':'yar-final yar-product-select-page'}">
     <header class="yarpro-head">
       <button type="button" class="yarpro-switch" data-yar-route="home">✕</button>
@@ -3036,6 +3079,15 @@ function yarSlide(index){
   const track=el.querySelector('.yar-horizontal-track');
   if(track) track.style.transform=`translate3d(${-i*(100/total)}%,0,0)`;
   panels.forEach((p,n)=>p.setAttribute('aria-hidden',n===i?'false':'true'));
+  const shell=document.querySelector('.yar-detail-shell');
+  const nav=shell?.querySelector('.yar-panel-nav');
+  if(nav){
+    const prev=nav.querySelector('button[data-pager="prev"]');
+    const next=nav.querySelector('button[data-pager="next"]');
+    if(prev) prev.disabled=i<=0;
+    if(next) next.disabled=i>=total-1;
+    nav.querySelectorAll('.yar-panel-dots button').forEach((b,n)=>b.classList.toggle('active',n===i));
+  }
 }
 function yarBindHorizontal(){
   const el=document.getElementById('yarHorizontalPages');
