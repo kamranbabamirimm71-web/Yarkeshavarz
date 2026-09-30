@@ -1848,6 +1848,75 @@ body:has(.yar-detail-shell) #app{
   .yar-detail-shell .yar-horizontal-panel{padding:6px 8px!important}
 }
 </style>
+
+<style id="yar-v74-fixed-pager">
+/* V74: نوار قبلی/بعدی واقعاً ثابت در پایین صفحه؛ محتوای هر چهار صفحه دقیقاً تا لبه بالایی نوار ادامه دارد. */
+.yar-detail-shell{
+  --yar-head-bottom: 190px;
+  --yar-pages-bottom: 72px;
+}
+.yar-detail-shell .yar-detail-content{
+  position:fixed!important;
+  top:0!important; left:0!important; right:0!important; bottom:0!important;
+  width:100vw!important; height:100dvh!important;
+  padding:0!important; margin:0!important; overflow:hidden!important;
+  z-index:9991!important;
+}
+.yar-detail-shell .yar-horizontal-pages{
+  position:absolute!important;
+  top:var(--yar-head-bottom)!important;
+  left:0!important; right:0!important;
+  bottom:var(--yar-pages-bottom)!important;
+  width:100vw!important; height:auto!important;
+  margin:0!important; padding:0!important;
+  overflow:hidden!important;
+  background:transparent!important;
+}
+.yar-detail-shell .yar-horizontal-track{
+  width:400vw!important; height:100%!important;
+}
+.yar-detail-shell .yar-horizontal-panel{
+  flex:0 0 100vw!important; width:100vw!important; min-width:100vw!important;
+  height:100%!important; min-height:0!important; max-height:none!important;
+  overflow:hidden!important; box-sizing:border-box!important;
+  padding:8px 10px 8px!important;
+}
+.yar-detail-shell .yar-horizontal-panel.yar-page-one{padding:8px 10px!important}
+.yar-detail-shell .yar-horizontal-panel .yar-panel-nav{
+  position:fixed!important;
+  left:10px!important; right:10px!important;
+  bottom:max(8px,env(safe-area-inset-bottom))!important;
+  width:auto!important; height:56px!important; min-height:56px!important;
+  margin:0!important; padding:6px!important;
+  z-index:10020!important;
+  display:flex!important; align-items:center!important; justify-content:space-between!important;
+  box-sizing:border-box!important;
+  border-radius:18px!important;
+  background:rgba(255,255,255,.99)!important;
+  border:1px solid rgba(18,70,48,.18)!important;
+  box-shadow:0 -2px 18px rgba(13,55,40,.20),0 5px 22px rgba(13,55,40,.14)!important;
+}
+.yar-detail-shell .yar-horizontal-panel .yar-panel-nav button.primary,
+.yar-detail-shell .yar-horizontal-panel .yar-panel-nav button.secondary{
+  min-width:96px!important; width:96px!important; height:42px!important; min-height:42px!important;
+  flex:0 0 96px!important; font-size:14px!important; font-weight:800!important;
+  border-radius:13px!important;
+}
+.yar-detail-shell .yar-horizontal-panel .yar-panel-nav button.primary:not(:disabled),
+.yar-detail-shell .yar-horizontal-panel .yar-panel-nav button.secondary:not(:disabled){
+  opacity:1!important; filter:none!important;
+}
+.yar-detail-shell .yar-panel-dots{flex:1 1 auto!important; height:42px!important; display:flex!important; align-items:center!important; justify-content:center!important; gap:7px!important}
+.yar-detail-shell .yar-panel-dots button{width:11px!important; height:11px!important; min-width:11px!important; min-height:11px!important; border-radius:50%!important}
+@media(max-width:600px){
+  .yar-detail-shell .yar-horizontal-panel{padding:6px 8px 6px!important}
+  .yar-detail-shell .yar-horizontal-panel.yar-page-one{padding:6px 8px!important}
+  .yar-detail-shell .yar-horizontal-panel .yar-panel-nav{left:8px!important;right:8px!important;height:58px!important;min-height:58px!important}
+  .yar-detail-shell .yar-horizontal-panel .yar-panel-nav button.primary,
+  .yar-detail-shell .yar-horizontal-panel .yar-panel-nav button.secondary{min-width:94px!important;width:94px!important}
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -2999,7 +3068,22 @@ function yarBindHorizontal(){
     }
   });
   yarSlide(0);
+  yarFitPager();
 }
+function yarFitPager(){
+  const shell=document.querySelector('.yar-detail-shell');
+  if(!shell)return;
+  const head=shell.querySelector('.yarpro-head');
+  const nav=shell.querySelector('.yar-panel-nav');
+  if(!head||!nav)return;
+  const hb=Math.max(0,Math.round(head.getBoundingClientRect().bottom));
+  const nr=nav.getBoundingClientRect();
+  const vh=window.innerHeight||document.documentElement.clientHeight;
+  const nb=Math.max(0,Math.round(vh-nr.top));
+  shell.style.setProperty('--yar-head-bottom',hb+'px');
+  shell.style.setProperty('--yar-pages-bottom',nb+'px');
+}
+window.addEventListener('resize',()=>{if(document.querySelector('.yar-detail-shell'))yarFitPager()},{passive:true});
 function yarAreaM2(){const l=(yarLandMode&&selected)?yarLand(selected):null;if(!l)return 0;const m2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);if(m2>0)return m2;const ha=Number(l.measurement?.hectare||l.area||0);return ha>0?ha*10000:0;}
 function yarSaveCultivation(){
   const l=selected?yarLand(selected):null;if(!l)return;
@@ -3043,7 +3127,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260929-v45').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260930-v74').catch(()=>{}));
 }
 </script>
 
