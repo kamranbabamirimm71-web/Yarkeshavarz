@@ -3800,5 +3800,19 @@ body:has(.yar-final.yar-product-detail-page){
 .yar-detail-back:active{transform:scale(.98)!important;background:#ffffff28!important;}
 @media(max-width:430px){.yar-detail-back{font-size:9px!important;padding:8px 9px!important;max-width:145px!important;white-space:normal!important;line-height:1.35!important}.yar-header-actions{gap:5px!important}.yarpro-head .yarpro-brand{max-width:48%!important}}
 </style>
+
+<style id="yar-v80-page-content-scroll">
+/* V80: محتوای هر صفحه نباید زیر نوار ثابت قبلی/بعدی قطع شود. */
+.yar-detail-shell .yar-horizontal-panel{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain!important;
+  padding-bottom:18px!important;
+  scrollbar-width:none!important;
+}
+.yar-detail-shell .yar-horizontal-panel::-webkit-scrollbar{display:none!important;}
+.yar-detail-shell .yar-horizontal-panel .yar-cost-box{margin-bottom:8px!important;}
+</style>
 </body>
 </html>
