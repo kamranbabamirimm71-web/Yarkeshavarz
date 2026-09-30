@@ -2301,63 +2301,38 @@ function managerTime(ts){
   try{return new Date(ts).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})}catch(e){return ''}
 }
 function managerChat(){
-  head('ارتباط با مدیر');
-  let msgs=managerLoad();
-  if(!msgs.length){
-    msgs=[{role:'manager',text:'سلام 🌱 خوش اومدی. اینجا می‌تونی پیشنهاد، انتقاد، گزارش مشکل یا درخواستت درباره یار کشاورز رو برای مدیر اپلیکیشن بنویسی.',ts:Date.now()}];
-    managerSave(msgs);
-  }
+  head('گزارش مشکل');
   app.innerHTML=`<div class="manager-wrap">
     <section class="manager-hero">
-      <div class="manager-profile"><div class="manager-avatar">👨‍💼</div><div><h2>ارتباط با مدیر اپلیکیشن</h2><div class="manager-status">مدیر یار کشاورز</div></div></div>
-      <p class="manager-note">پیامت را واضح بنویس. برای گزارش مشکل، اگر امکانش هست نام بخش و کاری که انجام دادی را هم بگو.</p>
+      <div class="manager-profile"><div class="manager-avatar">🐞</div><div><h2>گزارش مشکل</h2><div class="manager-status">ارتباط با مدیر یار کشاورز</div></div></div>
+      <p class="manager-note">اگر در برنامه مشکلی دیدی، مشکل را واضح بنویس تا بررسی شود. اگر نام بخش یا کاری که انجام دادی را هم بنویسی، بررسی راحت‌تر است.</p>
     </section>
-    <div class="manager-topics">
-      <button type="button" onclick="managerQuick('گزارش یک مشکل در برنامه')">🐞 گزارش مشکل</button>
-      <button type="button" onclick="managerQuick('پیشنهاد برای بهتر شدن برنامه')">💡 پیشنهاد</button>
-      <button type="button" onclick="managerQuick('درخواست اضافه شدن یک قابلیت')">🛠️ قابلیت جدید</button>
-      <button type="button" onclick="managerQuick('انتقاد یا نظر درباره برنامه')">📝 انتقاد و نظر</button>
-    </div>
-    <div id="managerChat" class="manager-chat"></div>
-    <form class="manager-compose" onsubmit="event.preventDefault();managerSend()">
-    <textarea id="managerInput" rows="1" placeholder="پیامت برای مدیر را بنویس…"></textarea>
-      <button type="submit" aria-label="ارسال پیام">➤</button>
+    <form class="manager-compose" onsubmit="event.preventDefault();managerSend()" style="display:block">
+      <textarea id="managerInput" rows="7" placeholder="مشکل خود را اینجا بنویس…"></textarea>
+      <button class="primary" type="submit" style="width:100%;margin-top:10px">🐞 ثبت گزارش مشکل</button>
     </form>
     <div class="manager-actions">
-      <button class="secondary" type="button" onclick="managerClear()">پاک کردن گفت‌وگو</button>
       <button class="secondary" type="button" onclick="go('account')">بازگشت به اکانت</button>
     </div>
   </div>`;
-  managerRender();
   const inp=document.getElementById('managerInput');
   if(inp){
-    inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,110)+'px'});
-    inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();managerSend()}});
+    inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,180)+'px'});
   }
-}
-function managerRender(){
-  const box=document.getElementById('managerChat');if(!box)return;
-  const msgs=managerLoad();
-  box.innerHTML=msgs.map(m=>`<div class="manager-msg ${m.role==='user'?'user':'manager'}"><div class="manager-bubble">${esc(m.text).replace(/\n/g,'<br>')}<span class="manager-time">${managerTime(m.ts)}</span></div></div>`).join('');
-  box.scrollTop=box.scrollHeight;
-}
-function managerQuick(q){
-  const i=document.getElementById('managerInput');if(!i)return;
-  i.value=q;i.focus();i.dispatchEvent(new Event('input'));
 }
 function managerSend(){
   const i=document.getElementById('managerInput'),q=(i?.value||'').trim();
-  if(!q)return;
-  const msgs=managerLoad();
-  msgs.push({role:'user',text:q,ts:Date.now()});
-  managerSave(msgs);
-  if(i){i.value='';i.style.height='auto'}
-  managerRender();
-  toast('پیامت ثبت شد 🌱 برای ارسال واقعی به مدیر، اتصال سرور پیام‌رسان باید فعال شود.');
+  if(!q){toast('لطفاً مشکل را بنویسید');return;}
+  const reports=[];
+  try{reports.push(...JSON.parse(localStorage.getItem('yk-manager-reports-v1')||'[]'))}catch(e){}
+  reports.push({text:q,ts:Date.now(),status:'ثبت‌شده'});
+  try{localStorage.setItem('yk-manager-reports-v1',JSON.stringify(reports.slice(-50)))}catch(e){}
+  if(i)i.value='';
+  toast('گزارش مشکل ثبت شد 🌱');
 }
 function managerClear(){
-  if(confirm('گفت‌وگوی ارتباط با مدیر پاک شود؟')){
-    localStorage.removeItem(MANAGER_CHAT_KEY);managerChat();
+  if(confirm('گزارش‌های ثبت‌شده روی این دستگاه پاک شوند؟')){
+    localStorage.removeItem('yk-manager-reports-v1');toast('گزارش‌ها پاک شدند');
   }
 }
 
@@ -2410,7 +2385,7 @@ function settings(){
         <button class="secondary settings-danger setting-action" type="button" onclick="settingsClearYar()">پاک کردن</button>
       </div>
       <div class="setting-row">
-        <div class="setting-info"><div class="setting-name">پاک کردن گفت‌وگوی مدیر</div><div class="setting-desc">پیام‌های ارتباط با مدیر از این دستگاه حذف می‌شوند.</div></div>
+        <div class="setting-info"><div class="setting-name">پاک کردن گزارش‌های مدیر</div><div class="setting-desc">گزارش‌های ثبت‌شده از این دستگاه حذف می‌شوند.</div></div>
         <button class="secondary settings-danger setting-action" type="button" onclick="settingsClearManager()">پاک کردن</button>
       </div>
     </section>
@@ -2465,7 +2440,7 @@ function settingsClearManager(){
     toast('گفت‌وگوی مدیر پاک شد');settings();
   }
 }
-function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 حساب کاربری</h2><p class="small muted">اطلاعات برنامه روی همین دستگاه ذخیره می‌شود.</p><button class="primary" onclick="go('profile')">پروفایل کشاورز</button><button class="primary" style="margin-top:8px" onclick="go('manager')">👨‍💼 ارتباط با مدیر اپلیکیشن</button><button class="primary" style="margin-top:8px" onclick="go('settings')">⚙️ تنظیمات</button></div><div class="card" style="margin-top:10px"><b>💾 پشتیبان‌گیری</b><p class="small muted">اطلاعات زمین‌ها، انبار، ادوات و پروفایل را ذخیره یا بازیابی کن.</p><div class="actions"><button class="secondary" onclick="backup()">خروجی پشتیبان</button><button class="secondary" onclick="document.getElementById('restore').click()">بازیابی پشتیبان</button></div></div><div class="card" style="margin-top:10px"><b>نسخه آزمایشی</b><p class="small muted">V3 Trial — قبل از جایگزینی GitHub ابتدا روی گوشی تست شود.</p></div>`}function ads(){head('تبلیغات');let items=[{icon:'🌱',cat:'بذر',title:'بذرهای اصلاح‌شده و پربازده',text:'انواع بذر مناسب کشت‌های مختلف؛ قبل از خرید شرایط منطقه و رقم را بررسی کن.',price:'تماس برای قیمت'},{icon:'🧪',cat:'نهاده',title:'کود و نهاده کشاورزی',text:'معرفی محصولات و خدمات تأمین نهاده برای کشاورزان.',price:'استعلام قیمت'},{icon:'🚜',cat:'تجهیزات',title:'ماشین‌آلات و تجهیزات مزرعه',text:'آگهی‌های مرتبط با ادوات و تجهیزات کشاورزی در این بخش نمایش داده می‌شود.',price:'تماس با فروشنده'}];app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>محصولات، تجهیزات و خدماتی که برای کشاورز کاربردی هستند.</p></div><div class="filter-row"><button class="active">همه</button><button>🌱 بذر</button><button>🧪 نهاده</button><button>🚜 تجهیزات</button><button>🛠️ خدمات</button></div><div class="ads-grid">${items.map((x,i)=>`<article class="ad-item"><div class="ad-top"><span style="font-size:30px">${x.icon}</span><span class="badge-ad">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price)}</span></div><button class="primary ad-contact" onclick="toast('اطلاعات تماس این آگهی در نسخه آنلاین فعال می‌شود')">☎️ اطلاعات تماس</button></article>`).join('')}</div><div class="card" style="margin-top:12px"><b>📌 ثبت آگهی</b><p class="small muted">در مرحله اتصال آنلاین، کشاورزان و فروشندگان می‌توانند آگهی ثبت کنند.</p></div>`}
+function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 حساب کاربری</h2><p class="small muted">اطلاعات برنامه روی همین دستگاه ذخیره می‌شود.</p><button class="primary" onclick="go('profile')">پروفایل کشاورز</button><button class="primary" style="margin-top:8px" onclick="go('manager')">🐞 گزارش مشکل</button><button class="primary" style="margin-top:8px" onclick="go('settings')">⚙️ تنظیمات</button></div><div class="card" style="margin-top:10px"><b>💾 پشتیبان‌گیری</b><p class="small muted">اطلاعات زمین‌ها، انبار، ادوات و پروفایل را ذخیره یا بازیابی کن.</p><div class="actions"><button class="secondary" onclick="backup()">خروجی پشتیبان</button><button class="secondary" onclick="document.getElementById('restore').click()">بازیابی پشتیبان</button></div></div><div class="card" style="margin-top:10px"><b>نسخه آزمایشی</b><p class="small muted">V3 Trial — قبل از جایگزینی GitHub ابتدا روی گوشی تست شود.</p></div>`}function ads(){head('تبلیغات');let items=[{icon:'🌱',cat:'بذر',title:'بذرهای اصلاح‌شده و پربازده',text:'انواع بذر مناسب کشت‌های مختلف؛ قبل از خرید شرایط منطقه و رقم را بررسی کن.',price:'تماس برای قیمت'},{icon:'🧪',cat:'نهاده',title:'کود و نهاده کشاورزی',text:'معرفی محصولات و خدمات تأمین نهاده برای کشاورزان.',price:'استعلام قیمت'},{icon:'🚜',cat:'تجهیزات',title:'ماشین‌آلات و تجهیزات مزرعه',text:'آگهی‌های مرتبط با ادوات و تجهیزات کشاورزی در این بخش نمایش داده می‌شود.',price:'تماس با فروشنده'}];app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>محصولات، تجهیزات و خدماتی که برای کشاورز کاربردی هستند.</p></div><div class="filter-row"><button class="active">همه</button><button>🌱 بذر</button><button>🧪 نهاده</button><button>🚜 تجهیزات</button><button>🛠️ خدمات</button></div><div class="ads-grid">${items.map((x,i)=>`<article class="ad-item"><div class="ad-top"><span style="font-size:30px">${x.icon}</span><span class="badge-ad">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price)}</span></div><button class="primary ad-contact" onclick="toast('اطلاعات تماس این آگهی در نسخه آنلاین فعال می‌شود')">☎️ اطلاعات تماس</button></article>`).join('')}</div><div class="card" style="margin-top:12px"><b>📌 ثبت آگهی</b><p class="small muted">در مرحله اتصال آنلاین، کشاورزان و فروشندگان می‌توانند آگهی ثبت کنند.</p></div>`}
 function news(){head('اخبار');let items=[{icon:'🌾',cat:'کشت',title:'مدیریت مرحله‌ای کشت؛ از آماده‌سازی تا برداشت',text:'ثبت عملیات و مشاهده وضعیت زمین کمک می‌کند تصمیم‌های مزرعه بر اساس سابقه واقعی گرفته شوند.',date:'امروز'},{icon:'🌦️',cat:'هوا',title:'هشدارهای آب‌وهوایی را جدی بگیرید',text:'پیش از آبیاری، سم‌پاشی یا عملیات حساس، شرایط جوی و پیش‌بینی روزهای آینده را بررسی کنید.',date:'امروز'},{icon:'💧',cat:'آبیاری',title:'آبیاری دقیق‌تر با ثبت مصرف آب',text:'ثبت زمان و مقدار آبیاری برای مقایسه عملکرد زمین و مدیریت بهتر منابع مفید است.',date:'این هفته'},{icon:'📦',cat:'بازار',title:'مدیریت موجودی انبار از هزینه‌های اضافی جلوگیری می‌کند',text:'ورودی و مصرف نهاده‌ها را جداگانه ثبت کن تا موجودی واقعی همیشه مشخص باشد.',date:'این هفته'}];app.innerHTML=`<div class="news-hero"><h2>📰 اخبار کشاورزی</h2><p>مطالب کاربردی برای تصمیم‌های بهتر در مزرعه.</p></div><div class="filter-row"><button class="active">همه</button><button>🌾 کشت</button><button>🌦️ هوا</button><button>💧 آبیاری</button><button>📈 بازار</button></div><div class="news-grid">${items.map((x,i)=>`<article class="news-item"><div class="news-top"><span style="font-size:29px">${x.icon}</span><span class="badge-news">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line">${esc(x.date)} · یار کشاورز</div><button class="secondary" style="width:100%;margin-top:11px" onclick="openNewsDetail(${i})">ادامه مطلب ←</button></article>`).join('')}</div>`;window.__ykNews=items}
 function openNewsDetail(i){let x=(window.__ykNews||[])[i];if(!x)return;head('خبر');app.innerHTML=`<article class="card news-detail"><div style="font-size:38px">${x.icon}</div><span class="badge-news">${esc(x.cat)}</span><h2>${esc(x.title)}</h2><div class="meta-line">${esc(x.date)} · یار کشاورز</div><p>${esc(x.text)}</p><p>این بخش در نسخه نهایی می‌تواند به سامانه اخبار آنلاین متصل شود تا اخبار معتبر، هشدارهای کشاورزی و اطلاعات بازار به‌صورت به‌روز در اختیار کشاورز قرار بگیرد.</p><button class="secondary" onclick="go('news')">← بازگشت به اخبار</button></article>`}
 function equipment(){head('ادوات');let list=state.equipment||[];app.innerHTML=`<div class="section"><h2>🚜 ادوات و ماشین‌آلات</h2><button class="primary" onclick="addEquipment()">＋ ثبت وسیله</button></div><div class="equip-grid">${list.map((x,i)=>`<article class="card equip-item"><div class="equip-icon">${esc(x.icon||'🚜')}</div><div><b>${esc(x.name)}</b><div class="equip-meta">نوع: ${esc(x.type||'-')}<br>مدل: ${esc(x.model||'-')} · وضعیت: ${esc(x.status||'فعال')}</div></div><div class="actions" style="margin:0"><button class="secondary" onclick="editEquipment(${i})">✏️</button><button class="danger" onclick="deleteEquipment(${i})">🗑️</button></div></article>`).join('')||'<div class="card empty">هنوز ادواتی ثبت نشده است.</div>'}</div>`}
