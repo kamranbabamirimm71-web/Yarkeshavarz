@@ -143,4 +143,18 @@ function addPlan(){
     '<div style="display:flex;gap:14px;flex-wrap:wrap;margin:10px 2px;color:#60736a;font-size:12px">'+
       '<span>● نقاط مرزی</span>'+
       '<span>━ مرز زمین</span>'+
-      '<span>● مرکز
+      '<span>● مرکز</span>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px">'+
+      '<div><b>'+hectare.toLocaleString('fa-IR',{maximumFractionDigits:2})+'</b><small> هکتار</small></div>'+
+      '<div><b>'+area.toLocaleString('fa-IR',{maximumFractionDigits:0})+'</b><small> مترمربع</small></div>'+
+      '<div><b>'+perimeter.toLocaleString('fa-IR',{maximumFractionDigits:1})+'</b><small> متر محیط</small></div>'+
+    '</div>';
+
+  card.innerHTML=card.innerHTML;
+  anchor.appendChild(card);
+}
+
+window.ykAddLandPlan=addPlan;
+
+})();
