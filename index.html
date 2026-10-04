@@ -1989,6 +1989,37 @@ body:has(.yar-entry-page){height:auto!important;min-height:100dvh!important;max-
 .yar-final.yar-entry-page{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:100dvh!important;max-height:none!important;overflow:visible!important;padding-bottom:120px!important;}
 .yar-entry-page .yar-land-list{max-height:none!important;overflow:visible!important;}
 </style>
+<style id="yar-v90-land-scroll-fix">
+/* V90: لیست همه زمین‌های ثبت‌شده در صفحه ورود کشاورزیار باید واقعاً قابل اسکرول باشد. */
+html:has(.yar-entry-page),
+body:has(.yar-entry-page){
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+body:has(.yar-entry-page) #app{
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+.yar-final.yar-entry-page{
+  position:relative!important;
+  inset:auto!important;
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding-bottom:140px!important;
+}
+.yar-entry-page .yar-land-list{
+  display:grid!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
