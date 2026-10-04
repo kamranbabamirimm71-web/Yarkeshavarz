@@ -2126,6 +2126,7 @@ document.getElementById('landForm').onsubmit=e=>{
  selected=l.id;
  openLand(l.id);
 };
+}
 function setOwnership(v){const hidden=document.getElementById('ownershipValue');if(hidden)hidden.value=v;document.querySelectorAll('.ownership-option').forEach(b=>b.classList.toggle('active',b.dataset.value===v));const box=document.getElementById('rentDetails');if(box)box.hidden=v!=='rent'}
 function startMeasureForNewLand(){selected=null;measureReturn='add';go('measure')}
 function landSchematic(l){
@@ -3265,7 +3266,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v86').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v87').catch(()=>{}));
 }
 </script>
 

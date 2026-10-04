@@ -148,9 +148,9 @@ function addPlan(){
   var stats=document.createElement('div');
   stats.className='small muted';
   stats.style.cssText='margin-top:8px;line-height:1.9';
-  stats.textContent='مساحت: '+(Number(land.area)||0).toLocaleString('fa-IR')+' هکتار · محیط: '+(Number(land.perimeter)||0).toLocaleString('fa-IR')+' متر';
+  stats.textContent='مساحت: '+(hectare||0).toLocaleString('fa-IR')+' هکتار · محیط: '+perimeter.toLocaleString('fa-IR')+' متر';
   card.appendChild(stats);
-  host.appendChild(card);
+  if(anchor.parentNode) anchor.parentNode.insertBefore(card,anchor.nextSibling);
 }
 window.ykAddLandPlan=addPlan;
 })();
