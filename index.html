@@ -2056,7 +2056,32 @@ const base={lands:[],inventory:[],transactions:[],equipment:[],profile:{name:'',
 let state=load(),route='home',selected=null,map=null,points=[],markers=[],polygon=null,watch=null,satellite=false,measureReturn=null;
 function openSelectedTool(r){let id=selected||localStorage.getItem('yk-last-land');if(id&&state.lands.some(x=>x.id===id)){selected=id;go(r)}else{toast('برای استفاده از این بخش، ابتدا یک زمین را باز کن');go('lands')}}
 function load(){try{let x={...base,...JSON.parse(localStorage.getItem(KEY)||'{}')};x.lands=x.lands||[];x.inventory=x.inventory||[];x.transactions=x.transactions||[];x.equipment=x.equipment||[];x.profile={...base.profile,...(x.profile||{})};return x}catch{return JSON.parse(JSON.stringify(base))}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){console.error(e);toast('ذخیره‌سازی انجام نشد؛ حافظه مرورگر پر است.');return false}}
+function save(){
+ try{
+  const payload=JSON.stringify(state);
+  localStorage.setItem(KEY,payload);
+  const check=localStorage.getItem(KEY);
+  if(check!==payload)throw new Error('localStorage verification failed');
+  return true;
+ }catch(e){
+  console.error('YK save failed',e);
+  toast('ذخیره‌سازی زمین انجام نشد. لطفاً فضای ذخیره مرورگر را بررسی کن و دوباره تلاش کن.');
+  return false;
+ }
+}
+function appendLandAndSave(land){
+ try{
+  const latest=load();
+  latest.lands=Array.isArray(latest.lands)?latest.lands:[];
+  latest.lands.push(land);
+  state=latest;
+  return save();
+ }catch(e){
+  console.error('YK land add failed',e);
+  toast('ثبت زمین انجام نشد.');
+  return false;
+ }
+}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function n(v){return Number(String(v??'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٬,\s]/g,''))||0}
 function money(v){return n(v).toLocaleString('fa-IR')+' تومان'}
@@ -2119,9 +2144,7 @@ document.getElementById('landForm').onsubmit=e=>{
  const l={id:uid(),name:String(f.get('name')||'').trim(),area:n(f.get('area')),region:String(f.get('region')||'').trim(),ownership:f.get('ownership')==='rent'?'rent':'own',soil:String(f.get('soil')||'').trim(),water:String(f.get('water')||'').trim(),irrigation:String(f.get('irrigation')||'').trim(),crop:String(f.get('crop')||'').trim(),notes:String(f.get('notes')||'').trim(),lat:pending?.lat??null,lng:pending?.lng??null,areaM2:pending?.areaM2??null,perimeter:pending?.perimeter??null,measurement:pending?.points?{points:pending.points}:null,rentAmount:n(f.get('rentAmount')),landlord:String(f.get('landlord')||''),rentStart:String(f.get('rentStart')||''),rentEnd:String(f.get('rentEnd')||'')};
  if(!l.name){toast('نام زمین را وارد کن');return}
  if(l.area<=0){toast('مساحت زمین را وارد کن');return}
- latest.lands.push(l);
- state=latest;
- if(!save()){return}
+ if(!appendLandAndSave(l)){return}
  sessionStorage.removeItem('yk-pending-measure');
  selected=l.id;
  openLand(l.id);
@@ -2610,7 +2633,9 @@ function registerMeasured(){
   let l=selected?state.lands.find(x=>x.id===selected):null;
   if(l){
     l.areaM2=a;l.perimeter=p;l.area=a/10000;l.lat=lat;l.lng=lng;l.measurement={points:points.map(x=>[x[0],x[1]])};
-    save();toast('متراژ با موفقیت ذخیره شد');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(l.id)},150);return;
+    const latest=load(); const idx=latest.lands.findIndex(x=>String(x.id)===String(l.id));
+    if(idx>=0) latest.lands[idx]=l; else latest.lands.push(l);
+    state=latest; if(!save())return; toast('متراژ با موفقیت ذخیره شد');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(l.id)},150);return;
   }
   let old=document.getElementById('measureRegisterBox');if(old)old.remove();
   let box=document.createElement('div');box.id='measureRegisterBox';box.className='register-modal';
@@ -2638,8 +2663,8 @@ function registerMeasured(){
   const buildLand=()=>({id:uid(),name:document.getElementById('newLandName').value.trim(),area:a/10000,areaM2:a,perimeter:p,lat,lng,region:document.getElementById('newLandRegion').value.trim(),ownership:regOwnership,soil:document.getElementById('newSoil').value.trim(),water:document.getElementById('newWater').value.trim(),irrigation:document.getElementById('newIrrigation').value.trim(),crop:document.getElementById('newCrop').value.trim(),notes:document.getElementById('newLandNotes').value.trim(),photos:[],measurement:{points:points.map(x=>[x[0],x[1]])},rentAmount:n(document.getElementById('newRentAmount').value),landlord:document.getElementById('newLandlord').value.trim(),rentStart:document.getElementById('newRentStart').value.trim(),rentEnd:document.getElementById('newRentEnd').value.trim()});
   const closeReg=()=>box.remove();
   document.getElementById('cancelRegister').onclick=closeReg;
-  document.getElementById('cancelRegister2').onclick=()=>{let name=document.getElementById('newLandName').value.trim()||'زمین جدید';document.getElementById('newLandName').value=name;let nl=buildLand();state.lands.push(nl);save();selected=nl.id;closeReg();toast('زمین ثبت شد؛ بعداً هم می‌توانی همه مشخصات را تکمیل کنی');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(nl.id)},120)};
-  document.getElementById('saveMeasuredLand').onclick=()=>{let nl=buildLand();if(!nl.name){toast('نام زمین را وارد کن');document.getElementById('newLandName').focus();return}state.lands.push(nl);save();selected=nl.id;closeReg();toast('زمین با همه مشخصات ذخیره شد');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(nl.id)},120)};
+  document.getElementById('cancelRegister2').onclick=()=>{let name=document.getElementById('newLandName').value.trim()||'زمین جدید';document.getElementById('newLandName').value=name;let nl=buildLand();if(!appendLandAndSave(nl))return;selected=nl.id;closeReg();toast('زمین ثبت شد؛ بعداً هم می‌توانی همه مشخصات را تکمیل کنی');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(nl.id)},120)};
+  document.getElementById('saveMeasuredLand').onclick=()=>{let nl=buildLand();if(!nl.name){toast('نام زمین را وارد کن');document.getElementById('newLandName').focus();return}if(!appendLandAndSave(nl))return;selected=nl.id;closeReg();toast('زمین با همه مشخصات ذخیره شد');measureReturn='land';setTimeout(()=>{closeMeasure();openLand(nl.id)},120)};
 }
 /* ===== PROFESSIONAL KESHAVAR-YAR V2 ===== */
 const YAR_CHAT_KEY='yk-yar-offline-chat-v1';
