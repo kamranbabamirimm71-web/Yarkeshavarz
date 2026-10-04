@@ -2111,7 +2111,21 @@ let pending=null;
 try{pending=JSON.parse(sessionStorage.getItem('yk-pending-measure')||'null')}catch{}
 let areaValue=pending&&pending.areaM2?((pending.areaM2/10000).toFixed(4).replace(/\.?0+$/,'')):'';
 app.innerHTML=`<div class="section"><h2>ثبت زمین جدید</h2><button class="secondary" onclick="startMeasureForNewLand()">📐 اندازه‌گیری</button></div><form class="card form" id="landForm"><div class="field"><label>نام زمین</label><input name="name" required placeholder="مثلاً زمین شمالی"></div><div class="field"><label>مساحت (هکتار)</label><input name="area" inputmode="decimal" required value="${areaValue}" placeholder="مثلاً 2.5"></div><div class="card" style="padding:10px;background:#f3f8f5"><b>📐 اندازه‌گیری</b><div class="small muted" id="measureSummary">${pending&&pending.areaM2?`مساحت اندازه‌گیری‌شده: ${Math.round(pending.areaM2).toLocaleString('fa-IR')} مترمربع · محیط: ${Math.round(pending.perimeter||0).toLocaleString('fa-IR')} متر`:'هنوز اندازه‌گیری نشده'}</div></div><div class="field"><label>روستا / شهر / منطقه</label><input name="region"></div><div class="field"><label>نوع مالکیت</label><div class="ownership-choice" id="ownershipChoice"><button type="button" class="ownership-option active" data-value="own" onclick="setOwnership('own')"><span class="ownership-icon">🏠</span><span><b>ملکی</b><small>زمین متعلق به خودم</small></span></button><button type="button" class="ownership-option" data-value="rent" onclick="setOwnership('rent')"><span class="ownership-icon">🔑</span><span><b>اجاره‌ای</b><small>زمین اجاره‌ای</small></span></button></div><input type="hidden" name="ownership" id="ownershipValue" value="own"><div id="rentDetails" class="rent-details" hidden><div class="rent-grid"><div class="field"><label>مبلغ اجاره</label><input name="rentAmount" inputmode="numeric" placeholder="مثلاً ۵۰٬۰۰۰٬۰۰۰ تومان"></div><div class="field"><label>نام مالک زمین</label><input name="landlord" placeholder="نام مالک"></div><div class="field"><label>شروع اجاره</label><input name="rentStart" placeholder="مثلاً ۱۴۰۵/۰۷/۰۱"></div><div class="field"><label>پایان اجاره</label><input name="rentEnd" placeholder="مثلاً ۱۴۰۶/۰۶/۳۱"></div></div></div></div><div class="field"><label>نوع خاک</label><input name="soil"></div><div class="field"><label>منبع آب</label><input name="water"></div><div class="field"><label>آبیاری</label><input name="irrigation"></div><div class="field"><label>محصول</label><input name="crop"></div><div class="field"><label>توضیحات</label><textarea name="notes"></textarea></div><button class="primary" type="submit">💾 ذخیره زمین</button></form>`;
-document.getElementById('landForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);let l={id:uid(),name:f.get('name'),area:n(f.get('area')),region:f.get('region'),ownership:f.get('ownership'),soil:f.get('soil'),water:f.get('water'),irrigation:f.get('irrigation'),crop:f.get('crop'),notes:f.get('notes'),lat:pending?.lat??null,lng:pending?.lng??null,areaM2:pending?.areaM2??null,perimeter:pending?.perimeter??null,measurement:pending?.points?{points:pending.points}:null,rentAmount:n(f.get('rentAmount')),landlord:f.get('landlord')||'',rentStart:f.get('rentStart')||'',rentEnd:f.get('rentEnd')||''};state.lands.push(l);save();sessionStorage.removeItem('yk-pending-measure');selected=l.id;openLand(l.id)}}
+document.getElementById('landForm').onsubmit=e=>{
+ e.preventDefault();
+ const f=new FormData(e.target);
+ const latest=load();
+ if(!Array.isArray(latest.lands)) latest.lands=[];
+ const l={id:uid(),name:String(f.get('name')||'').trim(),area:n(f.get('area')),region:String(f.get('region')||'').trim(),ownership:f.get('ownership')==='rent'?'rent':'own',soil:String(f.get('soil')||'').trim(),water:String(f.get('water')||'').trim(),irrigation:String(f.get('irrigation')||'').trim(),crop:String(f.get('crop')||'').trim(),notes:String(f.get('notes')||'').trim(),lat:pending?.lat??null,lng:pending?.lng??null,areaM2:pending?.areaM2??null,perimeter:pending?.perimeter??null,measurement:pending?.points?{points:pending.points}:null,rentAmount:n(f.get('rentAmount')),landlord:String(f.get('landlord')||''),rentStart:String(f.get('rentStart')||''),rentEnd:String(f.get('rentEnd')||'')};
+ if(!l.name){toast('نام زمین را وارد کن');return}
+ if(l.area<=0){toast('مساحت زمین را وارد کن');return}
+ latest.lands.push(l);
+ state=latest;
+ if(!save()){return}
+ sessionStorage.removeItem('yk-pending-measure');
+ selected=l.id;
+ openLand(l.id);
+};
 function setOwnership(v){const hidden=document.getElementById('ownershipValue');if(hidden)hidden.value=v;document.querySelectorAll('.ownership-option').forEach(b=>b.classList.toggle('active',b.dataset.value===v));const box=document.getElementById('rentDetails');if(box)box.hidden=v!=='rent'}
 function startMeasureForNewLand(){selected=null;measureReturn='add';go('measure')}
 function landSchematic(l){
@@ -3251,7 +3265,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20260930-v77').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v86').catch(()=>{}));
 }
 </script>
 
