@@ -2074,6 +2074,48 @@ body:has(.yar-entry-page) #app{
 }
 </style>
 
+
+<style id="yar-v94-entry-scroll-real">
+/* V94: اسکرول واقعی صفحه انتخاب زمین داخل پوسته ثابت کشاورزیار.
+   در نسخه‌های قبل خود صفحه اسکرول می‌شد ولی پوسته والد overflow:hidden داشت؛
+   بنابراین انتهای فهرست در بعضی گوشی‌ها کامل قابل دیدن نبود. */
+body:has(.yar-detail-shell) #app:has(.yar-entry-page),
+body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page){
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:auto!important;
+}
+body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page){
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page) .yar-entry-page{
+  position:relative!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0 8px 180px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+}
+body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page) .yar-entry-page .yar-land-list{
+  max-height:none!important;
+  overflow:visible!important;
+  padding-bottom:20px!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -3383,7 +3425,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v92').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v94').catch(()=>{}));
 }
 </script>
 
