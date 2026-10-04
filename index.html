@@ -2050,7 +2050,7 @@ body:has(.yar-entry-page) #app{
    خود صفحه انتخاب زمین را عمودی و لمسی اسکرول‌پذیر می‌کند. */
 .yar-detail-shell .yar-entry-page{
   position:relative!important;
-  height:calc(100dvh - 76px)!important;
+  height:100dvh!important;
   min-height:0!important;
   max-height:none!important;
   overflow-y:auto!important;
@@ -2059,13 +2059,14 @@ body:has(.yar-entry-page) #app{
   touch-action:pan-y!important;
   overscroll-behavior-y:auto!important;
   box-sizing:border-box!important;
-  padding-bottom:140px!important;
+  padding-bottom:220px!important;
+  scroll-padding-bottom:220px!important;
 }
 .yar-detail-shell .yar-entry-page .yar-land-list{
   display:grid!important;
   max-height:none!important;
   overflow:visible!important;
-  padding-bottom:18px!important;
+  padding-bottom:40px!important;
 }
 .yar-detail-shell .yar-entry-page .yar-land-option{
   min-height:68px!important;
