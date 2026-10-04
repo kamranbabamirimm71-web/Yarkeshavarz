@@ -2043,6 +2043,36 @@ body:has(.yar-entry-page) #app{
   .yar-entry-page .yar-land-list{max-height:55dvh!important;}
 }
 </style>
+
+<style id="yar-v92-real-entry-scroll">
+/* V92: مشکل اصلی v89-v91 این بود که خود صفحه ورود داخل قاب yar-detail-shell
+   دوباره با overflow:hidden قفل می‌شد. این قانون با همان specificity قاب،
+   خود صفحه انتخاب زمین را عمودی و لمسی اسکرول‌پذیر می‌کند. */
+.yar-detail-shell .yar-entry-page{
+  position:relative!important;
+  height:calc(100dvh - 76px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important;
+  overscroll-behavior-y:auto!important;
+  box-sizing:border-box!important;
+  padding-bottom:140px!important;
+}
+.yar-detail-shell .yar-entry-page .yar-land-list{
+  display:grid!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding-bottom:18px!important;
+}
+.yar-detail-shell .yar-entry-page .yar-land-option{
+  min-height:68px!important;
+  flex:none!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -3352,7 +3382,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v87').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v92').catch(()=>{}));
 }
 </script>
 
