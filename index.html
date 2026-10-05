@@ -15,7 +15,7 @@
 main{max-width:900px;margin:auto;padding:14px 12px 95px}.hero{min-height:210px;border-radius:24px;padding:22px;color:#fff;display:flex;flex-direction:column;justify-content:end;background:linear-gradient(135deg,#0b3d2e,#287659);box-shadow:var(--shadow);margin-bottom:14px}.hero h1{margin:0 0 7px;font-size:28px}.hero p{margin:0;opacity:.86;font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow)}.metric{font-size:22px;font-weight:900;margin-top:5px}.muted{color:var(--muted)}.small{font-size:11px}
 .section{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:19px 2px 9px}.section h2,.section h3{margin:0}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick button{min-height:78px;border:1px solid var(--line);background:#fff;border-radius:16px;font-weight:800;color:var(--g)}.primary,.secondary,.danger{border:0;border-radius:12px;padding:10px 13px;font-weight:800}.primary{background:var(--g);color:#fff}.secondary{background:#eaf2ee;color:var(--g)}.danger{background:#f8e8e8;color:var(--red)}.list{display:grid;gap:10px}.row{display:flex;align-items:center;justify-content:space-between;gap:9px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.badge{display:inline-block;background:#edf4ef;color:var(--g);border-radius:99px;padding:4px 8px;font-size:10px}.empty{text-align:center;color:var(--muted);padding:28px}
 .form{display:grid;gap:12px}.field{display:grid;gap:6px}.field label{font-size:12px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid #d7e2dc;background:#fff;border-radius:12px;padding:11px;color:var(--text);outline:none}.field textarea{min-height:90px}.tabs{display:flex;gap:7px;overflow:auto;padding:4px 0 9px}.tabs button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 12px}.tabs button.active{background:var(--g);color:#fff}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:74px;background:#fffefcfa;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:3000;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(12px)}.bottom button{border:0;background:none;color:#78857f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:21px}.bottom button span{font-size:9px}.bottom button.active{color:var(--g);font-weight:900}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:74px;background:#fffefcfa;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);z-index:3000;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(12px)}.bottom button{border:0;background:none;color:#78857f;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:21px}.bottom button span{font-size:9px}.bottom button.active{color:var(--g);font-weight:900}
 .weather-now{background:linear-gradient(135deg,#0b3d2e,#247557);color:#fff;border-radius:22px;padding:18px}.weather-temp{font-size:48px;font-weight:900}.weather-icon{font-size:55px}.forecast{display:grid;gap:7px}.day{display:grid;grid-template-columns:1.4fr .5fr .7fr .8fr;align-items:center;background:#f6f9f7;border-radius:14px;padding:10px}.weather-error{padding:25px;text-align:center}
 .measure-wrap{position:fixed;inset:0;background:#fff;z-index:5000;padding:10px}.measure-map{position:absolute;inset:0}.measure-head{position:absolute;z-index:5100;top:12px;left:12px;right:12px;display:flex;gap:7px}.measure-head input{flex:1;border:0;border-radius:13px;padding:12px;box-shadow:0 7px 22px #0002}.measure-tools{position:absolute;z-index:5100;top:62px;right:12px;display:flex;gap:6px}.measure-tools button{width:42px;height:42px;cursor:pointer;border:0;border-radius:12px;background:#fff;box-shadow:0 7px 20px #0002}.measure-bottom{position:absolute;z-index:5100;bottom:10px;left:10px;right:10px;background:#fffffff7;border-radius:18px;padding:9px;box-shadow:0 7px 25px #0003;max-width:620px;margin:auto}.measure-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;text-align:center;margin-bottom:7px}.measure-stats b{display:block;font-size:12px}.measure-stats span{font-size:8px;color:var(--muted)}.measure-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.gps,#register{width:100%;min-height:46px;margin:0;font-size:13px;position:relative;z-index:2;box-sizing:border-box;border:0;border-radius:13px;padding:10px;font-weight:900}.gps{background:#8f2929;color:#fff}#measureStatus{min-height:14px;margin:4px 0 0}.hint{text-align:center;color:var(--muted);font-size:9px;margin:6px}#register:disabled{opacity:.45;cursor:not-allowed}
 .chat{display:grid;gap:8px}.bubble{padding:11px 13px;border-radius:15px;max-width:90%;line-height:1.9;font-size:12px}.bot{background:#eaf2ee}.me{background:var(--g);color:#fff;margin-right:auto}.ad{min-height:150px;color:#fff;background:linear-gradient(135deg,#153d31,#2b7155);display:flex;flex-direction:column;justify-content:end}.news{display:grid;gap:10px}.news article{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}
@@ -4055,5 +4055,24 @@ body:has(.yar-final.yar-product-detail-page){
 .yar-detail-shell .yar-horizontal-panel::-webkit-scrollbar{display:none!important;}
 .yar-detail-shell .yar-horizontal-panel .yar-cost-box{margin-bottom:8px!important;}
 </style>
+<script id="yk-yar-direct-entry-fix">
+(function(){
+  function openYarDirect(e){
+    const b=e.target.closest && e.target.closest('button[data-r="yar"]');
+    if(!b)return;
+    try{
+      if(typeof go==='function'){
+        try{go('yar');return}catch(err){console.error('Yar entry error:',err);}
+      }
+    }catch(err){console.error('Yar go error:',err);}
+    // پشتیبان ورود: حتی اگر کد اصلی خطا داد، دکمه کشاورزیار باید صفحه ورود را باز کند.
+    const app=document.getElementById('app');
+    if(!app)return;
+    app.innerHTML='<section class="card" style="margin-top:10px"><h2>🌾 کشاورزیار</h2><p class="muted">ابتدا زمین را انتخاب کن، سپس آنلاین یا آفلاین را بزن.</p><button class="primary" style="width:100%;margin-top:10px" onclick="if(typeof go===\'function\'){go(\'lands\')}else{location.reload()}">🌱 انتخاب زمین</button></section>';
+    window.scrollTo({top:0,left:0});
+  }
+  document.addEventListener('click',openYarDirect,true);
+})();
+</script>
 </body>
 </html>
