@@ -3333,8 +3333,17 @@ function yar(){
       ${cultivationSection}
     </section>
     <section class="yar-horizontal-panel">
-      <div class="yar-page-step"><b>صفحه ۴ از ۴</b><span>محاسبات و سود و زیان</span></div>
-      ${calcSection}
+      <div class="yar-page-step"><b>صفحه ۴ از ۴</b><span>دسترسی‌های اصلی کشاورزیار</span></div>
+      ${yarPage4CalcOpen?`<div class="yar-flow-card">
+        <div class="yar-selected-head"><div><b>🧮 محاسبات عددی</b><h3>محاسبات و سود و زیان همین زمین</h3><small>اعداد فقط برای زمین و محصول انتخاب‌شده ذخیره می‌شوند.</small></div><button type="button" class="secondary" onclick="yarPage4CalcOpen=false;yar()">↩ برگشت</button></div>
+      </div>${calcSection}`:`<div class="yar-flow-card" style="margin-top:10px">
+        <div class="yar-section-head"><div><b>🌾 کشاورزیار</b><small>از اینجا بخش موردنیازت را انتخاب کن.</small></div></div>
+        <div style="display:grid;gap:10px;margin-top:10px">
+          <button type="button" class="primary" style="width:100%;min-height:64px" onclick="yarSlide(1)">👨‍🌾 <b>مشاور کشت</b><small style="display:block;opacity:.8;margin-top:4px">راهنمای تخصصی محصول و شرایط کشت</small></button>
+          <button type="button" class="secondary" style="width:100%;min-height:64px" onclick="yarPage4CalcOpen=false;yarChangeProduct()">🌱 <b>انتخاب محصول</b><small style="display:block;opacity:.8;margin-top:4px">انتخاب یا تغییر محصول همین زمین</small></button>
+          <button type="button" class="primary" style="width:100%;min-height:64px" onclick="yarOpenPage4Calc()">🧮 <b>محاسبات عددی</b><small style="display:block;opacity:.8;margin-top:4px">هزینه، درآمد و سود و زیان</small></button>
+        </div>
+      </div>`}
     </section>
   </div></div>${yarPanelNav(0,4)}`;
   app.innerHTML=`<section class="yarpro yar-real-page ${crop&&yarProductPage==='detail'?'yar-detail-shell':'yar-final yar-product-select-page'}">
@@ -3356,6 +3365,12 @@ function yar(){
   yarRender();yarBindInput();yarBindHorizontal();
 }
 let yarHorizontalIndex=0;
+let yarPage4CalcOpen=false;
+function yarOpenPage4Calc(){
+  yarPage4CalcOpen=true;
+  yar();
+  setTimeout(()=>yarSlide(3),0);
+}
 function yarSlide(index){
   const el=document.getElementById('yarHorizontalPages');
   if(!el)return;
