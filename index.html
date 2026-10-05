@@ -3249,7 +3249,12 @@ function yar(){
     if(saved && state.lands.some(x=>String(x.id)===saved)) selected=state.lands.find(x=>String(x.id)===saved).id;
   }
   const l=(yarLandMode&&selected)?yarLand(selected):null;
-  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());return}
+  if(!yarCropRegistry){
+    // صفحه ورود نباید منتظر بارگذاری کتابخانه محصولات بماند.
+    // ابتدا خود صفحه یار کشاورز را نشان بده، سپس کتابخانه را در پس‌زمینه بارگذاری کن.
+    yarCropRegistry={};
+    yarLoadCropRegistry().then(()=>yar()).catch(()=>{});
+  }
   const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
   if(crop&&!yarCropProfile){
     const requestedCrop=String(crop);
@@ -3465,7 +3470,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v96-app').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261005-v99-app').catch(()=>{}));
 }
 </script>
 
