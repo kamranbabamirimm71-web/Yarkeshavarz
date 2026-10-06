@@ -2612,9 +2612,23 @@ function settingsClearManager(){
     toast('گفت‌وگوی مدیر پاک شد');settings();
   }
 }
-function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 حساب کاربری</h2><p class="small muted">اطلاعات برنامه روی همین دستگاه ذخیره می‌شود.</p><button class="primary" onclick="go('profile')">پروفایل کشاورز</button><button class="primary" style="margin-top:8px" onclick="go('manager')">🐞 گزارش مشکل</button><button class="primary" style="margin-top:8px" onclick="yarShowProGate('امکانات حرفه‌ای یار کشاورز')">⭐ یار کشاورز حرفه‌ای 🔒</button><button class="primary" style="margin-top:8px" onclick="yarSupportModal()">💬 پشتیبانی و خرید امکانات حرفه‌ای</button><button class="primary" style="margin-top:8px" onclick="go('settings')">⚙️ تنظیمات</button></div><div class="card" style="margin-top:10px"><b>💾 پشتیبان‌گیری</b><p class="small muted">اطلاعات زمین‌ها، انبار، ادوات و پروفایل را ذخیره یا بازیابی کن.</p><div class="actions"><button class="secondary" onclick="backup()">خروجی پشتیبان</button><button class="secondary" onclick="document.getElementById('restore').click()">بازیابی پشتیبان</button></div></div><div class="card" style="margin-top:10px"><b>نسخه آزمایشی</b><p class="small muted">V3 Trial — قبل از جایگزینی GitHub ابتدا روی گوشی تست شود.</p></div>`}function ads(){head('تبلیغات');let items=[{icon:'🌱',cat:'بذر',title:'بذرهای اصلاح‌شده و پربازده',text:'انواع بذر مناسب کشت‌های مختلف؛ قبل از خرید شرایط منطقه و رقم را بررسی کن.',price:'تماس برای قیمت'},{icon:'🧪',cat:'نهاده',title:'کود و نهاده کشاورزی',text:'معرفی محصولات و خدمات تأمین نهاده برای کشاورزان.',price:'استعلام قیمت'},{icon:'🚜',cat:'تجهیزات',title:'ماشین‌آلات و تجهیزات مزرعه',text:'آگهی‌های مرتبط با ادوات و تجهیزات کشاورزی در این بخش نمایش داده می‌شود.',price:'تماس با فروشنده'}];app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>محصولات، تجهیزات و خدماتی که برای کشاورز کاربردی هستند.</p></div><div class="filter-row"><button class="active">همه</button><button>🌱 بذر</button><button>🧪 نهاده</button><button>🚜 تجهیزات</button><button>🛠️ خدمات</button></div><div class="ads-grid">${items.map((x,i)=>`<article class="ad-item"><div class="ad-top"><span style="font-size:30px">${x.icon}</span><span class="badge-ad">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price)}</span></div><button class="primary ad-contact" onclick="toast('اطلاعات تماس این آگهی در نسخه آنلاین فعال می‌شود')">☎️ اطلاعات تماس</button></article>`).join('')}</div><div class="card" style="margin-top:12px"><b>📌 ثبت آگهی</b><p class="small muted">در مرحله اتصال آنلاین، کشاورزان و فروشندگان می‌توانند آگهی ثبت کنند.</p></div>`}
-function news(){head('اخبار');let items=[{icon:'🌾',cat:'کشت',title:'مدیریت مرحله‌ای کشت؛ از آماده‌سازی تا برداشت',text:'ثبت عملیات و مشاهده وضعیت زمین کمک می‌کند تصمیم‌های مزرعه بر اساس سابقه واقعی گرفته شوند.',date:'امروز'},{icon:'🌦️',cat:'هوا',title:'هشدارهای آب‌وهوایی را جدی بگیرید',text:'پیش از آبیاری، سم‌پاشی یا عملیات حساس، شرایط جوی و پیش‌بینی روزهای آینده را بررسی کنید.',date:'امروز'},{icon:'💧',cat:'آبیاری',title:'آبیاری دقیق‌تر با ثبت مصرف آب',text:'ثبت زمان و مقدار آبیاری برای مقایسه عملکرد زمین و مدیریت بهتر منابع مفید است.',date:'این هفته'},{icon:'📦',cat:'بازار',title:'مدیریت موجودی انبار از هزینه‌های اضافی جلوگیری می‌کند',text:'ورودی و مصرف نهاده‌ها را جداگانه ثبت کن تا موجودی واقعی همیشه مشخص باشد.',date:'این هفته'}];app.innerHTML=`<div class="news-hero"><h2>📰 اخبار کشاورزی</h2><p>مطالب کاربردی برای تصمیم‌های بهتر در مزرعه.</p></div><div class="filter-row"><button class="active">همه</button><button>🌾 کشت</button><button>🌦️ هوا</button><button>💧 آبیاری</button><button>📈 بازار</button></div><div class="news-grid">${items.map((x,i)=>`<article class="news-item"><div class="news-top"><span style="font-size:29px">${x.icon}</span><span class="badge-news">${x.cat}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line">${esc(x.date)} · یار کشاورز</div><button class="secondary" style="width:100%;margin-top:11px" onclick="openNewsDetail(${i})">ادامه مطلب ←</button></article>`).join('')}</div>`;window.__ykNews=items}
-function openNewsDetail(i){let x=(window.__ykNews||[])[i];if(!x)return;head('خبر');app.innerHTML=`<article class="card news-detail"><div style="font-size:38px">${x.icon}</div><span class="badge-news">${esc(x.cat)}</span><h2>${esc(x.title)}</h2><div class="meta-line">${esc(x.date)} · یار کشاورز</div><p>${esc(x.text)}</p><p>این بخش در نسخه نهایی می‌تواند به سامانه اخبار آنلاین متصل شود تا اخبار معتبر، هشدارهای کشاورزی و اطلاعات بازار به‌صورت به‌روز در اختیار کشاورز قرار بگیرد.</p><button class="secondary" onclick="go('news')">← بازگشت به اخبار</button></article>`}
+function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 حساب کاربری</h2><p class="small muted">اطلاعات برنامه روی همین دستگاه ذخیره می‌شود.</p><button class="primary" onclick="go('profile')">پروفایل کشاورز</button><button class="primary" style="margin-top:8px" onclick="go('manager')">🐞 گزارش مشکل</button><button class="primary" style="margin-top:8px" onclick="yarShowProGate('امکانات حرفه‌ای یار کشاورز')">⭐ یار کشاورز حرفه‌ای ${yarIsPro()?"✅":"🔒"}</button><button class="primary" style="margin-top:8px" onclick="yarSupportModal()">💬 پشتیبانی و خرید امکانات حرفه‌ای</button><button class="primary" style="margin-top:8px" onclick="go('settings')">⚙️ تنظیمات</button></div><div class="card" style="margin-top:10px"><b>💾 پشتیبان‌گیری</b><p class="small muted">اطلاعات زمین‌ها، انبار، ادوات و پروفایل را ذخیره یا بازیابی کن.</p><div class="actions"><button class="secondary" onclick="backup()">خروجی پشتیبان</button><button class="secondary" onclick="document.getElementById('restore').click()">بازیابی پشتیبان</button></div></div><div class="card" style="margin-top:10px"><b>نسخه آزمایشی</b><p class="small muted">V3 Trial — قبل از جایگزینی GitHub ابتدا روی گوشی تست شود.</p></div>`}function ads(){
+  head('تبلیغات');
+  const d=ykContent();
+  const items=d.ads.length?d.ads:[{icon:'🌱',cat:'نمونه',title:'هنوز آگهی فعالی ثبت نشده است',text:'مدیر می‌تواند از پنل مدیریت آگهی جدید منتشر کند.',price:''}];
+  app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>آگهی‌های فعال منتشرشده توسط مدیر سامانه.</p></div><div class="ads-grid">${items.map(x=>`<article class="ad-item">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:14px">`:`<div style="font-size:30px">${esc(x.icon||'📢')}</div>`}<div class="ad-top"><span class="badge-ad">${esc(x.cat||'عمومی')}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price||'')}</span></div>${x.contact?`<button class="primary ad-contact" onclick="ykAdContact('${esc(x.contact).replace(/'/g,"&#039;")}')">☎️ تماس / مشاهده</button>`:''}</article>`).join('')}</div>`;
+}
+function ykAdContact(v){const x=String(v||'').trim();if(/^https?:\\/\\//i.test(x))location.href=x;else if(x)location.href='tel:'+x;}
+
+function news(){
+  head('اخبار');
+  const d=ykContent();
+  const items=d.news.length?d.news:[{icon:'🌾',cat:'کشت',title:'مدیریت مرحله‌ای کشت؛ از آماده‌سازی تا برداشت',text:'مطالب کاربردی برای تصمیم‌های بهتر در مزرعه.',date:'امروز'}];
+  window.__ykNews=items;
+  app.innerHTML=`<div class="news-hero"><h2>📰 اخبار کشاورزی</h2><p>اخبار و مطالبی که مدیر سامانه منتشر می‌کند.</p></div><div class="news-grid">${items.map((x,i)=>`<article class="news-item">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:14px">`:`<div style="font-size:29px">${esc(x.icon||'📰')}</div>`}<div class="news-top"><span class="badge-news">${esc(x.cat||'عمومی')}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line">${esc(x.date||'')}</div><button class="secondary" style="width:100%;margin-top:11px" onclick="openNewsDetail(${i})">ادامه مطلب ←</button></article>`).join('')}</div>`;
+}
+function openNewsDetail(i){let x=(window.__ykNews||[])[i];if(!x)return;head('خبر');app.innerHTML=`<article class="card news-detail">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.title)}" style="width:100%;max-height:260px;object-fit:cover;border-radius:16px">`:`<div style="font-size:38px">${esc(x.icon||'📰')}</div>`}<span class="badge-news">${esc(x.cat||'عمومی')}</span><h2>${esc(x.title)}</h2><div class="meta-line">${esc(x.date||'')} · یار کشاورز</div><p style="line-height:2">${esc(x.text)}</p><button class="secondary" onclick="go('news')">← بازگشت به اخبار</button></article>`}
+
 function equipment(){head('ادوات');let list=state.equipment||[];app.innerHTML=`<div class="section"><h2>🚜 ادوات و ماشین‌آلات</h2><button class="primary" onclick="addEquipment()">＋ ثبت وسیله</button></div><div class="equip-grid">${list.map((x,i)=>`<article class="card equip-item"><div class="equip-icon">${esc(x.icon||'🚜')}</div><div><b>${esc(x.name)}</b><div class="equip-meta">نوع: ${esc(x.type||'-')}<br>مدل: ${esc(x.model||'-')} · وضعیت: ${esc(x.status||'فعال')}</div></div><div class="actions" style="margin:0"><button class="secondary" onclick="editEquipment(${i})">✏️</button><button class="danger" onclick="deleteEquipment(${i})">🗑️</button></div></article>`).join('')||'<div class="card empty">هنوز ادواتی ثبت نشده است.</div>'}</div>`}
 function addEquipment(){let name=prompt('نام وسیله؟');if(!name)return;let type=prompt('نوع؟ مثلاً تراکتور، سمپاش، کمباین')||'ادوات';let model=prompt('مدل؟')||'';let status=prompt('وضعیت؟')||'فعال';let icon=type.includes('تراکت')?'🚜':type.includes('کمباین')?'🌾':type.includes('سمپ')?'🧴':'🔧';(state.equipment||=[]).push({id:uid(),name,type,model,status,icon});save();equipment()}
 function editEquipment(i){let x=state.equipment[i];if(!x)return;x.name=prompt('نام وسیله؟',x.name)||x.name;x.type=prompt('نوع؟',x.type)||x.type;x.model=prompt('مدل؟',x.model)||x.model;x.status=prompt('وضعیت؟',x.status)||x.status;save();equipment()}
@@ -2973,7 +2987,59 @@ let yarCropRegistry=null, yarCropProfile=null, yarCalc={};
 let yarCropCategory='';
 const YAR_PRO_ENABLED=true;
 const YAR_PRO_PRICE='۹۹٬۰۰۰ تومان در ماه';
-function yarIsPro(){return YAR_PRO_ENABLED===true;}
+const YK_PRO_ACCESS_KEY='yk-pro-access-v2';
+const YK_CONTENT_KEY='yk-content-v2';
+function ykRead(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
+function ykWrite(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+function ykUserProfile(){
+  state.profile=state.profile||{};
+  if(!state.profile.id) state.profile.id='u_'+uid();
+  save();
+  return state.profile;
+}
+function yarUserKey(){
+  const p=ykUserProfile();
+  return String(p.id||p.phone||p.email||p.name||'local-user');
+}
+function yarIsPro(){
+  if(YAR_PRO_ENABLED!==true)return false;
+  const a=ykRead(YK_PRO_ACCESS_KEY,{});
+  const u=yarUserKey();
+  return a[u]===true || a['*']===true;
+}
+function yarAccessLabel(){
+  return yarIsPro()?'⭐ حرفه‌ای فعال':'🔒 نسخه رایگان';
+}
+function ykContent(){
+  const d=ykRead(YK_CONTENT_KEY,{});
+  return {
+    news:Array.isArray(d.news)?d.news:[],
+    ads:Array.isArray(d.ads)?d.ads:[],
+    cropGuides:d.cropGuides&&typeof d.cropGuides==='object'?d.cropGuides:{}
+  };
+}
+function ykCropGuide(crop){
+  const d=ykContent().cropGuides[String(crop||'')];
+  return d&&typeof d==='object'?d:null;
+}
+function ykDiseaseList(crop,profile){
+  const g=ykCropGuide(crop)||{};
+  const base=Array.isArray(profile?.diseases)?profile.diseases:[];
+  const ds=Array.isArray(g.diseases)?g.diseases:[];
+  const out=[];
+  [...ds,...base].forEach(x=>{
+    const o=typeof x==='string'?{name:x}:x;
+    if(o?.name&&!out.some(y=>y.name===o.name))out.push(o);
+  });
+  return out;
+}
+function ykGallery(crop,profile){
+  const g=ykCropGuide(crop)||{};
+  const imgs=Array.isArray(g.images)?g.images:[];
+  const base=Array.isArray(profile?.images)?profile.images:[];
+  return [...imgs,...base].filter(Boolean);
+}
+
 
 function yarSupportModal(){
   const old=document.getElementById('yarSupportModal'); if(old)old.remove();
@@ -2986,10 +3052,24 @@ function yarCreateSupportRequest(){try{localStorage.setItem('yk-support-request-
 async function yarCopySupportRequest(){const t=yarSupportText();try{await navigator.clipboard.writeText(t);toast('متن درخواست کپی شد 📋')}catch(e){prompt('متن درخواست را کپی کن:',t)}}
 
 function yarShowProGate(feature='این بخش') {
+  if(yarIsPro()){ toast('این قابلیت برای شما فعال است ⭐'); return true; }
   const old=document.getElementById('yarProGateModal'); if(old)old.remove();
   const box=document.createElement('div'); box.id='yarProGateModal'; box.className='yar-pro-gate-modal';
-  box.innerHTML=`<div class="yar-pro-gate-backdrop" onclick="this.parentElement.remove()"></div><section class="yar-pro-gate-card" role="dialog" aria-modal="true"><button class="yar-pro-gate-close" type="button" onclick="this.closest('#yarProGateModal').remove()">×</button><div class="yar-pro-lock">🔒</div><h3>ویژگی حرفه‌ای</h3><p><b>${esc(feature)}</b> در نسخه رایگان قفل است.</p><div class="yar-pro-list"><span>⭐ راهنمای تخصصی محصول</span><span>⭐ برنامه کامل کشت از کاشت تا برداشت</span><span>⭐ جزئیات هزینه و سود و زیان</span></div><div class="yar-pro-price">نسخه حرفه‌ای · ${YAR_PRO_PRICE}</div><button type="button" class="primary" style="width:100%;margin-top:10px" onclick="yarSupportModal()">💬 خرید و ارتباط با پشتیبانی</button></section>`;
+  box.innerHTML=`<div class="yar-pro-gate-backdrop" onclick="this.parentElement.remove()"></div><section class="yar-pro-gate-card" role="dialog" aria-modal="true"><button class="yar-pro-gate-close" type="button" onclick="this.closest('#yarProGateModal').remove()">×</button><div class="yar-pro-lock">🔒</div><h3>ویژگی حرفه‌ای</h3><p><b>${esc(feature)}</b> در حال حاضر برای حساب شما قفل است.</p><div class="yar-pro-list"><span>⭐ راهنمای تخصصی و روش کشت</span><span>⭐ برنامه کامل کشت از کاشت تا برداشت</span><span>⭐ جزئیات هزینه و سود و زیان</span></div><div class="yar-pro-price">${yarAccessLabel()} · ${YAR_PRO_PRICE}</div><label style="display:block;font-size:11px;font-weight:800;margin:10px 0 5px">کد فعال‌سازی مدیر</label><input id="yarUnlockCode" type="text" inputmode="numeric" placeholder="کدی که مدیر به شما داده است" style="width:100%;border:1px solid #d6e4dc;border-radius:12px;padding:11px;font-family:inherit"><button type="button" class="primary" style="width:100%;margin-top:10px" onclick="yarRedeemProCode()">🔓 فعال‌سازی</button><button type="button" class="secondary" style="width:100%;margin-top:8px" onclick="yarSupportModal()">💬 درخواست خرید / پشتیبانی</button></section>`;
   document.body.appendChild(box);
+  return false;
+}
+function yarRedeemProCode(){
+  const code=String(document.getElementById('yarUnlockCode')?.value||'').trim();
+  const codes=ykRead('yk-pro-codes-v2',{});
+  const rec=codes[code];
+  if(!code||!rec||rec.active!==true){toast('کد فعال‌سازی معتبر نیست');return}
+  const access=ykRead(YK_PRO_ACCESS_KEY,{});
+  access[yarUserKey()]=true; ykWrite(YK_PRO_ACCESS_KEY,access);
+  rec.usedAt=new Date().toISOString(); codes[code]=rec; ykWrite('yk-pro-codes-v2',codes);
+  document.getElementById('yarProGateModal')?.remove();
+  toast('امکانات حرفه‌ای برای این حساب فعال شد ⭐');
+  yar();
 }
 function yarProFeature(feature){ if(yarIsPro()) return true; yarShowProGate(feature); return false; }
 let yarProductPage='select';
@@ -3225,6 +3305,22 @@ function yarCalcTotals(l,crop,areaHa,areaM2){
   const revenue=(d.yarYield>0&&areaHa>0&&d.yarPrice>0)?areaHa*d.yarYield*d.yarPrice:0;
   return {d,seedQty,irrigation,costs,revenue,profit:revenue-costs};
 }
+function yarCalcPreview(){
+  const l=selected?yarLand(selected):null, crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
+  if(!l||!crop)return;
+  const areaM2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0);
+  const areaHa=areaM2>0?areaM2/10000:Number(l.measurement?.hectare||l.area||0);
+  const get=id=>Number(document.getElementById(id)?.value||0)||0;
+  const costs=['yarSeedCost','yarFertilizerCost','yarPesticideCost','yarWaterCost','yarMachineCost','yarLaborCost','yarOtherCost'].reduce((a,k)=>a+get(k),0);
+  const seedQty=areaHa*get('yarSeedRate');
+  const revenue=areaHa*get('yarYield')*get('yarPrice');
+  const profit=revenue-costs;
+  const q=(id,val)=>{const e=document.querySelector(`[data-calc-result="${id}"]`);if(e)e.textContent=val};
+  q('seed',seedQty?seedQty.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—');
+  q('water',get('yarWaterAmount')?get('yarWaterAmount').toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—');
+  q('cost',money(costs));q('revenue',money(revenue));q('profit',money(Math.abs(profit)));
+  const pe=document.querySelector('[data-calc-profit-label]');if(pe)pe.textContent=profit>=0?'📈 سود خالص':'📉 زیان خالص';
+}
 function yar(){
   if(!yarLandMode){
     const saved=String(localStorage.getItem('yk-yar-entry-land')||'').trim();
@@ -3285,11 +3381,13 @@ function yar(){
     <div><span>📐 مساحت محاسبه‌شده</span><b>${areaHa.toLocaleString('fa-IR')} هکتار</b></div>
   </div>
   <div class="yar-auto-note">⚠️ ${auto.note}</div>`;
-  const cultivationSection=(l&&crop)?`<section class="yar-flow-card yar-cultivation-file yar-pro-locked"><div class="yar-pro-lock-strip"><span>🔒</span><div><b>پرونده کامل کشت — حرفه‌ای</b><small>برنامه کامل از کاشت تا برداشت در نسخه حرفه‌ای فعال می‌شود.</small></div><button type="button" class="secondary" onclick="yarShowProGate('برنامه کامل کشت')">مشاهده</button></div></section>`:'';
+  const guide=ykCropGuide(crop)||{};
+  const methodText=guide.method||guide.plowing||profile?.planting||'بستر کشت را نرم و یکنواخت آماده کن، شخم را متناسب با بافت خاک انجام بده و بذر را با عمق و فاصله مناسب رقم و خاک بکار.';
+  const cultivationSection=(l&&crop)?(yarIsPro()?`<section class="yar-flow-card yar-cultivation-file"><div class="yar-section-head"><div><b>🌱 روش کشت ساده</b><small>از آماده‌سازی زمین تا برداشت</small></div><span>⭐ فعال</span></div><div class="yar-simple-guide"><p>${esc(methodText)}</p><div class="yar-guide-grid"><div><b>📏 عمق بذر</b><span>${esc(guide.seedDepth||'طبق بافت خاک و توصیه رقم')}</span></div><div><b>↔️ فاصله بذر</b><span>${esc(guide.seedSpacing||'طبق رقم و تراکم هدف')}</span></div><div><b>🪨 نوع خاک</b><span>${esc(guide.soil||profile?.soil||l?.soil||'بر اساس آزمون خاک')}</span></div><div><b>🚜 شخم</b><span>${esc(guide.plowing||'شخم یکنواخت، بدون ایجاد کلوخه و فشردگی')}</span></div></div></div></section>`:`<section class="yar-flow-card yar-cultivation-file yar-pro-locked"><div class="yar-pro-lock-strip"><span>🔒</span><div><b>روش کشت کامل — حرفه‌ای</b><small>عمق بذر، فاصله بذر، خاک و روش شخم در نسخه حرفه‌ای.</small></div><button type="button" class="secondary" onclick="yarShowProGate('روش کشت کامل')">مشاهده</button></div></section>`):'';
   const autoCostRows=Object.entries(auto.costBreakdown||{}).map(([label,v])=>`<div class="yar-cost-row"><span>${v.icon} ${esc(label)}</span><b>${money(v.low)} تا ${money(v.high)}</b></div>`).join('');
   const calc=yarCalcTotals(l,crop,areaHa,areaM2);
   const cd=calc.d||{};
-  const calcSection=(l&&crop)?`<section class="yar-flow-card yar-number-calcs"><div class="yar-selected-head"><div><b>🧮 محاسبات عددی همین کشت</b><h3>🌾 ${esc(l.name)} · ${esc(crop)}</h3><small>مساحت محاسباتی: ${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع</small></div><span class="yar-area-badge">متصل به زمین</span></div><div class="yar-calc-form-grid"><label>🌱 نرخ بذر (کیلو/هکتار)<input id="yarSeedRate" type="number" min="0" value="${cd.yarSeedRate||''}"></label><label>💧 مقدار آب (مترمکعب)<input id="yarWaterAmount" type="number" min="0" value="${cd.yarWaterAmount||''}"></label></div><div class="yar-calc-result-grid"><div><span>🌾 بذر موردنیاز</span><b>${calc.seedQty?calc.seedQty.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'}</b></div><div><span>💧 مقدار آب</span><b>${calc.irrigation?calc.irrigation.toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—'}</b></div></div><hr><div class="yar-calc-form-grid"><label>🌾 هزینه بذر<input id="yarSeedCost" type="number" min="0" value="${cd.yarSeedCost||''}"></label><label>🧪 هزینه کود<input id="yarFertilizerCost" type="number" min="0" value="${cd.yarFertilizerCost||''}"></label><label>🧴 هزینه سم<input id="yarPesticideCost" type="number" min="0" value="${cd.yarPesticideCost||''}"></label><label>💧 هزینه آب و آبیاری<input id="yarWaterCost" type="number" min="0" value="${cd.yarWaterCost||''}"></label><label>🚜 هزینه ماشین‌آلات<input id="yarMachineCost" type="number" min="0" value="${cd.yarMachineCost||''}"></label><label>👷 هزینه کارگر<input id="yarLaborCost" type="number" min="0" value="${cd.yarLaborCost||''}"></label><label>📋 سایر هزینه‌ها<input id="yarOtherCost" type="number" min="0" value="${cd.yarOtherCost||''}"></label><label>📦 عملکرد محصول (کیلو/هکتار)<input id="yarYield" type="number" min="0" value="${cd.yarYield||''}"></label><label>💵 قیمت فروش (تومان/کیلو)<input id="yarPrice" type="number" min="0" value="${cd.yarPrice||''}"></label></div><div class="yar-calc-result-grid"><div><span>💸 مجموع هزینه</span><b>${money(calc.costs)}</b></div><div><span>💵 درآمد فروش</span><b>${money(calc.revenue)}</b></div></div><div class="calc-total"><span>${calc.profit>=0?'📈 سود خالص':'📉 زیان خالص'}</span><strong>${money(Math.abs(calc.profit))}</strong><small>فرمول: درآمد فروش − مجموع هزینه‌های کشت</small></div><button type="button" class="primary" style="width:100%;margin-top:10px" onclick="yarSaveNumericCalc()">💾 ذخیره محاسبات و سود و زیان</button><div class="yar-calc-note">تمام این اعداد برای زمین «${esc(l.name)}» و محصول «${esc(crop)}» ذخیره می‌شوند و با تغییر زمین، محاسبات زمین جدید نمایش داده می‌شود.</div></section>`:'';
+  const calcSection=(l&&crop)?`<section class="yar-flow-card yar-number-calcs"><div class="yar-selected-head"><div><b>🧮 محاسبات عددی همین کشت</b><h3>🌾 ${esc(l.name)} · ${esc(crop)}</h3><small>مساحت محاسباتی: ${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع</small></div><span class="yar-area-badge">متصل به زمین</span></div><div class="yar-calc-form-grid"><label>🌱 نرخ بذر (کیلو/هکتار)<input id="yarSeedRate" type="number" min="0" value="${cd.yarSeedRate||''}" oninput="yarCalcPreview()"></label><label>💧 مقدار آب (مترمکعب)<input id="yarWaterAmount" type="number" min="0" value="${cd.yarWaterAmount||''}" oninput="yarCalcPreview()"></label></div><div class="yar-calc-result-grid"><div><span>🌾 بذر موردنیاز</span><b data-calc-result="seed">${calc.seedQty?calc.seedQty.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'}</b></div><div><span>💧 مقدار آب</span><b data-calc-result="water">${calc.irrigation?calc.irrigation.toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—'}</b></div></div><hr><div class="yar-calc-form-grid"><label>🌾 هزینه بذر<input id="yarSeedCost" type="number" min="0" value="${cd.yarSeedCost||''}" oninput="yarCalcPreview()"></label><label>🧪 هزینه کود<input id="yarFertilizerCost" type="number" min="0" value="${cd.yarFertilizerCost||''}" oninput="yarCalcPreview()"></label><label>🧴 هزینه سم<input id="yarPesticideCost" type="number" min="0" value="${cd.yarPesticideCost||''}" oninput="yarCalcPreview()"></label><label>💧 هزینه آب و آبیاری<input id="yarWaterCost" type="number" min="0" value="${cd.yarWaterCost||''}" oninput="yarCalcPreview()"></label><label>🚜 هزینه ماشین‌آلات<input id="yarMachineCost" type="number" min="0" value="${cd.yarMachineCost||''}" oninput="yarCalcPreview()"></label><label>👷 هزینه کارگر<input id="yarLaborCost" type="number" min="0" value="${cd.yarLaborCost||''}" oninput="yarCalcPreview()"></label><label>📋 سایر هزینه‌ها<input id="yarOtherCost" type="number" min="0" value="${cd.yarOtherCost||''}" oninput="yarCalcPreview()"></label><label>📦 عملکرد محصول (کیلو/هکتار)<input id="yarYield" type="number" min="0" value="${cd.yarYield||''}" oninput="yarCalcPreview()"></label><label>💵 قیمت فروش (تومان/کیلو)<input id="yarPrice" type="number" min="0" value="${cd.yarPrice||''}" oninput="yarCalcPreview()"></label></div><div class="yar-calc-result-grid"><div><span>💸 مجموع هزینه</span><b data-calc-result="cost">${money(calc.costs)}</b></div><div><span>💵 درآمد فروش</span><b data-calc-result="revenue">${money(calc.revenue)}</b></div></div><div class="calc-total"><span data-calc-profit-label>${calc.profit>=0?'📈 سود خالص':'📉 زیان خالص'}</span><strong data-calc-result="profit">${money(Math.abs(calc.profit))}</strong><small>فرمول: درآمد فروش − مجموع هزینه‌های کشت</small></div><button type="button" class="primary" style="width:100%;margin-top:10px" onclick="yarSaveNumericCalc()">💾 ذخیره محاسبات و سود و زیان</button><div class="yar-calc-note">تمام این اعداد برای زمین «${esc(l.name)}» و محصول «${esc(crop)}» ذخیره می‌شوند و با تغییر زمین، محاسبات زمین جدید نمایش داده می‌شود.</div></section>`:'';
   const guideItems=[
     ['🌡️','اقلیم',profile?.climate||'اقلیم مناسب را بر اساس منطقه، فصل و نیاز محصول تنظیم کن.'],
     ['🪨','خاک',profile?.soil||l?.soil||'اطلاعات خاک ثبت نشده؛ آزمون خاک برای برنامه‌ریزی دقیق‌تر پیشنهاد می‌شود.'],
@@ -3300,7 +3398,11 @@ function yar(){
     ['🦠','بیماری‌ها',Array.isArray(profile?.diseases)?profile.diseases.join('، '):(profile?.diseases||'پایش علائم بیماری و مدیریت پیشگیرانه انجام شود.')],
     ['🌾','برداشت',profile?.harvest||'برداشت بر اساس رسیدگی محصول، کیفیت هدف و شرایط بازار برنامه‌ریزی شود.']
   ];
-  const guideSection=l?`<section class="yar-legacy-section yar-pro-locked"><div class="yar-pro-lock-panel"><div class="yar-pro-lock-icon">🔒</div><h3>راهنمای تخصصی مدیریت محصول</h3><p>راهنمای کامل اقلیم، خاک، آبیاری، تغذیه، آفات، بیماری‌ها و برداشت در نسخه حرفه‌ای قفل است.</p><button type="button" class="primary" onclick="yarShowProGate('راهنمای تخصصی محصول')">⭐ فعال‌سازی حرفه‌ای</button></div></section>`:'';
+  const diseaseList=ykDiseaseList(crop,profile);
+  const gallery=ykGallery(crop,profile);
+  const galleryHtml=gallery.length?`<div class="yar-media-gallery">${gallery.map((src,i)=>`<img src="${esc(src)}" alt="${esc(crop)} - تصویر ${i+1}" loading="lazy">`).join('')}</div>`:'';
+  const diseaseHtml=diseaseList.length?`<div class="yar-disease-list">${diseaseList.map(d=>`<article class="yar-disease-card"><h4>🦠 ${esc(d.name)}</h4><p>${esc(d.symptoms||d.signs||'علائم و نشانه‌های بیماری را در مزرعه بررسی کن.')}</p>${Array.isArray(d.images)&&d.images.length?`<div class="yar-media-gallery">${d.images.map((src,i)=>`<img src="${esc(src)}" alt="${esc(d.name)} - تصویر ${i+1}" loading="lazy">`).join('')}</div>`:''}<small>راهکار: ${esc(d.control||d.management||'پایش منظم، حذف منبع آلودگی و مدیریت تلفیقی؛ در صورت نیاز با کارشناس منطقه‌ای مشورت شود.')}</small></article>`).join('')}</div>`:'<p class="small muted">برای این محصول هنوز بیماری تصویری ثبت نشده است.</p>';
+  const guideSection=l?`<section class="yar-legacy-section ${yarIsPro()?'':'yar-pro-locked'}">${yarIsPro()?`<div class="yar-section-head"><div><b>📘 راهنمای ساده محصول</b><small>${esc(crop)}</small></div><span>⭐ فعال</span></div><div class="yar-guide-grid"><div><b>📏 عمق بذر</b><span>${esc(guide.seedDepth||'طبق بافت خاک و رقم')}</span></div><div><b>↔️ فاصله بذر</b><span>${esc(guide.seedSpacing||'طبق رقم و تراکم هدف')}</span></div><div><b>🪨 نوع خاک</b><span>${esc(guide.soil||profile?.soil||l?.soil||'بر اساس آزمون خاک')}</span></div><div><b>🚜 شخم</b><span>${esc(guide.plowing||'شخم متناسب با بافت خاک و بدون ایجاد لایه فشرده')}</span></div></div><p class="yar-simple-guide-text">${esc(guide.method||profile?.planting||'روش کشت بر اساس رقم، منطقه و شرایط زمین تنظیم شود.')}</p><h4>📸 تصاویر محصول</h4>${galleryHtml}<h4>🦠 بیماری‌ها و آفات</h4>${diseaseHtml}`:`<div class="yar-pro-lock-panel"><div class="yar-pro-lock-icon">🔒</div><h3>راهنمای تخصصی مدیریت محصول</h3><p>عمق بذر، فاصله بذر، نوع خاک، شخم و تصاویر بیماری‌ها در نسخه حرفه‌ای.</p><button type="button" class="primary" onclick="yarShowProGate('راهنمای تخصصی محصول')">⭐ فعال‌سازی</button></div>`}</section>`:'';
   const scenarioSection=l?`<section class="yar-legacy-section yar-pro-locked"><div class="yar-pro-lock-panel"><div class="yar-pro-lock-icon">🔒</div><h3>برنامه کشت کامل</h3><p>برنامه تخصصی کشت بر اساس محصول، مساحت و منطقه در نسخه حرفه‌ای قفل است.</p><button type="button" class="primary" onclick="yarShowProGate('برنامه کشت کامل')">⭐ فعال‌سازی حرفه‌ای</button></div></section>`:'';
   const areaSummary=l?`<div class="yar-legacy-area-strip"><span>📐 متراژ زمین</span><b>${areaM2.toLocaleString('fa-IR')} مترمربع</b><span>🌾 ${areaHa.toLocaleString('fa-IR')} هکتار</span><span>📶 حالت: ${yarMode==='online'?'آنلاین':'آفلاین'}</span></div>`:'';
 
@@ -4075,3 +4177,14 @@ body:has(.yar-final.yar-product-detail-page){
 </style>
 </body>
 </html>
+
+<style id="yk-v2-enhancements">
+.yar-simple-guide-text{line-height:2;margin:10px 0;padding:12px;background:#f5faf7;border-radius:14px}
+.yar-guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.yar-guide-grid>div{padding:10px;background:#f8fbf9;border:1px solid #dcebe3;border-radius:12px}
+.yar-guide-grid b,.yar-guide-grid span{display:block}.yar-guide-grid b{color:#17664b;margin-bottom:4px}.yar-guide-grid span{font-size:12px;line-height:1.7}
+.yar-media-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+.yar-media-gallery img{width:100%;height:145px;object-fit:cover;border-radius:12px;border:1px solid #dcebe3;background:#eef5f1}
+.yar-disease-list{display:grid;gap:10px}.yar-disease-card{padding:12px;border:1px solid #e2e8e5;border-radius:14px;background:#fff}.yar-disease-card h4{margin:0 0 6px}.yar-disease-card p{line-height:1.8;margin:5px 0}.yar-disease-card small{line-height:1.8;display:block}
+@media(max-width:430px){.yar-guide-grid{grid-template-columns:1fr}.yar-media-gallery{grid-template-columns:repeat(2,1fr)}}
+</style>
