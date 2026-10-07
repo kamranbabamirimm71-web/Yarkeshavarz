@@ -1,4 +1,4 @@
-const CACHE='yar-keshavarz-shell-v111';
+const CACHE='yar-keshavarz-shell-v112';
 const CORE=[
   './','./index.html','./offline/offline-ai.js','./offline/agriculture-db.js',
   './offline/agriculture-db-extended.js','./offline/calculators.js',

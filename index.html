@@ -3364,7 +3364,12 @@ function yar(){
     if(saved && state.lands.some(x=>String(x.id)===saved)) selected=state.lands.find(x=>String(x.id)===saved).id;
   }
   const l=(yarLandMode&&selected)?yarLand(selected):null;
-  if(!yarCropRegistry){yarLoadCropRegistry().then(()=>yar());return}
+  // کشاورزیار نباید برای بارگذاری کتابخانه محصولات منتظر بماند؛
+  // صفحه ورود باید فوراً باز شود حتی اگر فایل کتابخانه آنلاین/آفلاین دیر برسد.
+  if(!yarCropRegistry){
+    yarCropRegistry={};
+    yarLoadCropRegistry().then(()=>{ if(route==='yar') yar(); }).catch(()=>{});
+  }
   const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
   if(crop&&!yarCropProfile){
     const requestedCrop=String(crop);
@@ -3522,7 +3527,8 @@ function yarSlide(index){
   const panels=el.querySelectorAll('.yar-horizontal-panel');
   const total=panels.length;
   const requested=Math.max(0,Math.min(Number(index)||0,total-1));
-  if(requested>0 && !yarProFeature('صفحات تخصصی کشت')) return;
+  // صفحات داخلی کشاورزیار برای کاربر عادی هم قابل استفاده‌اند؛
+  // قفل حرفه‌ای نباید جلوی انتخاب محصول/راهنما/محاسبات را بگیرد.
   const i=requested;
   yarHorizontalIndex=i;
   const track=el.querySelector('.yar-horizontal-track');
