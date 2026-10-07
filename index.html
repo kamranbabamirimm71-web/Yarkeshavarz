@@ -3423,12 +3423,12 @@ function yar(){
     <div><span>📐 مساحت محاسبه‌شده</span><b>${areaHa.toLocaleString('fa-IR')} هکتار</b></div>
   </div>
   <div class="yar-auto-note">⚠️ ${auto.note}</div>`;
+  const guide=yarRichGuide(crop,profile,yarCropRegistry?.[crop]||{});
   const methodText=guide.method||guide.plowing||profile?.planting||'بستر کشت را نرم و یکنواخت آماده کن، شخم را متناسب با بافت خاک انجام بده و بذر را با عمق و فاصله مناسب رقم و خاک بکار.';
   const cultivationSection=(l&&crop)?(yarIsPro()?`<section class="yar-flow-card yar-cultivation-file"><div class="yar-section-head"><div><b>🌱 روش کشت ساده</b><small>از آماده‌سازی زمین تا برداشت</small></div><span>⭐ فعال</span></div><div class="yar-simple-guide"><p>${esc(methodText)}</p><div class="yar-guide-grid"><div><b>📏 عمق بذر</b><span>${esc(guide.seedDepth||'طبق بافت خاک و توصیه رقم')}</span></div><div><b>↔️ فاصله بذر</b><span>${esc(guide.seedSpacing||'طبق رقم و تراکم هدف')}</span></div><div><b>🪨 نوع خاک</b><span>${esc(guide.soil||profile?.soil||l?.soil||'بر اساس آزمون خاک')}</span></div><div><b>🚜 شخم</b><span>${esc(guide.plowing||'شخم یکنواخت، بدون ایجاد کلوخه و فشردگی')}</span></div></div></div></section>`:`<section class="yar-flow-card yar-cultivation-file yar-pro-locked"><div class="yar-pro-lock-strip"><span>🔒</span><div><b>روش کشت کامل — حرفه‌ای</b><small>عمق بذر، فاصله بذر، خاک و روش شخم در نسخه حرفه‌ای.</small></div><button type="button" class="secondary" onclick="yarShowProGate('روش کشت کامل')">مشاهده</button></div></section>`):'';
   const autoCostRows=Object.entries(auto.costBreakdown||{}).map(([label,v])=>`<div class="yar-cost-row"><span>${v.icon} ${esc(label)}</span><b>${money(v.low)} تا ${money(v.high)}</b></div>`).join('');
   const calc=yarAdvancedCalcTotals(l,crop,areaHa,areaM2);
   const cd=calc.d||{};
-  const guide=yarRichGuide(crop,profile,yarCropRegistry?.[crop]||{});
   const calcSection=(l&&crop)?`<section class="yar-flow-card yar-number-calcs"><div class="yar-selected-head"><div><b>🧮 محاسبات عددی پیشرفته همین کشت</b><h3>🌾 ${esc(l.name)} · ${esc(crop)}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع</small></div><span class="yar-area-badge">اتصال مستقیم به زمین</span></div>
   <div class="yar-calc-form-grid"><label>🌱 نرخ بذر (کیلو/هکتار)<input id="yarSeedRate" type="number" min="0" value="${cd.yarSeedRate||''}" oninput="yarCalcPreview()"></label><label>💧 آب کل کشت (مترمکعب)<input id="yarWaterAmount" type="number" min="0" value="${cd.yarWaterAmount||''}" oninput="yarCalcPreview()"></label><label>↔️ فاصله ردیف (سانتی‌متر)<input id="yarRowSpacing" type="number" min="0" value="${cd.yarRowSpacing||''}" oninput="yarCalcPreview()"></label><label>🌱 فاصله بذر/بوته (سانتی‌متر)<input id="yarSeedSpacing" type="number" min="0" value="${cd.yarSeedSpacing||''}" oninput="yarCalcPreview()"></label><label>🧪 نرخ کود (کیلو/هکتار)<input id="yarFertilizerRate" type="number" min="0" value="${cd.yarFertilizerRate||''}" oninput="yarCalcPreview()"></label><label>🧴 نرخ سم (لیتر/هکتار)<input id="yarPesticideRate" type="number" min="0" value="${cd.yarPesticideRate||''}" oninput="yarCalcPreview()"></label><label>🚜 ساعت ماشین/هکتار<input id="yarMachineHours" type="number" min="0" value="${cd.yarMachineHours||''}" oninput="yarCalcPreview()"></label><label>👷 ساعت کارگر/هکتار<input id="yarLaborHours" type="number" min="0" value="${cd.yarLaborHours||''}" oninput="yarCalcPreview()"></label></div>
   <div class="yar-calc-result-grid"><div><span>🌾 بذر موردنیاز</span><b data-calc-result="seed">${calc.seedQty?calc.seedQty.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'}</b></div><div><span>💧 آب</span><b data-calc-result="water">${calc.water?calc.water.toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—'}</b></div><div><span>🌱 تراکم تقریبی</span><b data-calc-result="density">${calc.density?Math.round(calc.density).toLocaleString('fa-IR')+' بوته/مترمربع':'—'}</b></div><div><span>🧪 کود</span><b data-calc-result="fertilizer">${calc.fertilizer?calc.fertilizer.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'}</b></div></div>
@@ -3640,7 +3640,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261007-v110').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261007-v115').catch(()=>{}));
 }
 </script>
 
@@ -4226,15 +4226,3 @@ body:has(.yar-final.yar-product-detail-page){
 .yar-detail-shell .yar-horizontal-panel .yar-cost-box{margin-bottom:8px!important;}
 </style>
 </body>
-</html>
-
-<style id="yk-v2-enhancements">
-.yar-simple-guide-text{line-height:2;margin:10px 0;padding:12px;background:#f5faf7;border-radius:14px}
-.yar-guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.yar-guide-grid>div{padding:10px;background:#f8fbf9;border:1px solid #dcebe3;border-radius:12px}
-.yar-guide-grid b,.yar-guide-grid span{display:block}.yar-guide-grid b{color:#17664b;margin-bottom:4px}.yar-guide-grid span{font-size:12px;line-height:1.7}
-.yar-media-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
-.yar-media-gallery img{width:100%;height:145px;object-fit:cover;border-radius:12px;border:1px solid #dcebe3;background:#eef5f1}
-.yar-disease-list{display:grid;gap:10px}.yar-disease-card{padding:12px;border:1px solid #e2e8e5;border-radius:14px;background:#fff}.yar-disease-card h4{margin:0 0 6px}.yar-disease-card p{line-height:1.8;margin:5px 0}.yar-disease-card small{line-height:1.8;display:block}
-@media(max-width:430px){.yar-guide-grid{grid-template-columns:1fr}.yar-media-gallery{grid-template-columns:repeat(2,1fr)}}
-</style>
