@@ -2122,7 +2122,7 @@ body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page) .yar-entry-pa
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
 <main id="app"></main>
-<nav class="bottom" id="mainBottomNav"><button type="button" data-r="home">⌂<span>خانه</span></button><button type="button" data-r="news">▤<span>اخبار</span></button><button type="button" data-r="game">🎮<span>سرگرمی</span></button><button type="button" data-r="yar" id="yarBottomBtn">✦<span>کشاورزیار</span></button><button type="button" data-r="ads">◈<span>تبلیغات</span></button><button type="button" data-r="account">●<span>اکانت</span></button></nav>
+<nav class="bottom" id="mainBottomNav"><button type="button" data-r="home">⌂<span>خانه</span></button><button type="button" data-r="news">▤<span>اخبار</span></button><button type="button" data-r="game">🎮<span>سرگرمی</span></button><button type="button" id="yarBottomBtn" onclick="event.stopPropagation(); window.openYar(); return false;">✦<span>کشاورزیار</span></button><button type="button" data-r="ads">◈<span>تبلیغات</span></button><button type="button" data-r="account">●<span>اکانت</span></button></nav>
 <input id="restore" type="file" accept="application/json" hidden>
 <script>
 const FUN_KEY='yk-fun-v2';
@@ -3636,7 +3636,7 @@ function backup(){let a=document.createElement('a');a.href=URL.createObjectURL(n
 document.getElementById('backup').onclick=backup;document.getElementById('restore').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...base,...JSON.parse(r.result)};save();go('home')}catch{toast('فایل پشتیبان نامعتبر است')}};r.readAsText(f)}
 document.addEventListener('click',e=>{let b=e.target.closest('[data-r]');if(b)go(b.dataset.r)});
 document.getElementById('restore').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state={...base,...JSON.parse(r.result)};save();toast('پشتیبان بازیابی شد');go('home')}catch{toast('فایل پشتیبان معتبر نیست')}};r.readAsText(f)};
-window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLand=editLand;window.openYar=function(){try{go('yar')}catch(e){console.error('YAR entry failed',e);try{toast('ورود به کشاورزیار با خطا روبه‌رو شد؛ دوباره امتحان کن.')}catch(_){}}};document.getElementById('yarBottomBtn')?.addEventListener('click',window.openYar);go('home');
+window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLand=editLand;window.openYar=function(){route='yar';try{go('yar')}catch(e){console.error('YAR entry failed',e);try{toast('ورود به کشاورزیار با خطا روبه‌رو شد؛ دوباره امتحان کن.')}catch(_){}}};go('home');
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
