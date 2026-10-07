@@ -1,5 +1,5 @@
 (()=>{
-const PIN='yk-admin-pin-v1', KNOW='yk-admin-knowledge-v1', LAND='yk-v3-clean', CHAT='yk-yar-chat-v4', CONTENT='yk-content-v2', ACCESS='yk-pro-access-v2';
+const PIN='yk-admin-pin-v1', KNOW='yk-admin-knowledge-v1', LAND='yar-keshavarz-v4-single', CHAT='yk-yar-chat-v4', CONTENT='yk-content-v2', ACCESS='yk-pro-access-v2';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch{return d}};
 const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
