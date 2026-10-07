@@ -3298,66 +3298,59 @@ function yarRichGuide(crop,profile,meta){
   const cat=String(meta?.label||meta?.category||profile?.category||'');
   const genericDepth=/باغ|میوه|خشکبار/.test(cat)?'عمق کاشت نهال: محل طوقه هم‌سطح خاک باشد؛ ریشه‌ها خم نشوند':'حدود ۳ تا ۵ سانتی‌متر برای اغلب بذرهای زراعی؛ مقدار دقیق با اندازه بذر و بافت خاک تنظیم شود';
   const genericSpacing=/باغ|میوه|خشکبار/.test(cat)?'فاصله ردیف و درخت بر اساس رقم، پایه، اقلیم و هدف باغ تعیین شود':'فاصله ردیف معمولاً ۱۵ تا ۳۰ سانتی‌متر؛ تراکم دقیق بر اساس رقم و روش کاشت تعیین شود';
-  const svg=(title,stage)=>'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600"><rect width="900" height="600" fill="#edf6ef"/><rect y="390" width="900" height="210" fill="#c9a66b"/><circle cx="120" cy="110" r="70" fill="#fff" opacity=".65"/><text x="450" y="120" text-anchor="middle" font-size="46" font-family="sans-serif" font-weight="700" fill="#173b2b">${name}</text><text x="450" y="190" text-anchor="middle" font-size="34" font-family="sans-serif" fill="#286246">${stage}</text><path d="M450 390V260" stroke="#2f7d45" stroke-width="18"/><path d="M450 330C360 270 330 220 300 180M450 350C540 280 580 230 610 170" fill="none" stroke="#3f914f" stroke-width="22" stroke-linecap="round"/><circle cx="300" cy="180" r="34" fill="#63a84e"/><circle cx="610" cy="170" r="34" fill="#63a84e"/><text x="450" y="520" text-anchor="middle" font-size="30" font-family="sans-serif" fill="#3c2b16">تصویر آموزشی محصول</text></svg>`);
-  const imgs=Array.isArray(g.images)&&g.images.length?g.images:[svg(name,'بذر و سبزشدن'),svg(name,'رشد مزرعه'),svg(name,'برداشت')];
-  const ds=Array.isArray(g.diseases)&&g.diseases.length?g.diseases:[
-    {name:'تنش و بیماری‌های برگی',symptoms:'لکه، تغییر رنگ، پیچیدگی یا خشکیدگی برگ‌ها؛ تشخیص دقیق باید با مشاهده علائم و شرایط مزرعه انجام شود.',control:'پایش منظم، حذف منبع آلودگی و مدیریت آبیاری/تهویه؛ در صورت نیاز تشخیص کارشناس.',images:[svg(name,'نمونه آموزشی علائم بیماری'),svg(name,'نمونه آموزشی لکه برگی')]}
-  ];
+  const imgs=Array.isArray(g.images)&&g.images.length?g.images:ykGallery(name,profile);
+  const ds=Array.isArray(g.diseases)&&g.diseases.length?g.diseases:ykDiseaseList(name,profile);
   return {seedDepth:g.depth||guideFallbackDepth(profile, genericDepth),seedSpacing:g.spacing||genericSpacing,soil:g.soil||profile?.soil||'لومی با زهکشی مناسب؛ آزمون خاک برای تصمیم دقیق‌تر ضروری است',plowing:g.plow||'شخم متناسب با بافت خاک، سپس دیسک و تسطیح برای بستر یکنواخت',method:g.method||profile?.planting||'عمق و فاصله کاشت را بر اساس رقم، بافت خاک، رطوبت و تراکم هدف تنظیم کن؛ قبل از کشت، بستر باید یکنواخت و عاری از کلوخه و فشردگی باشد.',images:imgs,diseases:ds};
 }
 function guideFallbackDepth(profile,fallback){return String(profile?.seedDepth||fallback||'طبق بافت خاک و رقم')}
-function yarAdvancedCalcTotals(l,crop,areaHa,areaM2){
-  const d=yarCalcData(l,crop); const num=k=>Number(d[k])||0;
-  const seedQty=areaHa*num('yarSeedRate');
-  const water=num('yarWaterAmount');
-  const density=(num('yarRowSpacing')>0&&num('yarSeedSpacing')>0)?areaM2/((num('yarRowSpacing')/100)*(num('yarSeedSpacing')/100)):0;
-  const fertilizer=areaHa*num('yarFertilizerRate');
-  const pesticide=areaHa*num('yarPesticideRate');
-  const machineHours=areaHa*num('yarMachineHours');
-  const laborHours=areaHa*num('yarLaborHours');
-  const costs=['yarSeedCost','yarFertilizerCost','yarPesticideCost','yarWaterCost','yarMachineCost','yarLaborCost','yarOtherCost'].reduce((a,k)=>a+num(k),0);
-  const revenue=areaHa*num('yarYield')*num('yarPrice');
-  const profit=revenue-costs;
-  const yieldTotal=areaHa*num('yarYield');
-  const costPerKg=yieldTotal>0?costs/yieldTotal:0;
-  const breakEvenYield=num('yarPrice')>0?costs/num('yarPrice'):0;
-  const breakEvenPrice=yieldTotal>0?costs/yieldTotal:0;
-  const roi=costs>0?(profit/costs)*100:0;
-  return {d,seedQty,water,density,fertilizer,pesticide,machineHours,laborHours,costs,revenue,profit,yieldTotal,costPerKg,breakEvenYield,breakEvenPrice,roi};
+function yarAutomaticCalc(l,crop,profile,areaHa,areaM2){
+  const auto=yarAutoEstimate(l,crop,profile,areaHa)||{};
+  const name=String(crop||'').trim();
+  const meta=yarCropRegistry?.[name]||{};
+  const cat=String(meta.label||profile?.category||'').trim();
+  const text=(name+' '+cat).toLowerCase();
+  const midRange=(value)=>{
+    const m=String(value||'').replace(/[٬,]/g,'').match(/(\d+(?:\.\d+)?)\s*تا\s*(\d+(?:\.\d+)?)/);
+    return m?(Number(m[1])+Number(m[2]))/2:0;
+  };
+  const seedText=String(auto.seedPerHa||'');
+  const seedMatch=seedText.match(/(\d+(?:\.\d+)?)\s*تا\s*(\d+(?:\.\d+)?)/);
+  const seedRate=seedMatch?(Number(seedMatch[1])+Number(seedMatch[2]))/2:50;
+  let waterPerHa=4500,fertilizerPerHa=220,pesticidePerHa=4,machineHoursPerHa=8,laborHoursPerHa=24;
+  if(/برنج/.test(text)){waterPerHa=12000;fertilizerPerHa=280;pesticidePerHa=6;machineHoursPerHa=10;laborHoursPerHa=28;}
+  else if(/ذرت|نیشکر/.test(text)){waterPerHa=6500;fertilizerPerHa=300;pesticidePerHa=5;machineHoursPerHa=9;laborHoursPerHa=24;}
+  else if(/سبزی|صیفی|سیب.?زمینی|پیاز|گوجه|خیار|فلفل|کاهو/.test(text)){waterPerHa=7000;fertilizerPerHa=350;pesticidePerHa=7;machineHoursPerHa=12;laborHoursPerHa=45;}
+  else if(/باغ|میوه|انگور|سیب|انار|پسته|گردو|بادام/.test(text)){waterPerHa=6500;fertilizerPerHa=400;pesticidePerHa=8;machineHoursPerHa=14;laborHoursPerHa=55;}
+  else if(/حبوبات|نخود|عدس|لوبیا/.test(text)){waterPerHa=3500;fertilizerPerHa=160;pesticidePerHa=3;machineHoursPerHa=7;laborHoursPerHa=20;}
+  else if(/دانه.?های روغنی|کلزا|آفتابگردان|کنجد/.test(text)){waterPerHa=4000;fertilizerPerHa=230;pesticidePerHa=4;machineHoursPerHa=8;laborHoursPerHa=20;}
+  if(/رسی/.test(String(l?.soil||''))) waterPerHa*=0.95;
+  if(/شنی|شنی.?لومی/.test(String(l?.soil||''))) waterPerHa*=1.10;
+  if(/قطره|نواری/.test(String(l?.irrigation||''))) waterPerHa*=0.72;
+  else if(/بارانی/.test(String(l?.irrigation||''))) waterPerHa*=0.85;
+  const totalSeed=areaHa*seedRate;
+  const water=areaHa*waterPerHa;
+  const fertilizer=areaHa*fertilizerPerHa;
+  const pesticide=areaHa*pesticidePerHa;
+  const machineHours=areaHa*machineHoursPerHa;
+  const laborHours=areaHa*laborHoursPerHa;
+  const totalCostRange=String(auto.cost||'').match(/(\d[\d٬,]*)\s*تومان\s*تا\s*(\d[\d٬,]*)\s*تومان/);
+  const totalCost=totalCostRange?((Number(totalCostRange[1].replace(/[٬,]/g,''))+Number(totalCostRange[2].replace(/[٬,]/g,'')))/2):0;
+  const totalRevenueRange=String(auto.income||'').match(/(\d[\d٬,]*)\s*تومان\s*تا\s*(\d[\d٬,]*)\s*تومان/);
+  const totalRevenue=totalRevenueRange?((Number(totalRevenueRange[1].replace(/[٬,]/g,''))+Number(totalRevenueRange[2].replace(/[٬,]/g,'')))/2):0;
+  const parts={seed:.12,fertilizer:.18,pesticide:.10,water:.12,machine:.18,labor:.22,other:.08};
+  const costs={};Object.entries(parts).forEach(([k,v])=>costs[k]=totalCost*v);
+  const profit=totalRevenue-totalCost;
+  const yieldPerHa=areaHa>0?totalRevenue/areaHa:0;
+  const salePrice=yieldPerHa>0?totalRevenue/(areaHa*yieldPerHa):0;
+  const costPerKg=yieldPerHa>0?totalCost/(areaHa*yieldPerHa):0;
+  return {auto,seedRate,totalSeed,waterPerHa,water,fertilizer,pesticide,machineHours,laborHours,costs,totalCost,totalRevenue,profit,yieldPerHa,yieldTotal:areaHa*yieldPerHa,salePrice,costPerKg,roi:totalCost>0?(profit/totalCost)*100:0};
 }
-function yarCalcData(l,crop){
-  if(!l||!crop)return {};
-  l.yarCalculations=l.yarCalculations&&typeof l.yarCalculations==='object'?l.yarCalculations:{};
-  return l.yarCalculations[crop]||{};
-}
-function yarSaveNumericCalc(){
-  const l=selected?yarLand(selected):null, crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
-  if(!l||!crop)return;
-  const ids=['yarSeedRate','yarWaterAmount','yarRowSpacing','yarSeedSpacing','yarFertilizerRate','yarPesticideRate','yarMachineHours','yarLaborHours','yarSeedCost','yarFertilizerCost','yarPesticideCost','yarWaterCost','yarMachineCost','yarLaborCost','yarOtherCost','yarYield','yarPrice'];
-  const data={};
-  ids.forEach(id=>{const el=document.getElementById(id);data[id]=Number(el?.value||0)||0});
-  l.yarCalculations=l.yarCalculations&&typeof l.yarCalculations==='object'?l.yarCalculations:{};
-  l.yarCalculations[crop]=data;
-  save();
-  yarCalc={};
-  toast('محاسبات و سود و زیان برای همین زمین و محصول ذخیره شد');
-  yar();
-}
-function yarCalcTotals(l,crop,areaHa,areaM2){return yarAdvancedCalcTotals(l,crop,areaHa,areaM2)}
+function yarAdvancedCalcTotals(l,crop,areaHa,areaM2){return yarAutomaticCalc(l,crop,yarCropProfile,areaHa,areaM2)}
+function yarCalcData(){return {}}
+function yarSaveNumericCalc(){toast('این محاسبات خودکار است و نیازی به ورود یا ذخیره دستی ندارد.');}
+function yarCalcTotals(l,crop,areaHa,areaM2){return yarAutomaticCalc(l,crop,yarCropProfile,areaHa,areaM2)}
+function yarCalcPreview(){}
 
-function yarCalcPreview(){
-  const l=selected?yarLand(selected):null, crop=l?(yarSelectedCrop(l.id)||l.crop||''):''; if(!l||!crop)return;
-  const areaM2=Number(l.areaM2||l.measurement?.areaM2||l.measurement?.area||0); const areaHa=areaM2>0?areaM2/10000:Number(l.measurement?.hectare||l.area||0);
-  const get=id=>Number(document.getElementById(id)?.value||0)||0;
-  const costs=['yarSeedCost','yarFertilizerCost','yarPesticideCost','yarWaterCost','yarMachineCost','yarLaborCost','yarOtherCost'].reduce((a,k)=>a+get(k),0);
-  const seedQty=areaHa*get('yarSeedRate'), water=get('yarWaterAmount');
-  const density=(get('yarRowSpacing')>0&&get('yarSeedSpacing')>0)?areaM2/((get('yarRowSpacing')/100)*(get('yarSeedSpacing')/100)):0;
-  const fertilizer=areaHa*get('yarFertilizerRate'), yieldTotal=areaHa*get('yarYield');
-  const revenue=yieldTotal*get('yarPrice'), profit=revenue-costs, costPerKg=yieldTotal>0?costs/yieldTotal:0, breakEvenYield=get('yarPrice')>0?costs/get('yarPrice'):0, roi=costs>0?(profit/costs)*100:0;
-  const q=(id,val)=>{const e=document.querySelector(`[data-calc-result="${id}"]`);if(e)e.textContent=val};
-  q('seed',seedQty?seedQty.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'); q('water',water?water.toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—'); q('density',density?Math.round(density).toLocaleString('fa-IR')+' بوته/مترمربع':'—'); q('fertilizer',fertilizer?fertilizer.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'); q('cost',money(costs)); q('revenue',money(revenue)); q('yieldTotal',yieldTotal?yieldTotal.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلو':'—'); q('costPerKg',costPerKg?money(costPerKg):'—'); q('breakEvenYield',breakEvenYield?breakEvenYield.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلو':'—'); q('roi',roi?roi.toLocaleString('fa-IR',{maximumFractionDigits:1})+'٪':'—'); q('profit',money(Math.abs(profit)));
-  const pe=document.querySelector('[data-calc-profit-label]');if(pe)pe.textContent=profit>=0?'📈 سود خالص':'📉 زیان خالص';
-}
 function yar(){
   if(!yarLandMode){
     const saved=String(localStorage.getItem('yk-yar-entry-land')||'').trim();
@@ -3429,12 +3422,26 @@ function yar(){
   const autoCostRows=Object.entries(auto.costBreakdown||{}).map(([label,v])=>`<div class="yar-cost-row"><span>${v.icon} ${esc(label)}</span><b>${money(v.low)} تا ${money(v.high)}</b></div>`).join('');
   const calc=yarAdvancedCalcTotals(l,crop,areaHa,areaM2);
   const cd=calc.d||{};
-  const calcSection=(l&&crop)?`<section class="yar-flow-card yar-number-calcs"><div class="yar-selected-head"><div><b>🧮 محاسبات عددی پیشرفته همین کشت</b><h3>🌾 ${esc(l.name)} · ${esc(crop)}</h3><small>${areaHa.toLocaleString('fa-IR')} هکتار · ${areaM2.toLocaleString('fa-IR')} مترمربع</small></div><span class="yar-area-badge">اتصال مستقیم به زمین</span></div>
-  <div class="yar-calc-form-grid"><label>🌱 نرخ بذر (کیلو/هکتار)<input id="yarSeedRate" type="number" min="0" value="${cd.yarSeedRate||''}" oninput="yarCalcPreview()"></label><label>💧 آب کل کشت (مترمکعب)<input id="yarWaterAmount" type="number" min="0" value="${cd.yarWaterAmount||''}" oninput="yarCalcPreview()"></label><label>↔️ فاصله ردیف (سانتی‌متر)<input id="yarRowSpacing" type="number" min="0" value="${cd.yarRowSpacing||''}" oninput="yarCalcPreview()"></label><label>🌱 فاصله بذر/بوته (سانتی‌متر)<input id="yarSeedSpacing" type="number" min="0" value="${cd.yarSeedSpacing||''}" oninput="yarCalcPreview()"></label><label>🧪 نرخ کود (کیلو/هکتار)<input id="yarFertilizerRate" type="number" min="0" value="${cd.yarFertilizerRate||''}" oninput="yarCalcPreview()"></label><label>🧴 نرخ سم (لیتر/هکتار)<input id="yarPesticideRate" type="number" min="0" value="${cd.yarPesticideRate||''}" oninput="yarCalcPreview()"></label><label>🚜 ساعت ماشین/هکتار<input id="yarMachineHours" type="number" min="0" value="${cd.yarMachineHours||''}" oninput="yarCalcPreview()"></label><label>👷 ساعت کارگر/هکتار<input id="yarLaborHours" type="number" min="0" value="${cd.yarLaborHours||''}" oninput="yarCalcPreview()"></label></div>
-  <div class="yar-calc-result-grid"><div><span>🌾 بذر موردنیاز</span><b data-calc-result="seed">${calc.seedQty?calc.seedQty.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'}</b></div><div><span>💧 آب</span><b data-calc-result="water">${calc.water?calc.water.toLocaleString('fa-IR',{maximumFractionDigits:2})+' مترمکعب':'—'}</b></div><div><span>🌱 تراکم تقریبی</span><b data-calc-result="density">${calc.density?Math.round(calc.density).toLocaleString('fa-IR')+' بوته/مترمربع':'—'}</b></div><div><span>🧪 کود</span><b data-calc-result="fertilizer">${calc.fertilizer?calc.fertilizer.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلوگرم':'—'}</b></div></div>
-  <hr><div class="yar-calc-form-grid"><label>🌾 هزینه بذر<input id="yarSeedCost" type="number" min="0" value="${cd.yarSeedCost||''}" oninput="yarCalcPreview()"></label><label>🧪 هزینه کود<input id="yarFertilizerCost" type="number" min="0" value="${cd.yarFertilizerCost||''}" oninput="yarCalcPreview()"></label><label>🧴 هزینه سم<input id="yarPesticideCost" type="number" min="0" value="${cd.yarPesticideCost||''}" oninput="yarCalcPreview()"></label><label>💧 هزینه آب و آبیاری<input id="yarWaterCost" type="number" min="0" value="${cd.yarWaterCost||''}" oninput="yarCalcPreview()"></label><label>🚜 هزینه ماشین‌آلات<input id="yarMachineCost" type="number" min="0" value="${cd.yarMachineCost||''}" oninput="yarCalcPreview()"></label><label>👷 هزینه کارگر<input id="yarLaborCost" type="number" min="0" value="${cd.yarLaborCost||''}" oninput="yarCalcPreview()"></label><label>📋 سایر هزینه‌ها<input id="yarOtherCost" type="number" min="0" value="${cd.yarOtherCost||''}" oninput="yarCalcPreview()"></label><label>📦 عملکرد (کیلو/هکتار)<input id="yarYield" type="number" min="0" value="${cd.yarYield||''}" oninput="yarCalcPreview()"></label><label>💵 قیمت فروش (تومان/کیلو)<input id="yarPrice" type="number" min="0" value="${cd.yarPrice||''}" oninput="yarCalcPreview()"></label></div>
-  <div class="yar-calc-result-grid"><div><span>💸 مجموع هزینه</span><b data-calc-result="cost">${money(calc.costs)}</b></div><div><span>💵 درآمد</span><b data-calc-result="revenue">${money(calc.revenue)}</b></div><div><span>📦 برداشت کل</span><b data-calc-result="yieldTotal">${calc.yieldTotal?calc.yieldTotal.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلو':'—'}</b></div><div><span>💰 هزینه هر کیلو</span><b data-calc-result="costPerKg">${calc.costPerKg?money(calc.costPerKg):'—'}</b></div><div><span>⚖️ حداقل عملکرد برای سربه‌سر</span><b data-calc-result="breakEvenYield">${calc.breakEvenYield?calc.breakEvenYield.toLocaleString('fa-IR',{maximumFractionDigits:2})+' کیلو':'—'}</b></div><div><span>📊 بازده سرمایه</span><b data-calc-result="roi">${calc.roi?calc.roi.toLocaleString('fa-IR',{maximumFractionDigits:1})+'٪':'—'}</b></div></div>
-  <div class="calc-total"><span data-calc-profit-label>${calc.profit>=0?'📈 سود خالص':'📉 زیان خالص'}</span><strong data-calc-result="profit">${money(Math.abs(calc.profit))}</strong><small>سود = درآمد − همه هزینه‌ها · هزینه هر کیلو = هزینه کل ÷ برداشت کل · بازده = سود ÷ هزینه × ۱۰۰</small></div><button type="button" class="primary" style="width:100%;margin-top:10px" onclick="yarSaveNumericCalc()">💾 ذخیره محاسبات کامل</button><div class="yar-calc-note">اعداد برای زمین «${esc(l.name)}» و محصول «${esc(crop)}» جداگانه ذخیره می‌شوند.</div></section>`:'';
+  const calcSection=(l&&crop)?(()=>{
+    const a=yarAutomaticCalc(l,crop,profile,areaHa,areaM2);
+    const money0=v=>money(Math.round(Number(v)||0));
+    return `<section class="yar-flow-card yar-number-calcs"><div class="yar-selected-head"><div><b>🧮 محاسبات خودکار همین زمین</b><h3>🌾 ${esc(l.name)} · ${esc(crop)}</h3><small>${areaHa.toLocaleString('fa-IR',{maximumFractionDigits:2})} هکتار · ${areaM2.toLocaleString('fa-IR',{maximumFractionDigits:0})} مترمربع</small></div><span class="yar-area-badge">محاسبه خودکار</span></div>
+    <div class="yar-auto-note">تمام اعداد بر اساس مساحت ثبت‌شده زمین، محصول انتخاب‌شده، خاک و روش آبیاری محاسبه شده‌اند. هیچ عددی لازم نیست دستی وارد شود.</div>
+    <div class="yar-calc-result-grid">
+      <div><span>🌱 بذر موردنیاز</span><b>${a.totalSeed.toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم</b></div>
+      <div><span>💧 آب موردنیاز</span><b>${a.water.toLocaleString('fa-IR',{maximumFractionDigits:0})} مترمکعب</b></div>
+      <div><span>🧪 کود موردنیاز</span><b>${a.fertilizer.toLocaleString('fa-IR',{maximumFractionDigits:0})} کیلوگرم</b></div>
+      <div><span>🧴 سم موردنیاز</span><b>${a.pesticide.toLocaleString('fa-IR',{maximumFractionDigits:1})} لیتر</b></div>
+      <div><span>🚜 کار ماشین</span><b>${a.machineHours.toLocaleString('fa-IR',{maximumFractionDigits:1})} ساعت</b></div>
+      <div><span>👷 کار کارگر</span><b>${a.laborHours.toLocaleString('fa-IR',{maximumFractionDigits:1})} ساعت</b></div>
+    </div>
+    <div class="yar-cost-box"><div class="yar-cost-title"><b>💸 برآورد هزینه‌ها</b><small>بدون ورود دستی</small></div>
+      ${[['🌱 بذر',a.costs.seed],['🧪 کود و تغذیه',a.costs.fertilizer],['🧴 سم و حفاظت',a.costs.pesticide],['💧 آب و آبیاری',a.costs.water],['🚜 ماشین‌آلات',a.costs.machine],['👷 کارگر',a.costs.labor],['📋 سایر',a.costs.other]].map(x=>`<div class="yar-cost-row"><span>${x[0]}</span><b>${money0(x[1])}</b></div>`).join('')}
+    </div>
+    <div class="yar-calc-result-grid"><div><span>💸 مجموع هزینه</span><b>${money0(a.totalCost)}</b></div><div><span>📦 عملکرد کل</span><b>${a.yieldTotal.toLocaleString('fa-IR',{maximumFractionDigits:0})} کیلو</b></div><div><span>💵 درآمد</span><b>${money0(a.totalRevenue)}</b></div><div><span>💰 هزینه هر کیلو</span><b>${money0(a.costPerKg)}</b></div><div><span>⚖️ قیمت فروش برآوردی</span><b>${money0(a.salePrice)} تومان/کیلو</b></div><div><span>📊 بازده سرمایه</span><b>${a.roi.toLocaleString('fa-IR',{maximumFractionDigits:1})}٪</b></div></div>
+    <div class="calc-total"><span>${a.profit>=0?'📈 سود خالص':'📉 زیان خالص'}</span><strong>${money0(Math.abs(a.profit))}</strong><small>درآمد − مجموع هزینه‌های برآوردی</small></div>
+    <div class="yar-calc-note">این اعداد «برآورد خودکار» هستند و برای تصمیم مالی نهایی باید قیمت روز نهاده، محصول، منطقه و شرایط واقعی مزرعه به‌روزرسانی شوند.</div></section>`;
+  })():'';
   const guideItems=[
     ['🌡️','اقلیم',profile?.climate||'اقلیم مناسب را بر اساس منطقه، فصل و نیاز محصول تنظیم کن.'],
     ['🪨','خاک',profile?.soil||l?.soil||'اطلاعات خاک ثبت نشده؛ آزمون خاک برای برنامه‌ریزی دقیق‌تر پیشنهاد می‌شود.'],
@@ -3449,7 +3456,7 @@ function yar(){
   const gallery=ykGallery(crop,profile);
   const galleryHtml=gallery.length?`<div class="yar-media-gallery">${gallery.map((src,i)=>`<img src="${esc(src)}" alt="${esc(crop)} - تصویر ${i+1}" loading="lazy">`).join('')}</div>`:'';
   const diseaseHtml=diseaseList.length?`<div class="yar-disease-list">${diseaseList.map(d=>`<article class="yar-disease-card"><h4>🦠 ${esc(d.name)}</h4><p>${esc(d.symptoms||d.signs||'علائم و نشانه‌های بیماری را در مزرعه بررسی کن.')}</p>${Array.isArray(d.images)&&d.images.length?`<div class="yar-media-gallery">${d.images.map((src,i)=>`<img src="${esc(src)}" alt="${esc(d.name)} - تصویر ${i+1}" loading="lazy">`).join('')}</div>`:''}<small>راهکار: ${esc(d.control||d.management||'پایش منظم، حذف منبع آلودگی و مدیریت تلفیقی؛ در صورت نیاز با کارشناس منطقه‌ای مشورت شود.')}</small></article>`).join('')}</div>`:'<p class="small muted">برای این محصول هنوز بیماری تصویری ثبت نشده است.</p>';
-  const guideImages=(guide.images||[]).map((src,i)=>`<figure class="yar-media-card"><img src="${esc(src)}" alt="${esc(crop)} مرحله ${i+1}" loading="lazy" onerror="this.closest('figure').classList.add('media-failed')"><figcaption>${['بذر و استقرار','رشد و مزرعه','برداشت'][i]||'تصویر محصول'}</figcaption></figure>`).join('');
+  const guideImages=(guide.images||[]).map((src,i)=>`<figure class="yar-media-card"><img src="${esc(src)}" alt="${esc(crop)} مرحله ${i+1}" loading="lazy" onerror="this.closest('figure').remove()"><figcaption>${['بذر و استقرار','رشد و مزرعه','برداشت'][i]||'تصویر محصول'}</figcaption></figure>`).join('');
   const diseaseCards=(guide.diseases||[]).map(d=>`<article class="yar-disease-card"><h4>🦠 ${esc(d.name)}</h4><p>${esc(d.symptoms||'علائم بیماری')}</p>${(d.images||[]).map((src,i)=>`<img class="yar-disease-img" src="${esc(src)}" alt="${esc(d.name)}" loading="lazy" onerror="this.style.display='none'">`).join('')}<small>راهکار: ${esc(d.control||'پایش منظم و مدیریت تلفیقی؛ برای مصرف سم با کارشناس منطقه‌ای مشورت شود.')}</small></article>`).join('');
   const guideSection=l?`<section class="yar-legacy-section"><div class="yar-section-head"><div><b>📘 راهنمای تخصصی ${esc(crop)}</b><small>اطلاعات کشت + تصاویر مراحل رشد + بیماری‌ها</small></div><span>⭐ فعال</span></div><div class="yar-guide-grid"><div><b>📏 عمق بذر</b><span>${esc(guide.seedDepth)}</span></div><div><b>↔️ فاصله بذر</b><span>${esc(guide.seedSpacing)}</span></div><div><b>🪨 نوع خاک</b><span>${esc(guide.soil)}</span></div><div><b>🚜 روش شخم</b><span>${esc(guide.plowing)}</span></div></div><div class="yar-simple-guide-text"><b>روش پیشنهادی:</b><br>${esc(guide.method)}</div><h4>📸 تصاویر محصول</h4><div class="yar-media-gallery yar-rich-gallery">${guideImages}</div><h4>🦠 بیماری‌ها و آفات مهم</h4><div class="yar-disease-list">${diseaseCards}</div></section>`:'';
   const scenarioSection=l?`<section class="yar-legacy-section yar-pro-locked"><div class="yar-pro-lock-panel"><div class="yar-pro-lock-icon">🔒</div><h3>برنامه کشت کامل</h3><p>برنامه تخصصی کشت بر اساس محصول، مساحت و منطقه در نسخه حرفه‌ای قفل است.</p><button type="button" class="primary" onclick="yarShowProGate('برنامه کشت کامل')">⭐ فعال‌سازی حرفه‌ای</button></div></section>`:'';
@@ -3640,7 +3647,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261007-v115').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261007-v116').catch(()=>{}));
 }
 </script>
 
@@ -4225,4 +4232,6 @@ body:has(.yar-final.yar-product-detail-page){
 .yar-detail-shell .yar-horizontal-panel::-webkit-scrollbar{display:none!important;}
 .yar-detail-shell .yar-horizontal-panel .yar-cost-box{margin-bottom:8px!important;}
 </style>
+
+<style id="yar-v116-auto-calc">.yar-auto-note{margin:9px 0;padding:10px;border-radius:12px;background:#eef7f1;color:#4f6d60;font-size:10px;line-height:1.9}.yar-number-calcs .yar-calc-result-grid{margin-top:9px}.yar-number-calcs .yar-cost-box{margin-top:10px}</style>
 </body>
