@@ -3005,7 +3005,8 @@ function yarIsPro(){
   if(YAR_PRO_ENABLED!==true)return false;
   const a=ykRead(YK_PRO_ACCESS_KEY,{});
   const u=yarUserKey();
-  return a[u]===true || a['*']===true;
+  // دسترسی پایه باز است؛ مدیر فقط در صورت ثبت قفل صریح برای کاربر، آن را می‌بندد.
+  return a[u]!==false && a['*']!==false;
 }
 function yarAccessLabel(){
   return yarIsPro()?'⭐ حرفه‌ای فعال':'🔒 نسخه رایگان';

@@ -27,10 +27,11 @@ function renderAccess(){
  const s=read(LAND,{}),p=s.profile||{};
  if(!p.id){p.id='u_'+Date.now().toString(36);s.profile=p;write(LAND,s)}
  const a=read(ACCESS,{});
- box.innerHTML=`<div class="item"><b>${esc(p.name||'کشاورز')}</b><small>شناسه پروفایل: ${esc(p.id)} · ${esc(p.phone||p.email||'اطلاعات تماس ثبت نشده')}</small><button class="${a[p.id]===true?'danger':'primary'}" id="toggleMyPro">${a[p.id]===true?'🔒 بستن دسترسی':'🔓 باز کردن دسترسی'}</button></div><div class="item"><b>همه کاربران این دستگاه</b><small>برای باز کردن همه پروفایل‌ها</small><button class="primary" id="openAllPro">⭐ باز کردن برای همه</button><button class="danger" id="closeAllPro" style="margin-top:7px">🔒 بستن برای همه</button></div>`;
- $('#toggleMyPro').onclick=()=>{const a=read(ACCESS,{});a[p.id]=a[p.id]!==true;write(ACCESS,a);renderAccess()};
- $('#openAllPro').onclick=()=>{const a=read(ACCESS,{});a['*']=true;write(ACCESS,a);renderAccess()};
- $('#closeAllPro').onclick=()=>{const a=read(ACCESS,{});delete a['*'];delete a[p.id];write(ACCESS,a);renderAccess()};
+ const isLocked=a[p.id]===false || a['*']===false;
+ box.innerHTML=`<div class="item"><b>${esc(p.name||'کشاورز')}</b><small>شناسه پروفایل: ${esc(p.id)} · ${esc(p.phone||p.email||'اطلاعات تماس ثبت نشده')}</small><button class="${isLocked?'primary':'danger'}" id="toggleMyPro">${isLocked?'🔓 باز کردن دسترسی':'🔒 بستن دسترسی'}</button></div><div class="item"><b>همه کاربران این دستگاه</b><small>دسترسی پایه باز است؛ در صورت نیاز می‌توانی همه را قفل کنی.</small><button class="primary" id="openAllPro">⭐ باز کردن برای همه</button><button class="danger" id="closeAllPro" style="margin-top:7px">🔒 بستن برای همه</button></div>`;
+ $('#toggleMyPro').onclick=()=>{const a=read(ACCESS,{});if(a[p.id]===false || a['*']===false){delete a[p.id];delete a['*']}else{a[p.id]=false}write(ACCESS,a);renderAccess()};
+ $('#openAllPro').onclick=()=>{const a=read(ACCESS,{});delete a['*'];delete a[p.id];write(ACCESS,a);renderAccess()};
+ $('#closeAllPro').onclick=()=>{const a=read(ACCESS,{});a['*']=false;write(ACCESS,a);renderAccess()};
 }
 function refresh(){const ls=lands(),t=tx(),area=ls.reduce((a,x)=>a+Number(x.area||x.hectare||0),0),income=t.filter(x=>x.type==='income').reduce((a,x)=>a+Number(x.amount||0),0),cost=t.filter(x=>x.type==='expense').reduce((a,x)=>a+Number(x.amount||0),0);$('#landCount').textContent=fmt(ls.length);$('#areaTotal').textContent=fmt(area);$('#questionCount').textContent=fmt(chats().length);$('#profit').textContent=fmt(income-cost);$('#status').textContent=`${fmt(ls.length)} زمین، ${fmt(chats().length)} پیام محلی و ${fmt(knowledge().length)} دانش مدیریتی ذخیره شده است. متن چت‌ها در پنل مدیریت نمایش داده نمی‌شود.`;renderLands();renderKnowledge();renderContent();renderAccess();userStats()}
 function renderLands(){const el=$('#landsList'),ls=lands();el.innerHTML=ls.length?ls.map((l,i)=>`<div class="item"><b>${esc(l.name||`زمین ${i+1}`)}</b><small>مساحت: ${esc(l.area??l.hectare??'ثبت نشده')} | محصول: ${esc(l.crop||l.product||'ثبت نشده')}</small><small>خاک: ${esc(l.soil||'—')} | آبیاری: ${esc(l.irrigation||'—')}</small></div>`).join(''):'<p class="note">هنوز زمینی ثبت نشده است.</p>'}
