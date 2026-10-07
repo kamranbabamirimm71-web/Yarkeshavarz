@@ -2618,7 +2618,7 @@ function account(){head('اکانت');app.innerHTML=`<div class="card"><h2>👤 
   const items=d.ads.length?d.ads:[{icon:'🌱',cat:'نمونه',title:'هنوز آگهی فعالی ثبت نشده است',text:'مدیر می‌تواند از پنل مدیریت آگهی جدید منتشر کند.',price:''}];
   app.innerHTML=`<div class="ads-hero"><h2>📢 بازار و تبلیغات کشاورزی</h2><p>آگهی‌های فعال منتشرشده توسط مدیر سامانه.</p></div><div class="ads-grid">${items.map(x=>`<article class="ad-item">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.title)}" style="width:100%;height:150px;object-fit:cover;border-radius:14px">`:`<div style="font-size:30px">${esc(x.icon||'📢')}</div>`}<div class="ad-top"><span class="badge-ad">${esc(x.cat||'عمومی')}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p><div class="meta-line"><span class="ad-price">${esc(x.price||'')}</span></div>${x.contact?`<button class="primary ad-contact" onclick="ykAdContact('${esc(x.contact).replace(/'/g,"&#039;")}')">☎️ تماس / مشاهده</button>`:''}</article>`).join('')}</div>`;
 }
-function ykAdContact(v){const x=String(v||'').trim();if(/^https?:\\/\\//i.test(x))location.href=x;else if(x)location.href='tel:'+x;}
+function ykAdContact(v){const x=String(v||'').trim();if(/^https?:\/\//i.test(x))location.href=x;else if(x)location.href='tel:'+x;}
 
 function news(){
   head('اخبار');
@@ -3591,7 +3591,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261004-v96-app').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261007-v110').catch(()=>{}));
 }
 </script>
 
