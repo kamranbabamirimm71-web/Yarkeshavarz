@@ -3005,7 +3005,13 @@ async function yarLoadCropProfile(name){
 }
 async function yarLoadCropRegistry(){
   if(yarCropRegistry)return yarCropRegistry;
-  try{const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops2');yarCropRegistry=mod.registry||{}}catch(e){yarCropRegistry={}}
+  try{
+    const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops2');
+    yarCropRegistry=mod.registry||{};
+  }catch(e){
+    // نبودن پوشه offline نباید مانع ورود به کشاورزیار شود.
+    yarCropRegistry=yarCropRegistry||{};
+  }
   return yarCropRegistry;
 }
 function yarSelectedCrop(id){
@@ -3135,9 +3141,9 @@ function yarSetMode(mode,forcedId){
   selected=l.id;
   yarLandMode=true;
   route='yar';
-  // ورود آفلاین/آنلاین باید همیشه از یک مسیر قطعی انجام شود.
-  // go('yar') هم route را ثبت می‌کند و هم همان صفحه را بلافاصله رندر می‌کند.
-  go('yar');
+  // ورود به آنلاین/آفلاین مستقل از registry و فایل‌های جانبی انجام می‌شود.
+  try{window.scrollTo({top:0,left:0,behavior:'instant'});}catch(e){}
+  yar();
 }
 
 function yarChangeProduct(){yarProductPage='select';yarCropCategory='';yar();}
@@ -3304,15 +3310,24 @@ function yar(){
     if(saved && state.lands.some(x=>String(x.id)===saved)) selected=state.lands.find(x=>String(x.id)===saved).id;
   }
   const l=(yarLandMode&&selected)?yarLand(selected):null;
-  // ورود به کشاورزیار نباید منتظر بارگذاری فهرست محصولات بماند؛
-  // مخصوصاً در حالت آفلاین ممکن است فایل registry دیر لود شود یا در کش پروژه نباشد.
-  // ابتدا صفحه را با یک registry خالی رندر می‌کنیم و بعد، اگر فایل موجود بود،
-  // فهرست کامل محصولات را دوباره بارگذاری می‌کنیم.
   if(!yarCropRegistry){
-    yarCropRegistry={};
-    import('./offline/global-crop-registry.js?v=20260928-yar-crops2').then(mod=>{
-      yarCropRegistry=mod?.registry||{};
-      if(route==='yar' && yarLandMode) yar();
+    // اگر فایل‌های offline در نسخه منتشرشده وجود نداشته باشند، ورود به کشاورزیار نباید متوقف شود.
+    // یک فهرست داخلی حداقلی برای ورود و انتخاب محصول در نظر می‌گیریم و در صورت وجود
+    // registry کامل، آن را بعداً جایگزین می‌کنیم.
+    yarCropRegistry={
+      'گندم':{label:'غلات'},'جو':{label:'غلات'},'ذرت':{label:'غلات'},'برنج':{label:'غلات'},
+      'نخود':{label:'حبوبات'},'عدس':{label:'حبوبات'},'لوبیا':{label:'حبوبات'},
+      'سیب‌زمینی':{label:'سبزی و صیفی'},'پیاز':{label:'سبزی و صیفی'},'سیر':{label:'سبزی و صیفی'},
+      'موسیر':{label:'سبزی و صیفی'},'گوجه‌فرنگی':{label:'سبزی و صیفی'},'خیار':{label:'سبزی و صیفی'},
+      'گل محمدی':{label:'گیاهان دارویی و ادویه‌ای'},'زعفران':{label:'گیاهان دارویی و ادویه‌ای'},
+      'سیب':{label:'میوه‌ها و باغی'},'انگور':{label:'میوه‌ها و باغی'},'انار':{label:'میوه‌ها و باغی'}
+    };
+    // بارگذاری نسخه کامل اختیاری است؛ اما هرگز ورود صفحه را متوقف نمی‌کند.
+    yarLoadCropRegistry().then(full=>{
+      if(full && Object.keys(full).length){
+        yarCropRegistry=full;
+        if(route==='yar') yar();
+      }
     }).catch(()=>{});
   }
   const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
