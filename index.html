@@ -2118,6 +2118,12 @@ body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page) .yar-entry-pa
 }
 </style>
 
+
+<style id="bottom-nav-five-items-fix">
+/* نوار پایین: بازی مخفی است، پس پنج گزینه باید کل عرض را دقیق و مساوی پر کنند */
+.bottom{grid-template-columns:repeat(5,minmax(0,1fr))!important;direction:rtl!important;}
+.bottom button{min-width:0!important;width:100%!important;margin:0!important;}
+</style>
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
@@ -3437,6 +3443,7 @@ function yar(){
   <div class="yar-auto-note">⚠️ ${auto.note}</div>`;
   const guide=yarRichGuide(crop,profile,yarCropRegistry?.[crop]||{});
   const methodText=guide.method||guide.plowing||profile?.planting||'بستر کشت را نرم و یکنواخت آماده کن، شخم را متناسب با بافت خاک انجام بده و بذر را با عمق و فاصله مناسب رقم و خاک بکار.';
+  const cropMeta=yarCropRegistry?.[crop]||{};
   const cultivationSection=(l&&crop)?(yarIsPro()?`<section class="yar-flow-card yar-cultivation-file"><div class="yar-section-head"><div><b>🌱 روش کشت ساده</b><small>از آماده‌سازی زمین تا برداشت</small></div><span>⭐ فعال</span></div><div class="yar-calendar-box"><div><span>📍 منطقه زمین</span><b>${esc(yarRegionalCalendar(crop,l,cropMeta?.label||profile?.category||'').region)}</b></div><div><span>📅 تاریخ پیشنهادی کاشت</span><b>${esc(yarRegionalCalendar(crop,l,cropMeta?.label||profile?.category||'').planting)}</b></div><div><span>🌾 بازه برداشت</span><b>${esc(yarRegionalCalendar(crop,l,cropMeta?.label||profile?.category||'').harvest)}</b></div></div><div class="yar-simple-guide"><p>${esc(methodText)}</p><div class="yar-guide-grid"><div><b>📏 عمق بذر</b><span>${esc(guide.seedDepth||'طبق بافت خاک و توصیه رقم')}</span></div><div><b>↔️ فاصله بذر</b><span>${esc(guide.seedSpacing||'طبق رقم و تراکم هدف')}</span></div><div><b>🪨 نوع خاک</b><span>${esc(guide.soil||profile?.soil||l?.soil||'بر اساس آزمون خاک')}</span></div><div><b>🚜 شخم</b><span>${esc(guide.plowing||'شخم یکنواخت، بدون ایجاد کلوخه و فشردگی')}</span></div></div></div></section>`:`<section class="yar-flow-card yar-cultivation-file yar-pro-locked"><div class="yar-pro-lock-strip"><span>🔒</span><div><b>روش کشت کامل — حرفه‌ای</b><small>عمق بذر، فاصله بذر، خاک و روش شخم در نسخه حرفه‌ای.</small></div><button type="button" class="secondary" onclick="yarShowProGate('روش کشت کامل')">مشاهده</button></div></section>`):'';
   const autoCostRows=Object.entries(auto.costBreakdown||{}).map(([label,v])=>`<div class="yar-cost-row"><span>${v.icon} ${esc(label)}</span><b>${money(v.low)} تا ${money(v.high)}</b></div>`).join('');
   const calc=yarAdvancedCalcTotals(l,crop,areaHa,areaM2);
@@ -3489,7 +3496,6 @@ function yar(){
     document.querySelectorAll('[data-yar-route]').forEach(b=>b.onclick=()=>go(b.dataset.yarRoute));
     return;
   }
-  const cropMeta=yarCropRegistry?.[crop]||{};
   const cropDescription=String(cropMeta.description||cropMeta.desc||cropMeta.summary||cropMeta.note||'').trim() || yarProductDescription(crop,cropMeta);
   const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(cropMeta.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div><div class="yar-product-mini-desc">${esc(cropDescription)}</div></section>`;
   const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
@@ -3666,7 +3672,7 @@ window.go=go;window.openLand=openLand;window.weatherFor=weatherFor;window.editLa
 
 // Offline-first: cache the application shell when the browser supports service workers.
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261008-v118').catch(()=>{}));
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=20261008-v120').catch(()=>{}));
 }
 </script>
 
