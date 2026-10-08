@@ -3328,23 +3328,42 @@ function yarRichGuide(crop,profile,meta){
   return {seedDepth:g.depth||guideFallbackDepth(profile, genericDepth),seedSpacing:g.spacing||genericSpacing,soil:g.soil||profile?.soil||'لومی با زهکشی مناسب؛ آزمون خاک برای تصمیم دقیق‌تر ضروری است',plowing:g.plow||'شخم متناسب با بافت خاک، سپس دیسک و تسطیح برای بستر یکنواخت',method:g.method||profile?.planting||'عمق و فاصله کاشت را بر اساس رقم، بافت خاک، رطوبت و تراکم هدف تنظیم کن؛ قبل از کشت، بستر باید یکنواخت و عاری از کلوخه و فشردگی باشد.',images:imgs,diseases:ds};
 }
 function guideFallbackDepth(profile,fallback){return String(profile?.seedDepth||fallback||'طبق بافت خاک و رقم')}
+function ykDigits(v){return String(v??'').replace(/[۰-۹]/g,d=>String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/[٬,]/g,'').replace(/تومان/g,'').trim()}
+function ykNumber(v){const n=Number(ykDigits(v));return Number.isFinite(n)?n:0}
+function ykRangeMid(v){const m=String(v||'').match(/([۰-۹٠-٩\d.]+)\s*تا\s*([۰-۹٠-٩\d.]+)/);return m?(ykNumber(m[1])+ykNumber(m[2]))/2:ykNumber(v)}
 function yarAutomaticCalc(l,crop,profile,areaHa,areaM2){
   const auto=yarAutoEstimate(l,crop,profile,areaHa)||{};
   const name=String(crop||'').trim();
   const meta=yarCropRegistry?.[name]||{};
   const cat=String(meta.label||profile?.category||'').trim();
   const text=(name+' '+cat).toLowerCase();
-  const midRange=(value)=>{
-    const m=String(value||'').replace(/[٬,]/g,'').match(/(\d+(?:\.\d+)?)\s*تا\s*(\d+(?:\.\d+)?)/);
-    return m?(Number(m[1])+Number(m[2]))/2:0;
+
+  // نرخ‌های بذر/مواد تکثیری محصول‌محور؛ دیگر برای همه محصولات مقدار ۵۰ کیلو در هکتار استفاده نمی‌شود.
+  const seedRates={
+    'گندم':[180,220,'کیلوگرم'],'جو':[160,200,'کیلوگرم'],'ذرت':[20,30,'کیلوگرم'],'برنج':[60,80,'کیلوگرم'],
+    'نخود':[120,180,'کیلوگرم'],'عدس':[60,90,'کیلوگرم'],'لوبیا':[80,120,'کیلوگرم'],'باقلا':[150,220,'کیلوگرم'],'ماش':[15,25,'کیلوگرم'],
+    'کلزا':[5,8,'کیلوگرم'],'سویا':[60,80,'کیلوگرم'],'آفتابگردان':[4,7,'کیلوگرم'],'کنجد':[3,5,'کیلوگرم'],
+    'سیب زمینی':[1800,2500,'کیلوگرم غده بذری'],'سیب‌زمینی':[1800,2500,'کیلوگرم غده بذری'],'پیاز':[4,6,'کیلوگرم بذر'],
+    'گوجه فرنگی':[0.15,0.30,'کیلوگرم بذر'],'گوجه‌فرنگی':[0.15,0.30,'کیلوگرم بذر'],'خیار':[1.5,2.5,'کیلوگرم بذر'],'فلفل':[0.10,0.20,'کیلوگرم بذر'],
+    'بادمجان':[0.20,0.40,'کیلوگرم بذر'],'کاهو':[0.20,0.50,'کیلوگرم بذر'],'هویج':[2,4,'کیلوگرم بذر'],'سیر':[800,1200,'کیلوگرم حبه بذری'],
+    'موسیر':[800,1200,'کیلوگرم پیازچه/غده بذری'],'یونجه':[15,25,'کیلوگرم'],'شبدر':[15,25,'کیلوگرم'],'پنبه':[15,25,'کیلوگرم']
   };
-  const seedText=String(auto.seedPerHa||'');
-  const seedMatch=seedText.match(/(\d+(?:\.\d+)?)\s*تا\s*(\d+(?:\.\d+)?)/);
-  const seedRate=seedMatch?(Number(seedMatch[1])+Number(seedMatch[2]))/2:50;
+  const treeDensity={'سیب':[400,600],'گلابی':[400,600],'هلو':[500,700],'شلیل':[500,700],'زردآلو':[300,500],'گیلاس':[400,600],'آلبالو':[400,600],'آلو':[400,600],'انگور':[1200,2500],'انار':[400,700],'انجیر':[250,400],'خرمالو':[400,600],'بادام':[250,400],'گردو':[100,180],'فندق':[500,800],'پسته':[200,300],'پرتقال':[300,500],'نارنگی':[300,500],'لیمو':[300,500],'زیتون':[200,300]};
+  const scale=Math.max(0,Number(areaHa)||0);
+  const exact=seedRates[name];
+  let seedPerHa,seedLand,seedUnit;
+  if(exact){const [lo,hi,unit]=exact;seedPerHa=`${lo.toLocaleString('fa-IR')} تا ${hi.toLocaleString('fa-IR')} ${unit} در هکتار`;seedLand=`${(lo*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(hi*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} ${unit} برای این زمین`;seedUnit=unit;}
+  else if(treeDensity[name]||/میوه‌ها و باغی|خشکبار و مغزها|باغ/.test(text)){const [lo,hi]=treeDensity[name]||[400,700];seedPerHa=`حدود ${lo.toLocaleString('fa-IR')} تا ${hi.toLocaleString('fa-IR')} نهال در هکتار`;seedLand=`حدود ${(lo*scale).toLocaleString('fa-IR',{maximumFractionDigits:0})} تا ${(hi*scale).toLocaleString('fa-IR',{maximumFractionDigits:0})} اصله نهال برای این زمین`;seedUnit='اصله نهال';}
+  else if(/دانه‌های روغنی/.test(text)){seedPerHa='حدود ۵ تا ۱۵ کیلوگرم در هکتار';seedLand=`حدود ${(5*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(15*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  else if(/حبوبات/.test(text)){seedPerHa='حدود ۸۰ تا ۱۶۰ کیلوگرم در هکتار';seedLand=`حدود ${(80*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(160*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  else if(/علوفه‌ای/.test(text)){seedPerHa='حدود ۱۵ تا ۳۰ کیلوگرم در هکتار';seedLand=`حدود ${(15*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(30*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+  else{seedPerHa='برآورد اولیه: ۵۰ تا ۱۰۰ کیلوگرم در هکتار';seedLand=`حدود ${(50*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} تا ${(100*scale).toLocaleString('fa-IR',{maximumFractionDigits:2})} کیلوگرم برای این زمین`;seedUnit='کیلوگرم';}
+
+  // نیاز آبی/کود/سم/زمان کار بر اساس محصول و دسته محصول.
   let waterPerHa=4500,fertilizerPerHa=220,pesticidePerHa=4,machineHoursPerHa=8,laborHoursPerHa=24;
   if(/برنج/.test(text)){waterPerHa=12000;fertilizerPerHa=280;pesticidePerHa=6;machineHoursPerHa=10;laborHoursPerHa=28;}
   else if(/ذرت|نیشکر/.test(text)){waterPerHa=6500;fertilizerPerHa=300;pesticidePerHa=5;machineHoursPerHa=9;laborHoursPerHa=24;}
-  else if(/سبزی|صیفی|سیب.?زمینی|پیاز|گوجه|خیار|فلفل|کاهو/.test(text)){waterPerHa=7000;fertilizerPerHa=350;pesticidePerHa=7;machineHoursPerHa=12;laborHoursPerHa=45;}
+  else if(/سبزی|صیفی|سیب.?زمینی|پیاز|گوجه|خیار|فلفل|کاهو|موسیر|سیر/.test(text)){waterPerHa=7000;fertilizerPerHa=350;pesticidePerHa=7;machineHoursPerHa=12;laborHoursPerHa=45;}
   else if(/باغ|میوه|انگور|سیب|انار|پسته|گردو|بادام/.test(text)){waterPerHa=6500;fertilizerPerHa=400;pesticidePerHa=8;machineHoursPerHa=14;laborHoursPerHa=55;}
   else if(/حبوبات|نخود|عدس|لوبیا/.test(text)){waterPerHa=3500;fertilizerPerHa=160;pesticidePerHa=3;machineHoursPerHa=7;laborHoursPerHa=20;}
   else if(/دانه.?های روغنی|کلزا|آفتابگردان|کنجد/.test(text)){waterPerHa=4000;fertilizerPerHa=230;pesticidePerHa=4;machineHoursPerHa=8;laborHoursPerHa=20;}
@@ -3352,23 +3371,53 @@ function yarAutomaticCalc(l,crop,profile,areaHa,areaM2){
   if(/شنی|شنی.?لومی/.test(String(l?.soil||''))) waterPerHa*=1.10;
   if(/قطره|نواری/.test(String(l?.irrigation||''))) waterPerHa*=0.72;
   else if(/بارانی/.test(String(l?.irrigation||''))) waterPerHa*=0.85;
-  const totalSeed=areaHa*seedRate;
-  const water=areaHa*waterPerHa;
-  const fertilizer=areaHa*fertilizerPerHa;
-  const pesticide=areaHa*pesticidePerHa;
-  const machineHours=areaHa*machineHoursPerHa;
-  const laborHours=areaHa*laborHoursPerHa;
-  const totalCostRange=String(auto.cost||'').match(/(\d[\d٬,]*)\s*تومان\s*تا\s*(\d[\d٬,]*)\s*تومان/);
-  const totalCost=totalCostRange?((Number(totalCostRange[1].replace(/[٬,]/g,''))+Number(totalCostRange[2].replace(/[٬,]/g,'')))/2):0;
-  const totalRevenueRange=String(auto.income||'').match(/(\d[\d٬,]*)\s*تومان\s*تا\s*(\d[\d٬,]*)\s*تومان/);
-  const totalRevenue=totalRevenueRange?((Number(totalRevenueRange[1].replace(/[٬,]/g,''))+Number(totalRevenueRange[2].replace(/[٬,]/g,'')))/2):0;
-  const parts={seed:.12,fertilizer:.18,pesticide:.10,water:.12,machine:.18,labor:.22,other:.08};
-  const costs={};Object.entries(parts).forEach(([k,v])=>costs[k]=totalCost*v);
+
+  const totalSeed=exact?scale*((exact[0]+exact[1])/2):scale*ykRangeMid(seedPerHa);
+  const water=scale*waterPerHa;
+  const fertilizer=scale*fertilizerPerHa;
+  const pesticide=scale*pesticidePerHa;
+  const machineHours=scale*machineHoursPerHa;
+  const laborHours=scale*laborHoursPerHa;
+
+  // برآورد عملکرد و قیمت پایه محصول؛ در صورت نبود داده اختصاصی، از دسته محصول استفاده می‌شود.
+  const economics={
+    'گندم':[4500,6500,18000,28000],'جو':[3500,5500,14000,22000],'ذرت':[7000,11000,15000,24000],'برنج':[3000,5000,70000,110000],
+    'نخود':[900,1500,50000,80000],'عدس':[700,1200,65000,95000],'لوبیا':[1800,3000,55000,85000],'باقلا':[2500,4500,30000,50000],
+    'کلزا':[1800,2800,25000,40000],'سویا':[2500,4000,25000,42000],'آفتابگردان':[1800,3000,22000,35000],'کنجد':[700,1100,70000,110000],
+    'سیب زمینی':[20000,35000,10000,18000],'پیاز':[25000,45000,7000,14000],'گوجه فرنگی':[35000,60000,10000,20000],'گوجه‌فرنگی':[35000,60000,10000,20000],
+    'خیار':[25000,50000,12000,24000],'فلفل':[18000,35000,18000,35000],'بادمجان':[25000,45000,12000,22000],'کاهو':[20000,35000,10000,20000],
+    'سیر':[6000,10000,35000,65000],'موسیر':[5000,9000,45000,80000],
+    'یونجه':[7000,11000,12000,20000],'شبدر':[5000,9000,10000,18000]
+  };
+  let eco=economics[name];
+  if(!eco){
+    if(/حبوبات|نخود|عدس|لوبیا/.test(text)) eco=[1000,1800,45000,75000];
+    else if(/سبزی|صیفی|موسیر|سیر|سیب.?زمینی|پیاز|گوجه|خیار|فلفل|کاهو/.test(text)) eco=[20000,45000,10000,22000];
+    else if(/میوه|باغ|انگور|سیب|انار|پسته|گردو|بادام|خشکبار/.test(text)) eco=[5000,20000,30000,90000];
+    else if(/علوفه/.test(text)) eco=[6000,10000,10000,18000];
+    else eco=[2500,6000,18000,30000];
+  }
+  const yieldPerHa=(eco[0]+eco[1])/2;
+  const salePrice=(eco[2]+eco[3])/2;
+  const totalYield=scale*yieldPerHa;
+  const totalRevenue=totalYield*salePrice;
+
+  // هزینه‌های پایه با توجه به دسته و محصول؛ به صورت عددی محاسبه می‌شوند تا هیچ ردیفی صفر نماند.
+  const costPerHa={seed:0,fertilizer:0,pesticide:0,water:0,machine:0,labor:0,other:0};
+  const seedCostPerKg=/سیب.?زمینی/.test(name)?18000:/موسیر|سیر/.test(name)?30000:/حبوبات|نخود|عدس|لوبیا/.test(text)?50000:25000;
+  costPerHa.seed=((exact?((exact[0]+exact[1])/2):ykRangeMid(seedPerHa))*seedCostPerKg);
+  costPerHa.fertilizer=fertilizerPerHa*90000;
+  costPerHa.pesticide=pesticidePerHa*450000;
+  costPerHa.water=waterPerHa*1200;
+  costPerHa.machine=machineHoursPerHa*1500000;
+  costPerHa.labor=laborHoursPerHa*500000;
+  costPerHa.other=5000000;
+  const costs={};Object.keys(costPerHa).forEach(k=>costs[k]=costPerHa[k]*scale);
+  const totalCost=Object.values(costs).reduce((a,b)=>a+b,0);
   const profit=totalRevenue-totalCost;
-  const yieldPerHa=areaHa>0?totalRevenue/areaHa:0;
-  const salePrice=yieldPerHa>0?totalRevenue/(areaHa*yieldPerHa):0;
-  const costPerKg=yieldPerHa>0?totalCost/(areaHa*yieldPerHa):0;
-  return {auto,seedRate,totalSeed,waterPerHa,water,fertilizer,pesticide,machineHours,laborHours,costs,totalCost,totalRevenue,profit,yieldPerHa,yieldTotal:areaHa*yieldPerHa,salePrice,costPerKg,roi:totalCost>0?(profit/totalCost)*100:0};
+  const costPerKg=totalYield>0?totalCost/totalYield:0;
+  const roi=totalCost>0?(profit/totalCost)*100:0;
+  return {auto,seedRate:exact?((exact[0]+exact[1])/2):ykRangeMid(seedPerHa),totalSeed,waterPerHa,water,fertilizer,pesticide,machineHours,laborHours,costs,totalCost,totalRevenue,profit,yieldPerHa,yieldTotal:totalYield,salePrice,costPerKg,roi,seedPerHa,seedLand,seedUnit};
 }
 function yarAdvancedCalcTotals(l,crop,areaHa,areaM2){return yarAutomaticCalc(l,crop,yarCropProfile,areaHa,areaM2)}
 function yarCalcData(){return {}}
