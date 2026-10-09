@@ -1,15 +1,8 @@
-YarKeshavarz - replacement package
+تغییرات نسخه v3 — کادر تایپ تمام‌عرض و ثابت
 
-This package is rebuilt as a valid ZIP from the latest stable YarKeshavarz HTML saved in the project context, with:
-- local hero background (SVG) so browser/cache clearing does not remove the background image;
-- stronger touch handling for the measurement map;
-- measurement remains internet-based;
-- Persian RTL interface and existing agricultural/advisor functionality retained in the main HTML.
-
-Place index.html, manifest.webmanifest, sw.js and the assets folder together.
-
-
-Update v2:
-- Updated index.html to open a dedicated land-specific chat page when Online is pressed after selecting a registered land.
-- Added per-land local chat history, photo selection (gallery/camera), land facts, and quick prompts.
-- This is UI/local-storage preparation only. AI server, subscription enforcement, and real online responses are not connected yet.
+- صفحه گفت‌وگوی آنلاین در فضای کامل صفحه نمایش داده می‌شود.
+- کادر تایپ و دکمه‌های گالری، دوربین و ارسال در پایین صفحه ثابت و تمام‌عرض هستند.
+- بخش پیام‌ها فضای باقی‌مانده را می‌گیرد و جداگانه اسکرول می‌شود.
+- برای برگشت به صفحه قبل، کلاس حالت تمام‌صفحه برداشته می‌شود.
+- فقط index.html را در ریشه پروژه جایگزین کنید؛ فایل‌های دیگر را تغییر ندهید.
+- این تغییر فقط چیدمان صفحه را اصلاح می‌کند و اتصال واقعی هوش مصنوعی/اشتراک را فعال نمی‌کند.

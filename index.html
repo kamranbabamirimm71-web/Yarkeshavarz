@@ -4443,6 +4443,21 @@ body:has(.yar-final.yar-product-detail-page){
 .yoc-compose textarea{width:100%;resize:vertical;min-height:54px;max-height:130px;border:0;outline:0;padding:8px;background:transparent;color:#17352b}
 .yoc-tools{display:flex;align-items:center;gap:7px}.yoc-tools button{border:0;border-radius:12px;padding:10px 12px;font-weight:800}.yoc-pick{background:#edf5ef;color:#22563d}.yoc-send{margin-right:auto;background:#0b4f38;color:#fff;min-width:84px}
 @media(max-width:600px){.yoc-head{top:66px}.yoc-chat{height:calc(100dvh - 330px);min-height:220px;padding:8px}.yoc-msg>div{max-width:94%;font-size:12px}.yoc-compose{bottom:78px}}
+/* v3: fullscreen chat layout with a composer fixed across the bottom edge */
+html.yoc-fullscreen-chat,html.yoc-fullscreen-chat body{height:100%;overflow:hidden}
+.yar-online-chat-page{position:fixed!important;inset:70px 0 0!important;z-index:1800!important;width:100%!important;max-width:none!important;height:calc(100dvh - 70px)!important;min-height:0!important;margin:0!important;padding:8px 10px calc(8px + env(safe-area-inset-bottom))!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;gap:8px!important;background:#f7fbf8!important;overflow:hidden!important}
+.yoc-head{position:relative!important;top:auto!important;flex:0 0 auto!important;margin:0!important}
+.yoc-landfacts{max-width:100%}
+.yoc-status{max-height:54px;overflow:auto}
+.yoc-suggestions{flex:0 0 auto!important;margin:0!important;padding:0 0 2px!important}
+.yoc-chat{flex:1 1 auto!important;height:auto!important;min-height:0!important;max-height:none!important;margin:0!important;overscroll-behavior:contain}
+.yoc-preview{flex:0 0 auto!important;margin:0!important}
+.yoc-compose{position:relative!important;inset:auto!important;bottom:auto!important;left:auto!important;right:auto!important;flex:0 0 auto!important;width:100%!important;margin:0!important;border-radius:16px!important;padding:7px!important;padding-bottom:calc(7px + env(safe-area-inset-bottom))!important;box-sizing:border-box!important}
+.yoc-compose textarea{display:block!important;width:100%!important;min-height:48px!important;max-height:110px!important;resize:none!important;box-sizing:border-box!important}
+.yoc-tools{width:100%;}
+.yoc-tools button{min-height:42px}
+@media(max-width:600px){.yar-online-chat-page{inset:64px 0 0!important;height:calc(100dvh - 64px)!important;padding:6px 7px calc(6px + env(safe-area-inset-bottom))!important;gap:6px!important}.yoc-head{padding:9px!important;border-radius:14px!important}.yoc-landfacts{margin-top:7px}.yoc-status{max-height:43px;padding:6px 8px;font-size:9px}.yoc-chat{padding:7px!important}.yoc-compose{padding:6px!important;padding-bottom:calc(6px + env(safe-area-inset-bottom))!important}.yoc-compose textarea{min-height:46px!important}.yoc-tools button{padding:9px 10px!important;font-size:11px}}
+
 </style>
 <script id="yar-online-chat-page-v1-js">
 (function(){
@@ -4460,6 +4475,7 @@ body:has(.yar-final.yar-product-detail-page){
     box.scrollTop=box.scrollHeight;
   }
   window.yarOnlineChatPage=function(){
+    document.documentElement.classList.add('yoc-fullscreen-chat');
     const l=yocLand();
     if(!l){toast('اول زمین را انتخاب کن.');return false}
     selected=l.id;localStorage.setItem('yk-last-land',String(l.id));localStorage.setItem('yk-yar-entry-land',String(l.id));localStorage.setItem('yk-yar-mode','online');
@@ -4479,7 +4495,7 @@ body:has(.yar-final.yar-product-detail-page){
     const input=document.getElementById('yocInput');if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();document.querySelector('.yoc-compose')?.requestSubmit()}});
     return false;
   };
-  window.yarOnlineBack=function(){yocPhoto=null;route='yar';yarLandMode=true;yarMode='online';yar()};
+  window.yarOnlineBack=function(){document.documentElement.classList.remove('yoc-fullscreen-chat');yocPhoto=null;route='yar';yarLandMode=true;yarMode='online';yar()};
   window.yarOnlineQuick=function(q){const i=document.getElementById('yocInput');if(i){i.value=q;i.focus()}};
   window.yarOnlineClearPhoto=function(){yocPhoto=null;const p=document.getElementById('yocPreview');if(p)p.style.display='none';const a=document.getElementById('yocGallery'),b=document.getElementById('yocCamera');if(a)a.value='';if(b)b.value=''};
   window.yarOnlinePhoto=function(input){
