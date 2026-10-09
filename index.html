@@ -4423,5 +4423,93 @@ body:has(.yar-final.yar-product-detail-page){
 @media(max-width:600px){.yar-detail-shell .yarpro-head{height:78px!important;min-height:78px!important}.yar-detail-shell .yar-horizontal-panel{padding-top:88px!important}}
 </style>
 
+
+<style id="yar-online-chat-page-v1">
+.yar-online-chat-page{max-width:900px;margin:0 auto;padding:8px 0 18px}
+.yoc-head{position:sticky;top:66px;z-index:900;background:#f7fbf8;border:1px solid #dbe9e0;border-radius:18px;padding:12px;margin-bottom:10px;box-shadow:0 8px 24px #1235}
+.yoc-topline{display:flex;align-items:center;gap:9px}
+.yoc-back{border:0;border-radius:12px;background:#e6f1e9;color:#174b37;padding:10px 12px;font-weight:900}
+.yoc-title{flex:1;min-width:0}.yoc-title b{display:block;font-size:15px}.yoc-title small{display:block;color:#60776a;font-size:11px;margin-top:4px}
+.yoc-landfacts{display:flex;gap:6px;overflow:auto;margin-top:10px;padding-bottom:2px}
+.yoc-landfacts span{white-space:nowrap;border-radius:999px;background:#eaf3ed;padding:6px 9px;font-size:10px;color:#244e3a}
+.yoc-status{font-size:10px;line-height:1.7;color:#7c4b15;background:#fff6e6;border:1px solid #f1d7a8;border-radius:12px;padding:9px 11px;margin-top:9px}
+.yoc-chat{height:calc(100dvh - 310px);min-height:260px;max-height:680px;overflow:auto;background:#edf4ef;border:1px solid #dce8e0;border-radius:18px;padding:12px;margin-bottom:10px}
+.yoc-msg{display:flex;margin:8px 0}.yoc-msg.user{justify-content:flex-start}.yoc-msg.assistant{justify-content:flex-end}
+.yoc-msg>div{max-width:88%;padding:11px 13px;border-radius:16px;background:#fff;box-shadow:0 3px 10px #173b2810;font-size:13px;line-height:1.9;overflow-wrap:anywhere}
+.yoc-msg.user>div{background:#dff2e5}.yoc-msg img{max-width:100%;max-height:240px;display:block;border-radius:12px;margin-bottom:7px}
+.yoc-suggestions{display:flex;gap:7px;overflow:auto;padding:2px 0 9px}.yoc-suggestions button{flex:0 0 auto;border:1px solid #d4e5d9;background:#fff;color:#20533c;border-radius:999px;padding:8px 11px;font-size:11px}
+.yoc-preview{display:none;align-items:center;gap:8px;background:#e7f3eb;padding:8px;border-radius:12px;margin-bottom:7px}.yoc-preview img{width:56px;height:56px;object-fit:cover;border-radius:9px}.yoc-preview button{border:0;background:#f9dfdc;border-radius:9px;padding:7px}
+.yoc-compose{position:sticky;bottom:78px;background:#fff;border:1px solid #dce8e0;border-radius:18px;padding:8px;box-shadow:0 -4px 18px #173b2815}
+.yoc-compose textarea{width:100%;resize:vertical;min-height:54px;max-height:130px;border:0;outline:0;padding:8px;background:transparent;color:#17352b}
+.yoc-tools{display:flex;align-items:center;gap:7px}.yoc-tools button{border:0;border-radius:12px;padding:10px 12px;font-weight:800}.yoc-pick{background:#edf5ef;color:#22563d}.yoc-send{margin-right:auto;background:#0b4f38;color:#fff;min-width:84px}
+@media(max-width:600px){.yoc-head{top:66px}.yoc-chat{height:calc(100dvh - 330px);min-height:220px;padding:8px}.yoc-msg>div{max-width:94%;font-size:12px}.yoc-compose{bottom:78px}}
+</style>
+<script id="yar-online-chat-page-v1-js">
+(function(){
+  const YOC_PREFIX='yk-online-land-chat-v1:';
+  let yocPhoto=null;
+  function yocEsc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+  function yocLand(){try{return (state.lands||[]).find(x=>String(x.id)===String(selected||localStorage.getItem('yk-last-land')||''))||null}catch(e){return null}}
+  function yocKey(l){return YOC_PREFIX+String(l.id)}
+  function yocRead(l){try{const v=JSON.parse(localStorage.getItem(yocKey(l))||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
+  function yocSave(l,m){try{localStorage.setItem(yocKey(l),JSON.stringify(m.slice(-80)))}catch(e){toast('فضای ذخیرهٔ تاریخچه کافی نیست؛ عکس‌های قدیمی را حذف کن.')} }
+  function yocRender(l){
+    const box=document.getElementById('yocChat');if(!box)return;
+    const msgs=yocRead(l);
+    box.innerHTML=msgs.length?msgs.map(m=>`<div class="yoc-msg ${m.role==='user'?'user':'assistant'}"><div>${m.image?`<img src="${yocEsc(m.image)}" alt="عکس ارسالی">`:''}${m.text?yocEsc(m.text).replace(/\n/g,'<br>'):''}</div></div>`).join(''):`<div class="yoc-msg assistant"><div>سلام! 🌱 من مشاور زمین «${yocEsc(l.name||'زمین شما')}» هستم.<br>سؤالت را بنویس یا از گیاه، محصول یا زمین عکس بفرست. اطلاعات این زمین در همین گفت‌وگو استفاده می‌شود.</div></div>`;
+    box.scrollTop=box.scrollHeight;
+  }
+  window.yarOnlineChatPage=function(){
+    const l=yocLand();
+    if(!l){toast('اول زمین را انتخاب کن.');return false}
+    selected=l.id;localStorage.setItem('yk-last-land',String(l.id));localStorage.setItem('yk-yar-entry-land',String(l.id));localStorage.setItem('yk-yar-mode','online');
+    head('مشاور آنلاین · '+(l.name||'زمین'));
+    const area=Number(l.area||0).toLocaleString('fa-IR',{maximumFractionDigits:2});
+    app.innerHTML=`<section class="yar-online-chat-page">
+      <header class="yoc-head"><div class="yoc-topline"><button class="yoc-back" type="button" onclick="yarOnlineBack()">‹ بازگشت</button><div class="yoc-title"><b>🌾 مشاور آنلاین کشت</b><small>گفت‌وگوی اختصاصی زمین: ${yocEsc(l.name||'زمین بدون نام')}</small></div></div>
+      <div class="yoc-landfacts"><span>📐 ${area} هکتار</span><span>🪨 ${yocEsc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${yocEsc(l.water||'آب ثبت نشده')}</span><span>🚿 ${yocEsc(l.irrigation||'آبیاری ثبت نشده')}</span><span>🌱 ${yocEsc(l.crop||'محصول ثبت نشده')}</span></div>
+      <div class="yoc-status">⚠️ صفحهٔ چت ساخته شده است؛ اتصال به سرور هوش مصنوعی و بررسی اشتراک هنوز راه‌اندازی نشده. فعلاً پیام‌ها در همین دستگاه ذخیره می‌شوند.</div></header>
+      <div class="yoc-suggestions"><button type="button" onclick="yarOnlineQuick('برای این زمین چه محصولی مناسب است؟')">🌱 انتخاب محصول</button><button type="button" onclick="yarOnlineQuick('برای محصول این زمین برنامه آبیاری پیشنهاد بده.')">💧 آبیاری</button><button type="button" onclick="yarOnlineQuick('چه اطلاعاتی برای بررسی بیماری گیاه لازم است؟')">🦠 بیماری گیاه</button><button type="button" onclick="yarOnlineQuick('هزینه و سود کشت این زمین را چطور بررسی کنم؟')">💰 سود و زیان</button></div>
+      <div id="yocChat" class="yoc-chat" aria-live="polite"></div>
+      <div id="yocPreview" class="yoc-preview"><img id="yocPreviewImg" alt="پیش‌نمایش عکس"><span id="yocPreviewName" class="small"></span><button type="button" onclick="yarOnlineClearPhoto()">حذف عکس</button></div>
+      <form class="yoc-compose" onsubmit="return yarOnlineSend(event)"><textarea id="yocInput" placeholder="سؤالت را درباره همین زمین بنویس…" aria-label="متن پیام"></textarea><div class="yoc-tools"><button type="button" class="yoc-pick" onclick="document.getElementById('yocGallery').click()">🖼️ گالری</button><button type="button" class="yoc-pick" onclick="document.getElementById('yocCamera').click()">📷 دوربین</button><button type="submit" class="yoc-send">ارسال ➤</button></div></form>
+      <input id="yocGallery" type="file" accept="image/*" hidden onchange="yarOnlinePhoto(this)"><input id="yocCamera" type="file" accept="image/*" capture="environment" hidden onchange="yarOnlinePhoto(this)">
+    </section>`;
+    yocPhoto=null;yocRender(l);
+    const input=document.getElementById('yocInput');if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();document.querySelector('.yoc-compose')?.requestSubmit()}});
+    return false;
+  };
+  window.yarOnlineBack=function(){yocPhoto=null;route='yar';yarLandMode=true;yarMode='online';yar()};
+  window.yarOnlineQuick=function(q){const i=document.getElementById('yocInput');if(i){i.value=q;i.focus()}};
+  window.yarOnlineClearPhoto=function(){yocPhoto=null;const p=document.getElementById('yocPreview');if(p)p.style.display='none';const a=document.getElementById('yocGallery'),b=document.getElementById('yocCamera');if(a)a.value='';if(b)b.value=''};
+  window.yarOnlinePhoto=function(input){
+    const f=input?.files?.[0];if(!f)return;
+    if(!f.type.startsWith('image/')){toast('فقط فایل تصویری انتخاب کن');input.value='';return}
+    if(f.size>12*1024*1024){toast('حجم عکس باید کمتر از ۱۲ مگابایت باشد');input.value='';return}
+    const r=new FileReader();r.onload=()=>{yocPhoto={data:r.result,name:f.name||'photo.jpg'};const p=document.getElementById('yocPreview'),im=document.getElementById('yocPreviewImg'),nm=document.getElementById('yocPreviewName');if(im)im.src=yocPhoto.data;if(nm)nm.textContent=yocPhoto.name;if(p)p.style.display='flex'};r.readAsDataURL(f);
+  };
+  window.yarOnlineSend=function(ev){
+    ev?.preventDefault();const l=yocLand(),input=document.getElementById('yocInput');if(!l)return false;
+    const text=(input?.value||'').trim();if(!text&&!yocPhoto)return false;
+    const msgs=yocRead(l);msgs.push({role:'user',text:text||'عکس برای بررسی ارسال شد',image:yocPhoto?.data||''});
+    msgs.push({role:'assistant',text:'پیامت در تاریخچهٔ همین زمین ذخیره شد. برای دریافت پاسخ هوشمند و تحلیل واقعی عکس، باید سرور و سرویس هوش مصنوعی را به این صفحه وصل کنیم؛ این اتصال هنوز فعال نیست.'});
+    yocSave(l,msgs);if(input)input.value='';yarOnlineClearPhoto();yocRender(l);return false;
+  };
+  const original=window.yarEnterMode;
+  if(typeof original==='function'){
+    window.yarEnterMode=function(mode,id){
+      if(mode==='online'){
+        const v=String(id||selected||localStorage.getItem('yk-last-land')||localStorage.getItem('yk-yar-entry-land')||'').trim();
+        const l=(state.lands||[]).find(x=>String(x.id)===v);
+        if(!l){toast('اول یک زمین را انتخاب کن، بعد آنلاین را بزن.');return false}
+        selected=l.id;localStorage.setItem('yk-last-land',String(l.id));localStorage.setItem('yk-yar-entry-land',String(l.id));localStorage.setItem('yk-yar-mode','online');route='yar';
+        return window.yarOnlineChatPage();
+      }
+      return original(mode,id);
+    };
+  }
+})();
+</script>
+
 </body>
 </html>
