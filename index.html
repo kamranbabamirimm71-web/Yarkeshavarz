@@ -4458,6 +4458,21 @@ html.yoc-fullscreen-chat,html.yoc-fullscreen-chat body{height:100%;overflow:hidd
 .yoc-tools button{min-height:42px}
 @media(max-width:600px){.yar-online-chat-page{inset:64px 0 0!important;height:calc(100dvh - 64px)!important;padding:6px 7px calc(6px + env(safe-area-inset-bottom))!important;gap:6px!important}.yoc-head{padding:9px!important;border-radius:14px!important}.yoc-landfacts{margin-top:7px}.yoc-status{max-height:43px;padding:6px 8px;font-size:9px}.yoc-chat{padding:7px!important}.yoc-compose{padding:6px!important;padding-bottom:calc(6px + env(safe-area-inset-bottom))!important}.yoc-compose textarea{min-height:46px!important}.yoc-tools button{padding:9px 10px!important;font-size:11px}}
 
+
+/* v4: reserve the fixed bottom navigation area and pin the full-width composer above it */
+html.yoc-fullscreen-chat,html.yoc-fullscreen-chat body{height:100%!important;overflow:hidden!important}
+html.yoc-fullscreen-chat .bottom{z-index:1700!important}
+html.yoc-fullscreen-chat .yar-online-chat-page{position:fixed!important;top:64px!important;left:0!important;right:0!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;inset:64px 0 calc(78px + env(safe-area-inset-bottom)) 0!important;width:100vw!important;height:auto!important;max-width:none!important;min-height:0!important;margin:0!important;padding:5px 0 0!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;gap:6px!important;overflow:hidden!important;z-index:1800!important;background:#f7fbf8!important}
+html.yoc-fullscreen-chat .yoc-head{flex:0 0 auto!important;margin:0 8px!important;position:relative!important;top:auto!important;max-width:none!important}
+html.yoc-fullscreen-chat .yoc-status{flex:0 0 auto!important;margin-left:8px!important;margin-right:8px!important}
+html.yoc-fullscreen-chat .yoc-chat{flex:1 1 0!important;height:auto!important;min-height:0!important;max-height:none!important;margin:0 8px!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+html.yoc-fullscreen-chat .yoc-preview{flex:0 0 auto!important;margin:0 8px!important;max-height:70px!important;overflow:auto!important}
+html.yoc-fullscreen-chat .yoc-compose{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;flex:0 0 auto!important;width:100%!important;max-width:none!important;margin:0!important;border-radius:16px 16px 0 0!important;padding:7px 10px calc(7px + env(safe-area-inset-bottom))!important;box-sizing:border-box!important;z-index:1801!important;background:#fff!important;box-shadow:0 -5px 18px rgba(17,58,39,.12)!important}
+html.yoc-fullscreen-chat .yoc-compose textarea{display:block!important;width:100%!important;min-width:0!important;min-height:46px!important;max-height:88px!important;resize:none!important;box-sizing:border-box!important}
+html.yoc-fullscreen-chat .yoc-tools{display:flex!important;width:100%!important;gap:6px!important}
+html.yoc-fullscreen-chat .yoc-tools button{min-height:40px!important;flex:0 1 auto!important}
+@media(max-width:600px){html.yoc-fullscreen-chat .yar-online-chat-page{top:64px!important;padding-top:5px!important;gap:5px!important}html.yoc-fullscreen-chat .yoc-head{margin-left:6px!important;margin-right:6px!important;padding:8px!important}html.yoc-fullscreen-chat .yoc-chat{margin-left:6px!important;margin-right:6px!important;padding:7px!important}html.yoc-fullscreen-chat .yoc-compose{padding:6px 8px calc(6px + env(safe-area-inset-bottom))!important}html.yoc-fullscreen-chat .yoc-compose textarea{min-height:44px!important;max-height:78px!important}}
+
 </style>
 <script id="yar-online-chat-page-v1-js">
 (function(){
