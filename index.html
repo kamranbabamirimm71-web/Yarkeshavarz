@@ -4490,24 +4490,25 @@ html.yoc-fullscreen-chat .yoc-tools button{min-height:40px!important;flex:0 1 au
     box.scrollTop=box.scrollHeight;
   }
   window.yarOnlineChatPage=function(){
-    document.documentElement.classList.add('yoc-fullscreen-chat');
+    document.documentElement.classList.remove('yoc-fullscreen-chat');
     const l=yocLand();
     if(!l){toast('اول زمین را انتخاب کن.');return false}
-    selected=l.id;localStorage.setItem('yk-last-land',String(l.id));localStorage.setItem('yk-yar-entry-land',String(l.id));localStorage.setItem('yk-yar-mode','online');
-    head('مشاور آنلاین · '+(l.name||'زمین'));
-    const area=Number(l.area||0).toLocaleString('fa-IR',{maximumFractionDigits:2});
-    app.innerHTML=`<section class="yar-online-chat-page">
-      <header class="yoc-head"><div class="yoc-topline"><button class="yoc-back" type="button" onclick="yarOnlineBack()">‹ بازگشت</button><div class="yoc-title"><b>🌾 مشاور آنلاین کشت</b><small>گفت‌وگوی اختصاصی زمین: ${yocEsc(l.name||'زمین بدون نام')}</small></div></div>
-      <div class="yoc-landfacts"><span>📐 ${area} هکتار</span><span>🪨 ${yocEsc(l.soil||'خاک ثبت نشده')}</span><span>💧 ${yocEsc(l.water||'آب ثبت نشده')}</span><span>🚿 ${yocEsc(l.irrigation||'آبیاری ثبت نشده')}</span><span>🌱 ${yocEsc(l.crop||'محصول ثبت نشده')}</span></div>
-      <div class="yoc-status">⚠️ صفحهٔ چت ساخته شده است؛ اتصال به سرور هوش مصنوعی و بررسی اشتراک هنوز راه‌اندازی نشده. فعلاً پیام‌ها در همین دستگاه ذخیره می‌شوند.</div></header>
-      <div class="yoc-suggestions"><button type="button" onclick="yarOnlineQuick('برای این زمین چه محصولی مناسب است؟')">🌱 انتخاب محصول</button><button type="button" onclick="yarOnlineQuick('برای محصول این زمین برنامه آبیاری پیشنهاد بده.')">💧 آبیاری</button><button type="button" onclick="yarOnlineQuick('چه اطلاعاتی برای بررسی بیماری گیاه لازم است؟')">🦠 بیماری گیاه</button><button type="button" onclick="yarOnlineQuick('هزینه و سود کشت این زمین را چطور بررسی کنم؟')">💰 سود و زیان</button></div>
-      <div id="yocChat" class="yoc-chat" aria-live="polite"></div>
-      <div id="yocPreview" class="yoc-preview"><img id="yocPreviewImg" alt="پیش‌نمایش عکس"><span id="yocPreviewName" class="small"></span><button type="button" onclick="yarOnlineClearPhoto()">حذف عکس</button></div>
-      <form class="yoc-compose" onsubmit="return yarOnlineSend(event)"><textarea id="yocInput" placeholder="سؤالت را درباره همین زمین بنویس…" aria-label="متن پیام"></textarea><div class="yoc-tools"><button type="button" class="yoc-pick" onclick="document.getElementById('yocGallery').click()">🖼️ گالری</button><button type="button" class="yoc-pick" onclick="document.getElementById('yocCamera').click()">📷 دوربین</button><button type="submit" class="yoc-send">ارسال ➤</button></div></form>
-      <input id="yocGallery" type="file" accept="image/*" hidden onchange="yarOnlinePhoto(this)"><input id="yocCamera" type="file" accept="image/*" capture="environment" hidden onchange="yarOnlinePhoto(this)">
+    selected=l.id;
+    localStorage.setItem('yk-last-land',String(l.id));
+    localStorage.setItem('yk-yar-entry-land',String(l.id));
+    localStorage.setItem('yk-yar-mode','online');
+    head('یار کشاورز آنلاین · به‌زودی');
+    app.innerHTML=`<section class="yar-online-unavailable" dir="rtl" style="max-width:760px;margin:16px auto;padding:18px;box-sizing:border-box">
+      <div style="background:#fff;border:1px solid #d9e8de;border-radius:24px;padding:clamp(22px,5vw,38px);text-align:center;box-shadow:0 10px 30px #173f2b12">
+        <div style="font-size:54px;line-height:1.4">🌾</div>
+        <h2 style="margin:8px 0 12px;color:#174d36;font-size:clamp(22px,5vw,30px)">یار کشاورز آنلاین</h2>
+        <div style="display:inline-block;background:#fff3d8;color:#80551a;border:1px solid #f0d7a0;border-radius:999px;padding:8px 16px;font-weight:700">⏳ فعلاً غیرفعال</div>
+        <p style="font-size:17px;line-height:2;color:#42564a;margin:20px 0 10px">داداش کشاورز، بخش مشاور آنلاین در حال آماده‌سازی است و فعلاً در دسترس نیست.</p>
+        <p style="font-size:15px;line-height:1.9;color:#68796e;margin:0 0 22px">پس از تکمیل و آزمایش خدمات آنلاین، امکان گفت‌وگو با مشاور و ارسال عکس فعال خواهد شد. اطلاعات و امکانات آفلاین شما همچنان قابل استفاده‌اند.</p>
+        <div style="background:#f2f8f4;border-radius:14px;padding:12px;color:#315c43;margin-bottom:22px">🌱 زمین انتخاب‌شده: <b>${yocEsc(l.name||'زمین بدون نام')}</b></div>
+        <button type="button" class="primary" onclick="yarOnlineBack()" style="min-width:150px;min-height:48px">بازگشت</button>
+      </div>
     </section>`;
-    yocPhoto=null;yocRender(l);
-    const input=document.getElementById('yocInput');if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();document.querySelector('.yoc-compose')?.requestSubmit()}});
     return false;
   };
   window.yarOnlineBack=function(){document.documentElement.classList.remove('yoc-fullscreen-chat');yocPhoto=null;route='yar';yarLandMode=true;yarMode='online';yar()};
