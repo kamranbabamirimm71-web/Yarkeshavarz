@@ -2141,6 +2141,41 @@ body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page) .yar-entry-pa
 @media(max-width:380px){.yar-plan-dates,.yar-plan-facts{grid-template-columns:1fr!important}.yar-plan-facts>div:last-child{grid-column:auto!important}.yar-plan-seed strong{font-size:16px!important}}
 </style>
 
+
+<style id="yar-land-list-final-scroll-fix-v131">
+/* V131: keep the complete registered-land list reachable on small phones.
+   The entry page itself scrolls; no fixed-height parent may clip the last cards. */
+html:has(.yar-entry-page), body:has(.yar-entry-page), body:has(.yar-entry-page) #app {
+  height:auto!important; min-height:100dvh!important; max-height:none!important;
+  overflow-x:hidden!important; overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+body:has(.yar-detail-shell) .yar-detail-shell:has(.yar-entry-page) {
+  position:fixed!important; inset:0!important; width:100vw!important;
+  height:100dvh!important; min-height:100dvh!important; max-height:none!important;
+  overflow-x:hidden!important; overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important; overscroll-behavior-y:auto!important;
+}
+.yar-entry-page, .yar-detail-shell .yar-entry-page {
+  position:relative!important; height:auto!important; min-height:100dvh!important;
+  max-height:none!important; overflow:visible!important;
+  padding-bottom:calc(150px + env(safe-area-inset-bottom, 0px))!important;
+  box-sizing:border-box!important;
+}
+.yar-entry-page .yar-land-list,
+.yar-detail-shell .yar-entry-page .yar-land-list {
+  display:grid!important; grid-template-columns:minmax(0,1fr)!important;
+  gap:9px!important; height:auto!important; min-height:0!important;
+  max-height:none!important; overflow:visible!important;
+  padding:3px 2px 24px!important; touch-action:pan-y!important;
+}
+.yar-entry-page .yar-land-option,
+.yar-detail-shell .yar-entry-page .yar-land-option {
+  display:grid!important; width:100%!important; min-height:72px!important;
+  flex:none!important; visibility:visible!important; opacity:1!important;
+}
+</style>
+
 </head>
 <body>
 <header class="top"><div class="brand"><div class="logo">🌾</div><div><b>یار کشاورز</b><small id="pageTitle">خانه · آفلاین</small></div></div><button id="backup">↥</button></header>
