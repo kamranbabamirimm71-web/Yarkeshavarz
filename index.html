@@ -1359,7 +1359,7 @@ body:has(.yar-detail-shell) #app{
   direction:ltr!important;
   display:flex!important;
   flex-direction:row!important;
-  width:500vw!important;
+  width:400vw!important;
   height:100%!important;
   transform:translate3d(0,0,0);
   transition:transform .32s cubic-bezier(.22,.7,.2,1)!important;
@@ -1408,9 +1408,9 @@ body:has(.yar-detail-shell) .bottom{
 <style id="yar-v55-swipe-correctness">
 /* V55: fix the two bugs that kept v54 on page 1:
    total was counting the wrapper instead of the panels, and percentage
-   transforms were relative to a 500vw track. */
+   track width is aligned to the four actual panels. */
 .yar-horizontal-track{
-  width:500vw!important;
+  width:400vw!important;
   flex:none!important;
 }
 .yar-horizontal-panel{
@@ -3049,22 +3049,42 @@ function yarLandType(l){
 }
 function yarLandTypeLabel(l){const t=yarLandType(l);return t==='irrigated'?'💧 آبی':t==='dryland'?'🌧️ دیم':'❔ نوع زمین مشخص نشده';}
 function yarCropWaterType(crop){
-  const name=String(crop||'').trim().replace(/[\u200c\s]+/g,' ');
-  const irrigatedOnly=['برنج','کرفس','کرفس برگی','سیب‌زمینی','سیب زمینی','پیاز','سیر','موسیر','گوجه‌فرنگی','گوجه فرنگی','خیار','فلفل','فلفل دلمه‌ای','بادمجان','کاهو','هویج','چغندر قند','توت‌فرنگی','موز','انبه','پاپایا','آناناس','آووکادو','مرکبات','پرتقال','نارنگی','لیموترش','کیوی','سیب','گلابی','هلو','شلیل','زردآلو','گیلاس','آلبالو','خرمالو'];
-  const drylandCommon=['گندم','جو','نخود','عدس','ماش','گلرنگ','ارزن','چاودار','تریتیکاله'];
-  if(irrigatedOnly.includes(name))return 'irrigated';
-  if(drylandCommon.includes(name))return 'both';
-  return 'both';
+  const norm=v=>String(v||'').trim().replace(/[\u200c\s]+/g,' ').replace(/ي/g,'ی').replace(/ك/g,'ک');
+  const name=norm(crop);
+  // محصولاتی که در شرایط معمول تولید اقتصادی به آب‌رسانی منظم نیاز دارند؛ در زمین دیم رد می‌شوند.
+  const irrigatedOnly=[
+    'برنج','کرفس','سیب‌زمینی','سیب زمینی','پیاز','سیر','موسیر','گوجه‌فرنگی','گوجه فرنگی','خیار',
+    'فلفل','فلفل دلمه‌ای','فلفل دلمه ای','بادمجان','کاهو','هویج','چغندر قند','توت‌فرنگی','توت فرنگی',
+    'موز','انبه','پاپایا','آناناس','آووکادو','پرتقال','نارنگی','لیموترش','لیمو ترش','کیوی','سیب',
+    'گلابی','هلو','شلیل','زردآلو','گیلاس','آلبالو','خرمالو','ذرت شیرین','اسفناج','کلم','گل کلم','بروکلی'
+  ].map(norm);
+  // محصولات دوکاربردی: دیم فقط در اقلیم و رقم مناسب؛ در غیر این صورت آبیاری تکمیلی لازم است.
+  const both=[
+    'گندم','جو','نخود','عدس','ماش','لوبیا','لوبیا قرمز','لوبیا چیتی','لوبیا سفید','گلرنگ','ارزن','چاودار','تریتیکاله',
+    'کلزا','آفتابگردان','کنجد','سویا','چغندر علوفه‌ای','یونجه','شبدر','ذرت علوفه‌ای','سورگوم','سیب','انگور','انار',
+    'بادام','گردو','پسته','فندق','زیتون','انجیر','توت','بلوط','گل محمدی','زعفران','زیره','گشنیز','رازیانه'
+  ].map(norm);
+  const drylandPreferred=['گندم','جو','نخود','عدس','چاودار','تریتیکاله','گلرنگ','ارزن'].map(norm);
+  if(irrigatedOnly.includes(name))return {type:'irrigated',label:'نیازمند آبیاری منظم',explanation:'این محصول برای تولید قابل اتکا به آبیاری منظم نیاز دارد؛ برای زمین دیم انتخاب نمی‌شود.'};
+  if(drylandPreferred.includes(name))return {type:'both',label:'قابل کشت دیم و آبی',explanation:'این محصول می‌تواند دیم یا آبی کشت شود. در دیم، بارندگی منطقه، ذخیره رطوبت خاک و رقم مناسب تعیین‌کننده‌اند؛ در خشکسالی عملکرد کاهش می‌یابد.'};
+  if(both.includes(name))return {type:'both',label:'قابل کشت دیم و آبی با شرط اقلیمی',explanation:'کشت دیم فقط در منطقه دارای بارندگی و رطوبت خاک کافی و با رقم مناسب قابل اتکاست؛ در مناطق خشک یا هنگام استقرار گیاه/نهال، آبیاری تکمیلی ممکن است ضروری باشد.'};
+  return {type:'both',label:'نیاز آبی نیازمند بررسی منطقه‌ای',explanation:'نیاز آبی این محصول در این نسخه به‌طور قطعی طبقه‌بندی نشده است. پیش از کشت دیم، سازگاری رقم، بارندگی منطقه و نیاز آب در دوره رشد را بررسی کن؛ صرف انتخاب دیم به معنی مناسب‌بودن محصول نیست.'};
 }
 function yarCropCompatibility(l,crop){
-  const landType=yarLandType(l), need=yarCropWaterType(crop);
-  // برای محصولاتی که به آبیاری منظم نیاز دارند، زمین باید صریحاً «آبی» ثبت شده باشد؛
-  // نامشخص بودن نوع زمین مجوز انتخاب خودکار نیست.
-  if(need==='irrigated' && landType!=='irrigated'){
-    const reason=landType==='dryland'?'برای زمین دیم قابل کشت نیست':'ابتدا نوع زمین را در اطلاعات زمین روی «آبی» تنظیم کن';
-    return {ok:false,landType,need,message:`❌ محصول «${crop}» به آبیاری منظم نیاز دارد و ${reason}.`};
+  const landType=yarLandType(l), water=yarCropWaterType(crop);
+  if(water.type==='irrigated' && landType==='dryland'){
+    return {ok:false,landType,need:water.type,message:`❌ محصول «${crop}» ${water.explanation} لطفاً زمین آبی انتخاب کن یا محصول مناسب دیم را برگزین.`};
   }
-  return {ok:true,landType,need};
+  if(water.type==='irrigated' && landType==='unknown'){
+    return {ok:false,landType,need:water.type,message:`❌ نوع زمین مشخص نیست. ${water.explanation} ابتدا نوع زمین را در اطلاعات زمین مشخص کن.`};
+  }
+  return {ok:true,landType,need:water.type,label:water.label,explanation:water.explanation,notice:landType==='dryland'?`🌧️ ${water.label}: ${water.explanation}`:`💧 ${water.label}: ${water.explanation}`};
+}
+function yarWaterFitNotice(l,crop){
+  if(!l||!crop)return '';
+  const fit=yarCropCompatibility(l,crop);
+  const text=fit.notice||fit.message||'';
+  return `<div class="yar-water-fit ${fit.ok?'yar-water-fit-ok':'yar-water-fit-block'}" role="status"><b>${fit.ok?'💧 سازگاری محصول با زمین':'⛔ ناسازگاری محصول و زمین'}</b><p>${esc(text)}</p></div>`;
 }
 function yarSetCrop(v){
   const l=selected?yarLand(selected):null;if(!l)return;
@@ -3567,13 +3587,13 @@ function yar(){
   }
   const cropMeta=yarCropRegistry?.[crop]||{};
   const cropDescription=String(cropMeta.description||cropMeta.desc||cropMeta.summary||cropMeta.note||'').trim() || yarProductDescription(crop,cropMeta);
-  const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(cropMeta.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div><div class="yar-product-mini-desc">${esc(cropDescription)}</div></section>`;
+  const productSummary=`<section class="yar-flow-card"><div class="yar-selected-head"><div><b>محصول انتخاب‌شده</b><h3>🌱 ${esc(crop)}</h3><small>${esc(cropMeta.label||profile?.category||'محصول کشاورزی')} · ${areaHa.toLocaleString('fa-IR')} هکتار</small></div><button type="button" class="secondary" onclick="yarChangeProduct()">تغییر محصول</button></div><div class="yar-product-mini-desc">${esc(cropDescription)}</div>${yarWaterFitNotice(l,crop)}</section>`;
   const selectPage=`<div class="yar-page-step"><b>مرحله ۱ از ۲</b><span>انتخاب محصول</span></div>${landSelected}${areaSummary}${productSection}`;
   const yarPanelNav=(idx,total=4)=>`<div class="yar-panel-nav" role="navigation" aria-label="پیمایش صفحات"><button data-pager="prev" type="button" class="secondary" onclick="yarPager(-1)">‹ قبلی</button><div class="yar-panel-dots">${Array.from({length:total},(_,i)=>`<button type="button" class="${i===idx?'active':''}" aria-label="صفحه ${i+1}" onclick="yarSlide(${i})"></button>`).join('')}</div><button data-pager="next" type="button" class="primary" onclick="yarPager(1)">بعدی ›</button></div>`;
   const detailPage=`<div id="yarHorizontalPages" class="yar-horizontal-pages"><div class="yar-horizontal-track">
     <section class="yar-horizontal-panel yar-page-one">
       <div class="yar-page-step"><b>صفحه ۱ از ۴</b><span>محصول و برنامه کشت</span></div>
-      ${productSummary}${scenarioSection}
+      ${productSummary}
       <div class="yar-swipe-hint">↔️ برای رفتن به صفحه بعد، انگشتت را افقی بکش</div>
     </section>
     <section class="yar-horizontal-panel">
@@ -3633,7 +3653,7 @@ function yarSlide(index){
   const i=requested;
   yarHorizontalIndex=i;
   const track=el.querySelector('.yar-horizontal-track');
-  if(track) track.style.transform=`translate3d(${-i*(100/total)}%,0,0)`;
+  if(track) track.style.transform=`translate3d(${-i*100}vw,0,0)`;
   panels.forEach((p,n)=>p.setAttribute('aria-hidden',n===i?'false':'true'));
   const shell=document.querySelector('.yar-detail-shell');
   const nav=shell?.querySelector('.yar-panel-nav');
@@ -4326,5 +4346,24 @@ body:has(.yar-final.yar-product-detail-page){
 .yar-detail-shell .yar-horizontal-panel::-webkit-scrollbar{display:none!important;}
 .yar-detail-shell .yar-horizontal-panel .yar-cost-box{margin-bottom:8px!important;}
 </style>
+
+<style id="yar-v129-clean-pages-and-water-fit">
+/* هر صفحه فقط یک وظیفه دارد؛ شرح طولانی محصول در هدر تکرار نمی‌شود. */
+.yar-detail-shell .yarpro-head{height:78px!important;min-height:78px!important;padding:8px 14px!important;display:flex!important;align-items:center!important;gap:10px!important;overflow:hidden!important}
+.yar-detail-shell .yar-header-product-desc{display:none!important}
+.yar-detail-shell .yarpro-brand{margin:0!important;min-width:0!important;flex:1!important}
+.yar-detail-shell .yarpro-brand h2{font-size:19px!important;margin:0!important}
+.yar-detail-shell .yarpro-brand span{font-size:11px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.yar-detail-shell .yar-horizontal-panel{padding-top:88px!important}
+.yar-water-fit{box-sizing:border-box;border-radius:14px;padding:12px 14px;margin:10px 0;border:1px solid #cfe4d8;background:#edf8f1;color:#174f3d;line-height:1.8;font-size:13px}
+.yar-water-fit p{margin:5px 0 0}
+.yar-water-fit-block{background:#fff0ed;border-color:#e8b8ae;color:#8b2822}
+.yar-page-one .yar-cultivation-plan-unlocked{display:none!important}
+.yar-horizontal-panel .yar-flow-card{margin-bottom:12px!important}
+.yar-horizontal-panel .yar-page-step{padding:10px 12px!important;border-radius:12px!important}
+.yar-horizontal-track{width:400vw!important}
+@media(max-width:600px){.yar-detail-shell .yarpro-head{height:78px!important;min-height:78px!important}.yar-detail-shell .yar-horizontal-panel{padding-top:88px!important}}
+</style>
+
 </body>
 </html>
