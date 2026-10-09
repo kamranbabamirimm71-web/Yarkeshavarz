@@ -3003,16 +3003,22 @@ async function yarLoadCropProfile(name){
   try{const mod=await import('./offline/crop-profiles.js?v=20260928-yar-profile2');yarCropProfile=mod.findCropProfile(crop)||null}catch(e){yarCropProfile=null}
   return yarCropProfile;
 }
+let yarRegistryLoadPromise=null, yarRegistryLoaded=false;
 async function yarLoadCropRegistry(){
-  if(yarCropRegistry)return yarCropRegistry;
-  try{
-    const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops2');
-    yarCropRegistry=mod.registry||{};
-  }catch(e){
-    // نبودن پوشه offline نباید مانع ورود به کشاورزیار شود.
-    yarCropRegistry=yarCropRegistry||{};
-  }
-  return yarCropRegistry;
+  if(yarRegistryLoaded)return yarCropRegistry||{};
+  if(yarRegistryLoadPromise)return yarRegistryLoadPromise;
+  yarRegistryLoadPromise=(async()=>{
+    try{
+      const mod=await import('./offline/global-crop-registry.js?v=20260928-yar-crops2');
+      yarCropRegistry={...(yarCropRegistry||{}),...(mod.registry||{})};
+      yarRegistryLoaded=true;
+    }catch(e){
+      // نبودن پوشه offline نباید مانع ورود شود؛ فهرست داخلی ۱۵۱ محصول حفظ می‌شود.
+      yarCropRegistry=yarCropRegistry||{};
+    }
+    return yarCropRegistry;
+  })();
+  return yarRegistryLoadPromise;
 }
 function yarSelectedCrop(id){
   try{const x=JSON.parse(localStorage.getItem(YAR_CROP_KEY)||'{}');return String(x[id]||'')}catch(e){return ''}
@@ -3043,16 +3049,21 @@ function yarLandType(l){
 }
 function yarLandTypeLabel(l){const t=yarLandType(l);return t==='irrigated'?'💧 آبی':t==='dryland'?'🌧️ دیم':'❔ نوع زمین مشخص نشده';}
 function yarCropWaterType(crop){
-  const name=String(crop||'').trim().replace(/\s+/g,' ');
-  const irrigatedOnly=['برنج','کرفس','کرفس برگی','سیب‌زمینی','سیب زمینی','پیاز','سیر','موسیر','گوجه‌فرنگی','گوجه فرنگی','خیار','فلفل','بادمجان','کاهو','هویج','چغندر قند'];
-  const drylandCommon=['گندم','جو','نخود','عدس','ماش','گلرنگ'];
+  const name=String(crop||'').trim().replace(/[\u200c\s]+/g,' ');
+  const irrigatedOnly=['برنج','کرفس','کرفس برگی','سیب‌زمینی','سیب زمینی','پیاز','سیر','موسیر','گوجه‌فرنگی','گوجه فرنگی','خیار','فلفل','فلفل دلمه‌ای','بادمجان','کاهو','هویج','چغندر قند','توت‌فرنگی','موز','انبه','پاپایا','آناناس','آووکادو','مرکبات','پرتقال','نارنگی','لیموترش','کیوی','سیب','گلابی','هلو','شلیل','زردآلو','گیلاس','آلبالو','خرمالو'];
+  const drylandCommon=['گندم','جو','نخود','عدس','ماش','گلرنگ','ارزن','چاودار','تریتیکاله'];
   if(irrigatedOnly.includes(name))return 'irrigated';
   if(drylandCommon.includes(name))return 'both';
   return 'both';
 }
 function yarCropCompatibility(l,crop){
   const landType=yarLandType(l), need=yarCropWaterType(crop);
-  if(landType==='dryland'&&need==='irrigated')return {ok:false,landType,need,message:`❌ محصول «${crop}» آبی است و برای زمین دیم قابل کشت نیست. لطفاً یک زمین آبی انتخاب کن.`};
+  // برای محصولاتی که به آبیاری منظم نیاز دارند، زمین باید صریحاً «آبی» ثبت شده باشد؛
+  // نامشخص بودن نوع زمین مجوز انتخاب خودکار نیست.
+  if(need==='irrigated' && landType!=='irrigated'){
+    const reason=landType==='dryland'?'برای زمین دیم قابل کشت نیست':'ابتدا نوع زمین را در اطلاعات زمین روی «آبی» تنظیم کن';
+    return {ok:false,landType,need,message:`❌ محصول «${crop}» به آبیاری منظم نیاز دارد و ${reason}.`};
+  }
   return {ok:true,landType,need};
 }
 function yarSetCrop(v){
@@ -3313,22 +3324,169 @@ function yar(){
     // یک فهرست داخلی حداقلی برای ورود و انتخاب محصول در نظر می‌گیریم و در صورت وجود
     // registry کامل، آن را بعداً جایگزین می‌کنیم.
     yarCropRegistry={
-      'گندم':{label:'غلات'},'جو':{label:'غلات'},'ذرت':{label:'غلات'},'برنج':{label:'غلات'},
-      'نخود':{label:'حبوبات'},'عدس':{label:'حبوبات'},'لوبیا':{label:'حبوبات'},
-      'سیب‌زمینی':{label:'سبزی و صیفی'},'پیاز':{label:'سبزی و صیفی'},'سیر':{label:'سبزی و صیفی'},
-      'موسیر':{label:'سبزی و صیفی'},'گوجه‌فرنگی':{label:'سبزی و صیفی'},'خیار':{label:'سبزی و صیفی'},
-      'گل محمدی':{label:'گیاهان دارویی و ادویه‌ای'},'زعفران':{label:'گیاهان دارویی و ادویه‌ای'},
-      'سیب':{label:'میوه‌ها و باغی'},'انگور':{label:'میوه‌ها و باغی'},'انار':{label:'میوه‌ها و باغی'}
+      'نخود':{label:'حبوبات'},
+      'عدس':{label:'حبوبات'},
+      'لوبیا قرمز':{label:'حبوبات'},
+      'لوبیا چیتی':{label:'حبوبات'},
+      'لوبیا سفید':{label:'حبوبات'},
+      'ماش':{label:'حبوبات'},
+      'گردو':{label:'خشکبار و مغزها'},
+      'بادام':{label:'خشکبار و مغزها'},
+      'پسته':{label:'خشکبار و مغزها'},
+      'فندق':{label:'خشکبار و مغزها'},
+      'بادام\\u200cزمینی':{label:'خشکبار و مغزها'},
+      'کلزا':{label:'دانه\u200cهای روغنی'},
+      'آفتابگردان':{label:'دانه\u200cهای روغنی'},
+      'گلرنگ':{label:'دانه\u200cهای روغنی'},
+      'کنجد':{label:'دانه\u200cهای روغنی'},
+      'سویا':{label:'دانه\u200cهای روغنی'},
+      'رز':{label:'زینتی'},
+      'لاله':{label:'زینتی'},
+      'نرگس':{label:'زینتی'},
+      'سنبل':{label:'زینتی'},
+      'گل داوودی':{label:'زینتی'},
+      'میخک':{label:'زینتی'},
+      'ژربرا':{label:'زینتی'},
+      'آنتوریوم':{label:'زینتی'},
+      'ارکیده':{label:'زینتی'},
+      'شمعدانی':{label:'زینتی'},
+      'اطلسی':{label:'زینتی'},
+      'بنفشه':{label:'زینتی'},
+      'مریم':{label:'زینتی'},
+      'گلایل':{label:'زینتی'},
+      'آفتابگردان زینتی':{label:'زینتی'},
+      'گوجه\\u200cفرنگی':{label:'سبزی و صیفی'},
+      'خیار':{label:'سبزی و صیفی'},
+      'فلفل دلمه\\u200cای':{label:'سبزی و صیفی'},
+      'فلفل تند':{label:'سبزی و صیفی'},
+      'بادمجان':{label:'سبزی و صیفی'},
+      'کدو سبز':{label:'سبزی و صیفی'},
+      'کدو حلوایی':{label:'سبزی و صیفی'},
+      'هندوانه':{label:'سبزی و صیفی'},
+      'خربزه':{label:'سبزی و صیفی'},
+      'طالبی':{label:'سبزی و صیفی'},
+      'توت\\u200cفرنگی':{label:'سبزی و صیفی'},
+      'کاهو':{label:'سبزی و صیفی'},
+      'اسفناج':{label:'سبزی و صیفی'},
+      'کلم برگ':{label:'سبزی و صیفی'},
+      'گل کلم':{label:'سبزی و صیفی'},
+      'کلم بروکلی':{label:'سبزی و صیفی'},
+      'هویج':{label:'سبزی و صیفی'},
+      'تربچه':{label:'سبزی و صیفی'},
+      'شلغم':{label:'سبزی و صیفی'},
+      'چغندر لبویی':{label:'سبزی و صیفی'},
+      'پیاز':{label:'سبزی و صیفی'},
+      'سیر':{label:'سبزی و صیفی'},
+      'موسیر':{label:'سبزی و صیفی'},
+      'سیب\\u200cزمینی':{label:'سبزی و صیفی'},
+      'بامیه':{label:'سبزی و صیفی'},
+      'لوبیا سبز':{label:'سبزی و صیفی'},
+      'نخودفرنگی':{label:'سبزی و صیفی'},
+      'ذرت شیرین':{label:'سبزی و صیفی'},
+      'جعفری':{label:'سبزی و صیفی'},
+      'گشنیز':{label:'سبزی و صیفی'},
+      'شوید':{label:'سبزی و صیفی'},
+      'ریحان':{label:'سبزی و صیفی'},
+      'کرفس':{label:'سبزی و صیفی'},
+      'پنبه':{label:'صنعتی'},
+      'چغندر قند':{label:'صنعتی'},
+      'نیشکر':{label:'صنعتی'},
+      'توتون':{label:'صنعتی'},
+      'تنباکو':{label:'صنعتی'},
+      'کتان':{label:'صنعتی'},
+      'کنف':{label:'صنعتی'},
+      'چای':{label:'صنعتی'},
+      'قهوه':{label:'صنعتی'},
+      'نیشکر علوفه\\u200cای':{label:'صنعتی'},
+      'یونجه':{label:'علوفه\u200cای'},
+      'شبدر':{label:'علوفه\u200cای'},
+      'اسپرس':{label:'علوفه\u200cای'},
+      'سورگوم علوفه\\u200cای':{label:'علوفه\u200cای'},
+      'ذرت علوفه\\u200cای':{label:'علوفه\u200cای'},
+      'چاودار علوفه\\u200cای':{label:'علوفه\u200cای'},
+      'ارزن علوفه\\u200cای':{label:'علوفه\u200cای'},
+      'علف باغ':{label:'علوفه\u200cای'},
+      'گندم':{label:'غلات'},
+      'جو':{label:'غلات'},
+      'ذرت':{label:'غلات'},
+      'برنج':{label:'غلات'},
+      'چاودار':{label:'غلات'},
+      'تریتیکاله':{label:'غلات'},
+      'ارزن':{label:'غلات'},
+      'سورگوم':{label:'غلات'},
+      'خرما':{label:'گرمسیری و نیمه\u200cخشک'},
+      'موز':{label:'گرمسیری و نیمه\u200cخشک'},
+      'انبه':{label:'گرمسیری و نیمه\u200cخشک'},
+      'پاپایا':{label:'گرمسیری و نیمه\u200cخشک'},
+      'آناناس':{label:'گرمسیری و نیمه\u200cخشک'},
+      'نارگیل':{label:'گرمسیری و نیمه\u200cخشک'},
+      'آووکادو':{label:'گرمسیری و نیمه\u200cخشک'},
+      'انجیر هندی':{label:'گرمسیری و نیمه\u200cخشک'},
+      'جوجوبا':{label:'گرمسیری و نیمه\u200cخشک'},
+      'کنار':{label:'گرمسیری و نیمه\u200cخشک'},
+      'تمر هندی':{label:'گرمسیری و نیمه\u200cخشک'},
+      'پسته گرمسیری':{label:'گرمسیری و نیمه\u200cخشک'},
+      'آلوئه\\u200cورا':{label:'گرمسیری و نیمه\u200cخشک'},
+      'زعفران':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'گل محمدی':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'نعناع فلفلی':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'بابونه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'آویشن':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'زیره سبز':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'زیره سیاه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'رازیانه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'گشنیز بذری':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'شوید بذری':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'سیاه\\u200cدانه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'اسطوخودوس':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'بادرنجبویه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'به\\u200cلیمو':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'مرزه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'ترخون':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'ریحان دارویی':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'زنجبیل':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'زردچوبه':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'دارچین':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'هل':{label:'گیاهان دارویی و ادویه\u200cای'},
+      'سیب':{label:'میوه\u200cها و باغی'},
+      'انگور':{label:'میوه\u200cها و باغی'},
+      'انار':{label:'میوه\u200cها و باغی'},
+      'گلابی':{label:'میوه\u200cها و باغی'},
+      'به':{label:'میوه\u200cها و باغی'},
+      'هلو':{label:'میوه\u200cها و باغی'},
+      'شلیل':{label:'میوه\u200cها و باغی'},
+      'زردآلو':{label:'میوه\u200cها و باغی'},
+      'آلو':{label:'میوه\u200cها و باغی'},
+      'گیلاس':{label:'میوه\u200cها و باغی'},
+      'آلبالو':{label:'میوه\u200cها و باغی'},
+      'لیموشیرین':{label:'میوه\u200cها و باغی'},
+      'نارنج':{label:'میوه\u200cها و باغی'},
+      'زغال\\u200cاخته':{label:'میوه\u200cها و باغی'},
+      'آلوچه':{label:'میوه\u200cها و باغی'},
+      'توت':{label:'میوه\u200cها و باغی'},
+      'توت سفید':{label:'میوه\u200cها و باغی'},
+      'توت سیاه':{label:'میوه\u200cها و باغی'},
+      'خرمالو':{label:'میوه\u200cها و باغی'},
+      'کیوی':{label:'میوه\u200cها و باغی'},
+      'مرکبات':{label:'میوه\u200cها و باغی'},
+      'پرتقال':{label:'میوه\u200cها و باغی'},
+      'نارنگی':{label:'میوه\u200cها و باغی'},
+      'لیموترش':{label:'میوه\u200cها و باغی'},
+      'زیتون':{label:'میوه\u200cها و باغی'},
+      'انجیر':{label:'میوه\u200cها و باغی'},
+      'سنجد':{label:'میوه\u200cها و باغی'}
     };
     // بارگذاری نسخه کامل اختیاری است؛ اما هرگز ورود صفحه را متوقف نمی‌کند.
     yarLoadCropRegistry().then(full=>{
       if(full && Object.keys(full).length){
-        yarCropRegistry=full;
+        // ادغام کتابخانهٔ کامل با فهرست داخلی؛ در نبود فایل‌ها تعداد محصولات کم نمی‌شود.
+        yarCropRegistry={...yarCropRegistry,...full};
         if(route==='yar') yar();
       }
     }).catch(()=>{});
   }
-  const crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
+  let crop=l?(yarSelectedCrop(l.id)||l.crop||''):'';
+  if(l && crop){const compat=yarCropCompatibility(l,crop);if(!compat.ok){yarSaveSelectedCrop(l.id,'');crop='';yarProductPage='select';try{delete l.registeredProduct;delete l.crop;save();}catch(e){};}}
   if(crop&&!yarCropProfile){
     const requestedCrop=String(crop);
     yarLoadCropProfile(requestedCrop).then(profile=>{
