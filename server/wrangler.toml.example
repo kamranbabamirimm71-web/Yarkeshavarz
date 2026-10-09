@@ -1,0 +1,18 @@
+name = "yarkeshavarz-api"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Replace with the real D1 database ID after creating a NEW database.
+[[d1_databases]]
+binding = "DB"
+database_name = "yarkeshavarz-db"
+database_id = "REPLACE_WITH_REAL_DATABASE_ID"
+
+[vars]
+# Comma-separated exact frontend origins. Do not use * in production.
+ALLOWED_ORIGINS = "https://YOUR-USERNAME.github.io"
+# AI_BASE_URL should be the provider's OpenAI-compatible base URL, without /chat/completions.
+# Do not place AI_API_KEY or ADMIN_SECRET here; configure them as Worker secrets.
+AI_BASE_URL = ""
+AI_MODEL_TEXT = ""
+AI_MODEL_VISION = ""
