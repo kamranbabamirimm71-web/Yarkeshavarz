@@ -1,1 +1,11 @@
 
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.kamranbabamirimm71_web.twa",
+    "sha256_cert_fingerprints": [
+      "8E:82:D2:0B:8B:30:89:FD:32:D0:EE:03:A2:95:CD:F3:C3:EF:3D:3C:14:04:27:90:7E:76:21:91:53:18:36:B4"
+    ]
+  }
+}]
